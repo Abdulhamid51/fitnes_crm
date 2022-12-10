@@ -15,6 +15,7 @@ class Month(models.Model):
     # main coming_types dan olinadi
     coming_days = models.PositiveIntegerField("kelishi kerak bo`ldan kunlar")
     payment = models.PositiveIntegerField("to`lashi kerak bo`lgan summa")
+    created = models.DateField(auto_now_add=True)
     
     came = models.PositiveIntegerField("kelgan kunlari")
     payed = models.BooleanField("To`landi", default=False)
