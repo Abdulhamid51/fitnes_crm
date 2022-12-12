@@ -1,17 +1,19 @@
 {% extends 'wrapper.html' %}
-{% block content %}
 
+{% block content %}
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Asosiy sahifa</h1>
+      <h1>Davomat</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Asosiy sahifa</a></li>
-          <li class="breadcrumb-item active"></li>
+          <li class="breadcrumb-item"><a href="index.html">Asosiy sahifa</a></li>
+          <li class="breadcrumb-item">Davomat</li>
+          <li class="breadcrumb-item active">Davomat kiruvchilar royhati</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
+
     <section class="section">
       <div class="row">
         <div class="col-lg-12">
@@ -19,155 +21,61 @@
 
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Table with hoverable rows</h5>
+              <h5 class="card-title">Mashg'ulotga qatnashuvchilar umumiy ro'yxati</h5>
 
               <!-- Table with hoverable rows -->
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Position</th>
-                    <th scope="col">Age</th>
-                    <th scope="col">Start Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Brandon Jacob</td>
-                    <td>Designer</td>
-                    <td>28</td>
-                    <td>2016-05-25</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Bridie Kessler</td>
-                    <td>Developer</td>
-                    <td>35</td>
-                    <td>2014-12-05</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Ashleigh Langosh</td>
-                    <td>Finance</td>
-                    <td>45</td>
-                    <td>2011-08-12</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">4</th>
-                    <td>Angus Grady</td>
-                    <td>HR</td>
-                    <td>34</td>
-                    <td>2012-06-11</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">5</th>
-                    <td>Raheem Lehner</td>
-                    <td>Dynamic Division Officer</td>
-                    <td>47</td>
-                    <td>2011-04-19</td>
-                  </tr>
-                </tbody>
-              </table>
+
+                <table class="table table-hover" id="myTable">
+                      <div class="row mt-2">
+                        <div class="col-12 mb-3 col-md-4">
+                            <select class="form-select" id="filterBy" onchange="searchFilter()">
+                                <option value="" selected>Mijozlar turi bo'yicha</option>
+                                <option value="green">Aktiv</option>
+                                <option value="blue">Aktiv emas</option>
+                            </select>
+                        </div>
+                        <div class="col-12 mb-3 col-md-4">
+                            <select class="form-select" id="mylist" onchange="myFunction()">
+                                <option value="" selected>Tarif</option>
+                                <option value="oylik">Oylik</option>
+                                <option value="haftada uch kun">Haftada uch kun</option>
+                                <option value="kunlik">Kunlik</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-4 mb-3">
+                            <input type="text" class="form-control" id="mysearch" placeholder="Ism Familya yoki phone " aria-label="Search cards" onkeyup="myFunction()">
+
+                        </div>
+                    </div>
+  <tr class="header">
+    <th scope="col"></th>
+    <th scope="col">Ism Familya</th>
+    <th scope="col">Telefon</th>
+    <th scope="col">Tarif</th>
+    <th scope="col">Davomat</th>  
+      
+    <th scope="col">To'lov</th>
+  </tr>
+
+  {% for a in abonent %}
+
+      <tr>
+        <th scope="row">1</th>
+        <td>{{ a.first_name }}  {{ a.last_name }}</td>
+        <td>{{ a.phone_number }}</td>
+        <td>{{ a.tarif }}</td>
+        <td>Davomat</td>
+        <td><span class="text-success">To'landi: 0 so'm</span> <br> <span class="text-danger">Qarz: 0 so'm</span></td>
+
+      </tr>
+  {% endfor %}
+   
+ 
+</table>
+
+
+
+
               <!-- End Table with hoverable rows -->
 
             </div>
@@ -180,6 +88,102 @@
         </div>
       </div>
     </section>
-
+    
   </main><!-- End #main -->
-{% endblock content %}
+
+
+  <style>
+    
+  * {
+    box-sizing: border-box;
+  }
+  
+  #myInput {
+    background-image: url('/css/searchicon.png');
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    width: 100%;
+    font-size: 16px;
+    padding: 12px 20px 12px 40px;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+  }
+  
+  #mylist {
+    /* background-position: 10px 10px; */
+    background-repeat: no-repeat;
+    width: 100%;
+    font-size: 17.5px;
+    /* padding: 12px 20px 12px 40px; */
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+  }
+  
+  #myTable {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #ddd;
+    font-size: 17px;
+  }
+  
+  #myTable th,
+  #myTable td {
+    text-align: left;
+    padding: 12px;
+  }
+  
+  #myTable tr {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  #myTable tr.header,
+  #myTable tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .hide {
+    display: none
+  }
+  </style>
+  
+  <script>
+    function myFunction() {
+    let input, filter, table, tr, td,i;
+    const searchbox = document.querySelector("#mysearch");
+    let textBox = searchbox.value;
+    console.log(textBox)
+
+    input = document.getElementById("mylist");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[2];
+      td_name = tr[i].getElementsByTagName("td")[1];
+      if (td) {
+        tr[i].classList.toggle("hide", filter && td.innerHTML.toUpperCase() !== filter)
+      }
+      
+      
+     
+    }
+  }
+  </script>
+
+
+<script>
+
+  // Initialize the DataTable
+  $(document).ready(function () {
+    $('#tableID').DataTable({
+
+      // Enable the searching
+      // of the DataTable
+      searching: true
+    });
+  });
+</script>
+
+
+  {% endblock %}
+  
