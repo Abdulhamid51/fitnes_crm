@@ -30,8 +30,8 @@
                         <div class="col-12 mb-3 col-md-4">
                             <select class="form-select" id="filterBy" onchange="searchFilter()">
                                 <option value="" selected>Mijozlar turi bo'yicha</option>
-                                <option value="green">Aktiv</option>
-                                <option value="blue">Aktiv emas</option>
+                                <option value="green">Active</option>
+                                <option value="blue">No active</option>
                             </select>
                         </div>
                         <div class="col-12 mb-3 col-md-4">
@@ -52,6 +52,7 @@
     <th scope="col">Ism Familya</th>
     <th scope="col">Telefon</th>
     <th scope="col">Tarif</th>
+    <th scope="col">Status</th>
     <th scope="col">Davomat</th>  
       
     <th scope="col">To'lov</th>
@@ -75,6 +76,7 @@
         <td>Oyatillo Abdulatipov</td>
         <td>+998932528323</td>
         <td>Oylik</td>
+        <td>Active</td>
         <td>Davomat</td>
         <td><span class="text-success">To'landi: 0 so'm</span> <br> <span class="text-danger">Qarz: 0 so'm</span></td>
 
@@ -84,6 +86,7 @@
         <td>Oyatillo Abdulatipov</td>
         <td>+998932528323</td>
         <td>Oylik</td>
+        <td>No active</td>
         <td>Davomat</td>
         <td><span class="text-success">To'landi: 0 so'm</span> <br> <span class="text-danger">Qarz: 0 so'm</span></td>
 
@@ -93,6 +96,7 @@
         <td>Oyatillo Abdulatipov</td>
         <td>+998932528323</td>
         <td>Kunlik</td>
+        <td>Active</td>
         <td>Davomat</td>
         <td><span class="text-success">To'landi: 0 so'm</span> <br> <span class="text-danger">Qarz: 0 so'm</span></td>
 
@@ -102,6 +106,7 @@
         <td>Oyatillo Abdulatipov</td>
         <td>+998932528323</td>
         <td>Oylik</td>
+        <td>Active</td>
         <td>Davomat</td>
         <td><span class="text-success">To'landi: 0 so'm</span> <br> <span class="text-danger">Qarz: 0 so'm</span></td>
 
@@ -196,12 +201,15 @@
     tr = table.getElementsByTagName("tr");
     for (i = 0; i < tr.length; i++) {
       td = tr[i].getElementsByTagName("td")[2];
+      td_status = tr[i].getElementsByTagName("td")[3];
       td_name = tr[i].getElementsByTagName("td")[1];
-      if (td) {
+      // if (td) {
+      //   tr[i].classList.toggle("hide", filter && td.innerHTML.toUpperCase() !== filter)
+      // }
+
+      if (td_status){
         tr[i].classList.toggle("hide", filter && td.innerHTML.toUpperCase() !== filter)
       }
-      
-      
      
     }
   }
