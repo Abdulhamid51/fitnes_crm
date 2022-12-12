@@ -4,7 +4,7 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Asosiy sahifa</h1>
+      <h1>REGISTER</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Asosiy sahifa</a></li>
@@ -25,64 +25,55 @@
               <h5 class="card-title">Royhatdan otkazish</h5>
 
               <!-- Floating Labels Form -->
-               <form class="row g-3">
+               <form class="row g-3" method="post"> {% csrf_token %}
                 <div class="col-md-12">
                   <div class="form-floating">
-                    <input type="text" class="form-control" id="floatingName" placeholder="Your Name">
+                    <input type="text" name="name" class="form-control" id="floatingName" placeholder="Your Name">
                     <label for="floatingName">Ismi</label>
                   </div>
-                  
+
                 </div>
+  
+
                 <div class="col-md-12">
-                    <div class="form-floating">
-                      <input type="text" class="form-control" id="floatingName" placeholder="Your Name">
-                      <label for="floatingName">Familiyasi</label>
-                    </div>
-                    
-                  </div>
-                <div class="col-md-6">
-                  <div class="form-floating">
-                    <input type="email" class="form-control" id="floatingEmail" placeholder="Your Email">
-                    <label for="floatingEmail">Your Email</label>
-                  </div>
-                </div>
-              
-         
-                <div class="col-md-6">
                   <div class="col-md-12">
                     <div class="form-floating">
-                      <input type="text" class="form-control" id="floatingCity" placeholder="City">
+                      <input type="text" name="phone" class="form-control" id="floatingCity" placeholder="City">
                       <label for="floatingCity">Telefon raqam</label>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                   <div class="form-floating mb-3">
-                    <select class="form-select" id="floatingSelect" aria-label="State">
-                      <option selected>Oylik</option>
-                      <option value="1">Haftalik</option>
-                      <option value="2">Kunlik</option>
+                    <select class="form-select" name="tarif" id="floatingSelect" aria-label="State">
+                      {% for t in tarif %}
+                      <option selected value="{{t.title}}" >{{t}}</option>
+                      {% endfor %}
                     </select>
                     <label for="floatingSelect">Tarif</label>
                   </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                   <div class="form-floating mb-3">
-                    <select class="form-select" id="floatingSelect" aria-label="State">
-                      <option selected>Oylik</option>
-                      <option value="1">Haftalik</option>
-                      <option value="2">Kunlik</option>
+                    <select class="form-select" name="status" id="floatingSelect" aria-label="State">
+
+                      <option selected value="active"> active</option>
+                      <option selected value="inactive" > inactive</option>
+                      <option selected value="paused"> paused</option>
+
                     </select>
-                    <label for="floatingSelect">Status</label>
+                    <label for="floatingSelect">status</label>
                   </div>
                 </div>
-              
-                <div class="text-center">
+
+               <div class="text-center">
                   <button type="submit" class="btn btn-primary">Qoshish</button>
                   <button type="reset" class="btn btn-secondary">Qayta o'rnatish</button>
                 </div>
               </form><!-- End floating Labels Form -->
-
+              <div class="text">
+                <h1> {{client.name}}</h1>
+              </div>
             </div>
           </div>
 
