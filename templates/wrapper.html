@@ -86,14 +86,14 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="index.html">
+        <a class="nav-link " href="{% url 'main:home' %}">
           <i class="bi bi-grid"></i>
           <span>Asosiy sahifa </span>
         </a>
       </li><!-- End Dashboard Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="register.html">
+        <a class="nav-link collapsed" href="{% url 'main:register' %}">
           <i class="bi bi-person-check-fill"></i>
           <span>Royhatdan otkazish </span>
         </a>
@@ -106,24 +106,15 @@
         <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
          
           <li>
-            <a href="forms-layouts.html">
+            <a href="{% url 'payment:payment' %}">
               <i class="bi bi-circle"></i><span>Tolov qoshish</span>
             </a>
           </li>
 
           
-          <li>
-            <a href="forms-validation.html">
-              <i class="bi bi-circle"></i><span>Qarz qoshish</span>
-            </a>
-          </li>
-          <li>
-            <a href="forms-validation.html">
-              <i class="bi bi-circle"></i><span>Barga tolov qoshish</span>
-            </a>
-          </li>
-          <li>
-            <a href="list.html">
+  
+
+            <a href="{% url 'payment:list' %}">
               <i class="bi bi-circle"></i><span>Mudati tugaganlar</span>
             </a>
           </li>
@@ -137,7 +128,7 @@
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="tables-general.html">
+            <a href="{% url 'attendance:davomet' %}">
               <i class="bi bi-circle"></i><span>Davomat kiruvchilar royhati</span>
             </a>
           </li>
@@ -146,27 +137,14 @@
       </li><!-- End Tables Nav -->
 
        <li class="nav-item">
-        <a class="nav-link collapsed " href="static.html">
+        <a class="nav-link collapsed " href="{% url 'attendance:static' %}">
           <i class="bi bi-check"></i>
           <span>Hisobot </span>
         </a>
       </li> 
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="participants.html">
-          <i class="bi bi-book"></i>
-          <span>Qatnashuvchilar royhati </span>
-        </a>
-      </li>
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="product.html">
-          <i class="bi bi-box"></i>
-          <span>Mahsulotlar </span>
-        </a>
-      </li> 
-    
-    
+
 
       <!-- End Blank Page Nav -->
 
