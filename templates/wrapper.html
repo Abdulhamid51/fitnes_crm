@@ -98,8 +98,14 @@
           <span>Royhatdan otkazish </span>
         </a>
       </li>
-
       <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'attendance:list_client' %}">
+          <i class="bi bi-person-check-fill"></i>
+          <span>Umumiy Ro'yxat</span>
+        </a>
+      </li>
+      {% comment %}
+      <!-- <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-journal-check"></i><span>Tolovlar</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
@@ -117,31 +123,15 @@
             <a href="{% url 'payment:list' %}">
               <i class="bi bi-circle"></i><span>Mudati tugaganlar</span>
             </a>
-          </li>
-          
+          </li> -->
+      {% endcomment %}
+        
         </ul>
       </li><!-- End Forms Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-calendar"></i><span>Davomat</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="{% url 'attendance:davomet' %}">
-              <i class="bi bi-circle"></i><span>Davomat kiruvchilar royhati</span>
-            </a>
-          </li>
-        
-        </ul>
-      </li><!-- End Tables Nav -->
+      <!-- End Tables Nav -->
 
-       <li class="nav-item">
-        <a class="nav-link collapsed " href="{% url 'attendance:static' %}">
-          <i class="bi bi-check"></i>
-          <span>Hisobot </span>
-        </a>
-      </li> 
+    
 
 
 

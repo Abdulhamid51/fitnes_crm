@@ -28,25 +28,19 @@
               <h5 class="card-title">Floating labels Form</h5>
 
               <!-- Floating Labels Form -->
+
+              <div class="form-floating mb-3">
+                <select class="form-select" id="floatingSelect" aria-label="State">
+                  <option selected>User</option>
+                  <option value="1">User2</option>
+                  <option value="2">User3</option>
+                </select>
+                <label for="floatingSelect">Client</label>
+              </div>
+
               <form class="row g-3">
-                <div class="col-md-12">
-                  <div class="form-floating">
-                    <input type="text" class="form-control" id="floatingName" placeholder="Your Name">
-                    <label for="floatingName">Your Name</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating">
-                    <input type="email" class="form-control" id="floatingEmail" placeholder="Your Email">
-                    <label for="floatingEmail">Your Email</label>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-floating">
-                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-                    <label for="floatingPassword">Password</label>
-                  </div>
-                </div>
+            
+          
                 <div class="col-12">
                   <div class="form-floating">
                     <textarea class="form-control" placeholder="Address" id="floatingTextarea" style="height: 100px;"></textarea>
