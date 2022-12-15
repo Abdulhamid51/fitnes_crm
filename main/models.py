@@ -14,7 +14,7 @@ class Client(models.Model):
         ("PAUSED","paused")
     )
     status = models.CharField(choices=STATUS_TYPES, max_length=50, blank=True, null=True)
-    debt = models.BooleanField("Qarzi bor", default=False)
+    debt = models.BooleanField("Qarzi bor", default=True)
     created = models.DateField("Qo'shilgan sana", auto_now_add=True)
     updated = models.DateTimeField("O'zgartirilgan vaqt", auto_now=True)
 

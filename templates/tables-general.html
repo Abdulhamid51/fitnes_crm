@@ -23,35 +23,42 @@
            
             <div class="card-body">
               <h5 class="card-title">Klientlar ro'yxati <span>| Today</span></h5>
-
-              <table class="table table-borderless datatable">
+              <form method="post" action="{% url 'attendance:list_client' %}">
+                {% csrf_token %}
                 <div class="row">
-                  <div class="col-md-4 col-sm-6">
-
-                    <select class="form-select">
-                      <option value="">ssaom</option>
-                      <option value="">ssaom</option>
-                      <option value="">ssaom</option>
+                  <div class="col-md-3 col-sm-6">
+                    
+                    <select class="form-select" name="tarif">
+                      <option value="">All</option>
+                      {% for tarif in tarif %}
+                      <option value="{{tarif.id}}">{{tarif.title}}</option>
+                      {% endfor %}
                     </select>
                   </div>
-                  <div class="col-md-4 col-sm-6">
-
-                    <select class="form-select">
-                      <option value="">ssaom</option>
-                      <option value="">ssaom</option>
-                      <option value="">ssaom</option>
+                  <div class="col-md-3 col-sm-6">
+                    <select class="form-select" name="status">
+                      <option value="">All</option>
+                      <option value="ACTIVE">ACTIVE</option>
+                      <option value="INACTIVE">INACTIVE</option>
+                      <option value="PAUSED">PAUSED</option>
                     </select>
                   </div>
-                  <div class="col-md-4 col-sm-6">
-
-                    <select class="form-select">
-                      <option value="">ssaom</option>
-                      <option value="">ssaom</option>
-                      <option value="">ssaom</option>
+                  <div class="col-md-3 col-sm-6">
+                    
+                    <select class="form-select" name="debt">
+                      <option value="">All</option>
+                      <option value="0">To'lagan</option>
+                      <option value="1">To'lamagan</option>
                     </select>
+                  </div>
+                  <div class="col-md-3 col-sm-6">
+                    <button type="submit" class="btn btn-success">Filterlash</button>
                   </div>
                   
                 </div>
+              </form>  
+              <table class="table table-borderless datatable">
+                  
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -62,36 +69,36 @@
                     <th scope="col">STATUS</th>
                   </tr>
                 </thead>
-                <tbody>
-                  
-                  {% for client in clients %}
-                    <tr>
-                    <th scope="row"><a href="#">#{{ forloop.counter }}</a></th>
-                    <td><a href="#">{{ client.name }}</a></td>
-                    <td>{{ client.phone }}</td>
-                    <td>{{ client.coming_type }}</td>
-                    <td>
-                      
-                      {% if client.months.last.payed == True %}
-                      <span class="badge bg-success">To'langan</span>
-                      {% else %}
-                      <span class="badge bg-danger">To'lanmagan</span>
-                      {% endif %}
+                <tbody class="clients_list">
+
+                    {% for client in clients %}
+                    <tr class="default">
+                      <th scope="row"><a href="#">#{{ forloop.counter }}</a></th>
+                      <td><a href="#">{{ client.name }}</a></td>
+                      <td>{{ client.phone }}</td>
+                      <td>{{ client.coming_type }}</td>
+                      <td>
                         
-                    </td>
-                    <td>
-                      {% if client.status == "ACTIVE" %}
-                      <span class="badge bg-success">{{client.status}}</span>
-                      {% elif client.status == "INACTIVE" %}
-                      <span class="badge bg-danger">{{client.status}}</span>
-                      {% else %}
-                      <span class="badge bg-warning">{{client.status}}</span>
-                      {% endif %}
-                    </td>
-                  </tr>
-                  {% endfor %}
+                        {% if client.debt == False %}
+                        <span class="badge bg-success">To'langan</span>
+                        {% else %}
+                        <span class="badge bg-danger">To'lanmagan</span>
+                        {% endif %}
+                        
+                      </td>
+                      <td>
+                        {% if client.status == "ACTIVE" %}
+                        <span class="badge bg-success">{{client.status}}</span>
+                        {% elif client.status == "INACTIVE" %}
+                        <span class="badge bg-danger">{{client.status}}</span>
+                        {% else %}
+                        <span class="badge bg-warning">{{client.status}}</span>
+                        {% endif %}
+                      </td>
+                    </tr>
+                    {% endfor %}
                     
-                  
+                    
                 </tbody>
               </table>
 
@@ -107,90 +114,48 @@
     </section>
     
   </main><!-- End #main -->
-
-
-  <style>
-    
-  * {
-    box-sizing: border-box;
-  }
-  
-  #myInput {
-    background-image: url('/css/searchicon.png');
-    background-position: 10px 10px;
-    background-repeat: no-repeat;
-    width: 100%;
-    font-size: 16px;
-    padding: 12px 20px 12px 40px;
-    border: 1px solid #ddd;
-    margin-bottom: 12px;
-  }
-  
-  #mylist {
-    /* background-position: 10px 10px; */
-    background-repeat: no-repeat;
-    width: 100%;
-    font-size: 17.5px;
-    /* padding: 12px 20px 12px 40px; */
-    border: 1px solid #ddd;
-    margin-bottom: 12px;
-  }
-  
-  #myTable {
-    border-collapse: collapse;
-    width: 100%;
-    border: 1px solid #ddd;
-    font-size: 17px;
-  }
-  
-  #myTable th,
-  #myTable td {
-    text-align: left;
-    padding: 12px;
-  }
-  
-  #myTable tr {
-    border-bottom: 1px solid #ddd;
-  }
-  
-  #myTable tr.header,
-  #myTable tr:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .hide {
-    display: none
-  }
-  </style>
-  
-  <script>
-    function myFunction() {
-    let input, filter, table, tr, td,i;
-    const searchbox = document.querySelector("#mysearch");
-    let textBox = searchbox.value;
-    console.log(textBox)
-
-    input = document.getElementById("mylist");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td")[2];
-      td_name = tr[i].getElementsByTagName("td")[1];
-      if (td) {
-        tr[i].classList.toggle("hide", filter && td.innerHTML.toUpperCase() !== filter)
-      }
-      
-      
-     
-    }
-  }
-  </script>
-
-
+  <script src="/static/assets/js/jquery-3.6.1.min.js"></script>
 <script>
-
-
+  $(".filter").on("click", function(){
+    $(".default").hide()
+    
+    $tarif = $(".tarif").val()
+    $status = $(".status").val()
+    $debt = $(".debt").val()
+    if($debt == "0"){
+      $no_debt = `<span class="badge bg-success">To'langan</span>`
+    }else{
+      $no_debt = `<span class="badge bg-danger">To'lanmagan</span>`
+    }
+    console.log($tarif,$status,$debt)
+    $.ajax({
+      url:"/attendance/filter/",
+      type:"GET",
+      data:{
+        status:$status,
+        coming_type:$tarif,
+        debt:$debt
+      },
+      success:function(response){
+        data = response.response
+        console.log(data)
+        for(res in data){
+          console.log(res)
+          $(".clients_list").append(`
+              <tr class="default">
+                <th scope="row"><a href="#">#${Number(res)+1}</a></th>
+                <td><a href="#">${data[res].name}</a></td>
+                <td>${data[res].phone}</td>
+                <td>${response["ct_name"]}</td>
+                <td>${$no_debt}</td>
+                <td>${$status}</td>
+              </tr>
+            `)
+          }
+      }
+    })
+  
+})
 </script>
 
 
