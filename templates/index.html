@@ -17,24 +17,20 @@
       <div class="row">
 
         <!-- Left side columns -->
-        <div class="col-lg-8">
+        <div class="col-lg-12">
           <div class="row">
-
-            <!-- Sales Card -->
-            <div class="col-xxl-4 col-md-6">
+            <div class="col-md-4" style="margin-left:450px;">
               <div class="card info-card sales-card">
-
                
-
                 <div class="card-body">
-                  <h5 class="card-title">UMMUMIY TOLOVLAR  <span>| Kunlik</span></h5>
+                  <h5 class="card-title">Mijozlar soni <span>| Umumiy</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-currency-dollar"></i>
+                      <i class="bi bi-people"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>145 000 sum</h6>
+                      <h6 id="count_all" data-all="{{ all_clients }}">{{ all_clients }} ta</h6>
                       <!-- tolovlar kunlik  -->
 
                     </div>
@@ -42,7 +38,12 @@
                 </div>
 
               </div>
-            </div><!-- End Sales Card -->
+            </div>
+
+   
+            
+          </div>
+          <div class="row">
 
             <!-- Revenue Card -->
             <div class="col-xxl-4 col-md-6">
@@ -51,14 +52,14 @@
                
 
                 <div class="card-body">
-                  <h5 class="card-title">UMMUMIY TOLOVLAR  <span>| Kunlik</span></h5>
+                  <h4 class="card-title">Active mijozlar soni<span></span></h4>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-currency-dollar"></i>
+                      <i class="bi bi-check-circle-fill" style="color:rgb(32, 236, 32); "></i>
                     </div>
                     <div class="ps-3">
-                      <h6>145 000 sum</h6>
+                      <h6 id="count_active" data-active="{{ active }}">{{ active }} ta</h6>
                       <!-- tolovlar kunlik  -->
 
                     </div>
@@ -76,14 +77,14 @@
                 
 
                 <div class="card-body">
-                  <h5 class="card-title">KELGAN ODAMLAR SONI  <span>| Kunlik</span></h5>
+                  <h5 class="card-title">Vaqtincha to'xtatilgan mijozlar soni<span>| Pauza</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-people"></i>
+                      <i class="bi bi-pause-fill text-warning "></i>
                     </div>
                     <div class="ps-3">
-                      <h6>1244</h6>
+                      <h6 id="count_paused" data-paused="{{ paused }}">{{ paused }} ta</h6>
 
                     </div>
                   </div>
@@ -100,60 +101,14 @@
                 
 
                 <div class="card-body">
-                  <h5 class="card-title">KELGAN ODAMLAR SONI  <span>| Kunlik</span></h5>
+                  <h5 class="card-title">Aktiv bo'lmagan mijozlar soni<span>| Inactive</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-people"></i>
+                      <i class="bi bi-x-circle-fill" style="color: red;"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>1244</h6>
-
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-            <div class="col-xxl-4 col-xl-12">
-
-              <div class="card info-card customers-card">
-
-                
-
-                <div class="card-body">
-                  <h5 class="card-title">KELGAN ODAMLAR SONI  <span>| Kunlik</span></h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-people"></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6>1244</h6>
-
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-            <div class="col-xxl-4 col-xl-12" >
-
-              <div class="card info-card customers-card">
-
-                
-
-                <div class="card-body">
-                  <h5 class="card-title">KELGAN ODAMLAR SONI  <span>| Kunlik</span></h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-people"></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6>1244</h6>
+                      <h6 id="count_inactive" data-inactive="{{ inactive }}">{{ inactive }} ta</h6>
 
                     </div>
                   </div>
@@ -179,5 +134,35 @@
     </section>
 
   </main><!-- End #main -->
+
+
+<script>
+
+const counterAnim = (qSelector, start = 0, end, duration = 1000) => {
+ const target = document.querySelector(qSelector);
+ let startTimestamp = null;
+ const step = (timestamp) => {
+  if (!startTimestamp) startTimestamp = timestamp;
+  const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+  target.innerText = Math.floor(progress * (end - start) + start);
+  if (progress < 1) {
+   window.requestAnimationFrame(step);
+  }
+ };
+ window.requestAnimationFrame(step);
+};
+const c_ounter = document.querySelectorAll('h6')
+let all_c = c_ounter[0].getAttribute("data-all");
+let active_c = c_ounter[1].getAttribute("data-active");
+let paused_c = c_ounter[2].getAttribute("data-paused");
+let inactive_c = c_ounter[3].getAttribute("data-inactive");
+
+document.addEventListener("DOMContentLoaded", () => {
+ counterAnim("#count_all", 0, all_c, 1500);
+ counterAnim("#count_active", 0, active_c, 1000);
+ counterAnim("#count_inactive", 0, inactive_c, 1000);
+ counterAnim("#count_paused", 0, paused_c, 1000);
+});
+</script>
   
   {% endblock content %}
