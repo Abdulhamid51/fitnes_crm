@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from main.models import Client
-# Create your views here.
+from django.http import JsonResponse
+from main.models import *
 from django.views import View
 
 
@@ -8,11 +8,44 @@ from django.views import View
 class DavomatView(View):
     def get(self,request):
         queryset = Client.objects.all().order_by("-id")
+        tarif = ComingType.objects.all()
         data = {
-            "clients":queryset
+            "clients":queryset,
+            "tarif":tarif
+        }
+        return render (request,'tables-general.html', data)
+    
+    def post(self, request):
+        tarif = ComingType.objects.all()
+        status = request.POST['status']
+        coming_type = request.POST['tarif']
+        debt = request.POST['debt']
+        queryset = Client.objects.all()
+        if status:
+            queryset = queryset.filter(status=status)
+        if coming_type:
+            queryset = queryset.filter(coming_type=int(coming_type))
+        if debt:
+            queryset = queryset.filter(debt=bool(int(debt)))
+        data = {
+            "clients":queryset,
+            "tarif":tarif
         }
         return render (request,'tables-general.html', data)
 
+def filter_client(request):
+    status = request.GET['status']
+    coming_type = int(request.GET['coming_type'])
+    debt = bool(int(request.GET['debt']))
+    queryset = Client.objects.all()
+    if status:
+        queryset = queryset.filter(status=status)
+    if coming_type:
+        queryset = queryset.filter(coming_type=coming_type)
+    if debt:
+        queryset = queryset.filter(debt=debt)
+    data = {"response":list(queryset.values())}
+    return JsonResponse(data)
 
 
 class StaticView(View):
