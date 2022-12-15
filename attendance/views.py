@@ -33,21 +33,9 @@ class DavomatView(View):
         }
         return render (request,'tables-general.html', data)
 
-def filter_client(request):
-    status = request.GET['status']
-    coming_type = int(request.GET['coming_type'])
-    debt = bool(int(request.GET['debt']))
-    queryset = Client.objects.all()
-    if status:
-        queryset = queryset.filter(status=status)
-    if coming_type:
-        queryset = queryset.filter(coming_type=coming_type)
-    if debt:
-        queryset = queryset.filter(debt=debt)
-    data = {"response":list(queryset.values())}
-    return JsonResponse(data)
-
 
 class StaticView(View):
     def get(self,request):
         return render (request,'static.html')
+
+
