@@ -93,3 +93,10 @@ class RegisterView(View):
         )
 
         return render (request,'register.html',context)
+
+
+class DetailView(View):
+    def get(self, request, id):
+        queryset = Client.objects.get(id=id)
+        months = Month.objects.filter(client=queryset)
+        return render(request, "detail.html", {"client":queryset, "months":months})

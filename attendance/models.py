@@ -12,7 +12,7 @@ class Month(models.Model):
     payed = models.BooleanField("To`landi", default=False)
 
     def __str__(self):
-        return str(self.coming_days)
+        return str(self.id)
 
 
 class Day(models.Model):
