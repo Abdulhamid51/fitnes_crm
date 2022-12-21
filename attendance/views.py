@@ -51,7 +51,8 @@ class DavomatView(View):
             "clients":queryset,
             "tarif":tarif
         }
-        return render (request,'tables-general.html', data)
+        return render (request,'new_table.html', data)
+
     
     def post(self, request):
         tarif = ComingType.objects.all()
