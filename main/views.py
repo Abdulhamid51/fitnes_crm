@@ -98,5 +98,5 @@ class RegisterView(View):
 class DetailView(View):
     def get(self, request, id):
         queryset = Client.objects.get(id=id)
-        months = Month.objects.filter(client=queryset)
+        months = Month.objects.filter(client=queryset).order_by("-id")
         return render(request, "detail.html", {"client":queryset, "months":months})

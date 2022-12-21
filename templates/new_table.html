@@ -10,12 +10,14 @@
     <h1>Davomat</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.html">Asosiy sahifa</a></li>
+        <li class="breadcrumb-item"><a href="index.html">Asosiy sahifa</a></li> 
         <li class="breadcrumb-item">Davomat</li>
         <li class="breadcrumb-item active">Davomat kiruvchilar royhati</li>
       </ol>
     </nav>
   </div><!-- End Page Title -->
+
+    
 
     <div class="container">
         
@@ -48,6 +50,7 @@
                 </select>
             </th>
             <th>Telefon raqam</th>
+            <th>Davomat</th>
             
             <!-- <th col-index = 5>Office
                 <select class="table-filter" onchange="filter_rows()">
@@ -60,27 +63,34 @@
         <tbody class="p-4">
             {% for c in clients %}
             <tr>
-                <td>{{ forloop.counter }}. {{ c.name }}</td>   
+                <td>{{ forloop.counter }}. <a href="{% url 'main:detail' c.id %}">{{ c.name }}</a></td>   
                 <td>{{ c.coming_type }}</td>
-                <td class="badge 
+                
+                <td class="
                 {% if c.status == "ACTIVE" %}
-                bg-success
+                text-success
                 {% elif c.status == "INACTIVE" %}
-                bg-danger
+                text-danger
                 {% else %}
-                bg-warning
-                {% endif %}">{{ c.status }}</td>
+                text-warning
+                {% endif %}">{{ c.status }}
+                </td>
 
                 <!-- <td class="badge bg-danger">{{ c.status }}</td> -->
                 <td
                 {% if c.debt == False %}
-                class="badge  bg-success">To'langan
+                class="text-success">To'langan
                 {% else %}
-                class="badge bg-danger">To'lanmagan
+                class="text-danger">To'lanmagan
                 {% endif %}
                 </td>
 
                 <td>{{ c.phone }}</td>
+                <td>  <button class="icons" type="button"  data-dismiss="alert" aria-label="Close" >
+                    <span class="checking{% if user.today_came == 'today_came' %} checked_icon {% else %} check_icon {% endif %}" data-id="{{ user.pk }}" aria-hidden="true" ><i class=" fa-solid fa-check"></i></span>
+                    <span class="attendance_btn attendance_icon"  data-id="{{ user.pk }}" aria-hidden="true" ><i class="fa-solid fa-plus"></i></span>
+                  </button>
+                </td>
                 <!-- <td>Site 1</td> -->
             </tr>
             {% endfor %}
@@ -130,6 +140,8 @@
             margin-bottom: 25px;
             
         }
+
+       
 
                 
         

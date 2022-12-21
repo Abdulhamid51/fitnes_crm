@@ -8,8 +8,10 @@
       
     </div><hr>
     
+    
+    <div class="row">
+   <div class="col-md-6" style="overflow-y: scroll; height: 300px;">
     {% for month in months %}
-        
     <div class="month">
         <div class="title form-inline">
             <h4 class="pagetitle">{{month.created | date:"F"}} {{month.came}}/{{month.coming_days}} 
@@ -22,38 +24,121 @@
                 {{month.id}}
             </h4>
         </div>
-        <div class="row container">
-            
-            {% for day in month.days.all %}
+        <!-- <div class="row "> -->
+           <!-- <div class="col-md-6"> -->
+             <div class="row">
+                {% for day in month.days.all %}
             
             {% if day.came == True %}
-                
-            <div class="col-md-1 card bg-success text-light m-1">
-                <center>
-                    12 <br>
-                    {{day.date|date:"D"}}
-                </center>
+            <div class="col-md-2 col-sm-4">
+                <div class="card bg-success text-light" style="width:70px; height: 70px;" >
+                    <div class="text-center text-light">
+                        12 <br>
+                        {{day.date|date:"D"}}
+                    </div>
+                </div>
             </div>
 
             {% else %}
-
-            <div class="col-md-1 card bg-danger text-light m-1">
-                <center>
-                    12 <br>
-                    {{day.date|date:"D"}}
-                </center>
+            <div class="col-md-2 col-sm-4">
+                <div class="card bg-danger text-light " style="width:70px; height: 70px;" >
+                    <div class="text-center text-light">
+                        12 <br>
+                        {{day.date|date:"D"}}
+                    </div>
+                </div>
             </div>
 
             {% endif %}
-                
 
             {% endfor %}
-                
-        </div>
+             </div>
+            
+        
     </div>
 
     <hr>
     {% endfor %}
+   </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="info m-5 text-center">
+            <h3>Ismi : Oyatillo</h3>
+            <h3>Ismi : Oyatillo</h3>
+            <h3>Ismi : Oyatillo</h3>
+            </div>
+            
+        </div>
+       </div>
+    </div>
+    <div class="row mt-5">
+        <hr>
+        <h3 class="mt-5 text-success">Umumiy to'lovlar ro'yxati</h3>
+        <div class="col-md-6" style="overflow-y: scroll; height: 300px;">  
+            <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Oy nomi</th>
+                    <th scope="col">To'langan summa</th>
+                    <th scope="col">To'langan sana</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">3</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                  </tr>
+                </tbody>
+              </table>
+        </div>
+        <div class="col-md-6">
+
+            <form class="row g-3" method="post" style="margin-left: auto;"> {% csrf_token %}
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="number" name="summa" class="form-control" id="floatingName" placeholder="Summa">
+                    <label for="floatingName">Summa</label>
+                  </div>
+
+                </div>
+  
+
+                <div class="col-md-12">
+                  <div class="form-floating mb-3">
+                    <select class="form-select" name="month" id="floatingSelect" aria-label="State">
+                      {% for t in tarif %}
+                      <option selected value="{{t.title}}" >{{t}}</option>
+                      {% endfor %}
+                    </select>
+                    <label for="floatingSelect">Month</label>
+                  </div>
+                </div>
+
+
+               <div class="text-left">
+                  <button type="submit" class="btn btn-primary">Qoshish</button>
+                </div>
+              </form><!-- End floating Labels Form -->
+
+
+        </div>
+    </div>
+
         
 
 
