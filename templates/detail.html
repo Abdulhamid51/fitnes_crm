@@ -25,6 +25,8 @@
         <div class="row container">
             
             {% for day in month.days.all %}
+            
+            {% if day.came == True %}
                 
             <div class="col-md-1 card bg-success text-light m-1">
                 <center>
@@ -32,6 +34,18 @@
                     {{day.date|date:"D"}}
                 </center>
             </div>
+
+            {% else %}
+
+            <div class="col-md-1 card bg-danger text-light m-1">
+                <center>
+                    12 <br>
+                    {{day.date|date:"D"}}
+                </center>
+            </div>
+
+            {% endif %}
+                
 
             {% endfor %}
                 
