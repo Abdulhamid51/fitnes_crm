@@ -1,8 +1,46 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from main.models import *
+from .models import *
 from django.views import View
 
+
+def default_add_month(request, client_id):
+    import datetime
+    import calendar
+    client = get_object_or_404(Client, id=client_id)
+    now = datetime.datetime.now()
+    today = int(now.strftime("%d"))
+    month_days = calendar.monthrange(int(now.strftime("%Y")), int(now.strftime("%m")))[1]
+    res_days = month_days - today
+    if res_days >= client.coming_type.days:
+        coming_days = client.coming_type.days
+        price = client.coming_type.price
+    else:
+        daily_price = client.coming_type.price / client.coming_type.days
+        print(daily_price)
+        coming_days = res_days
+        price = daily_price * coming_days
+    sunday = coming_days // 7
+    coming_days -= sunday
+    month = Month.objects.create(
+        client=client,
+        coming_days=coming_days,
+        payment=int(price)
+    )
+    return JsonResponse({"status":"Oy hosil qilindi"})
+
+
+def default_add_day(request, client_id):
+    client = get_object_or_404(Client, id=client_id)
+    try:
+        month = client.months.last()
+        day = Day.objects.create(
+            month=month
+        )
+    except:
+        month = "salom"
+    return JsonResponse({"status":"Kun hosil qilindi"})
 
 
 class DavomatView(View):
@@ -33,21 +71,9 @@ class DavomatView(View):
         }
         return render (request,'tables-general.html', data)
 
-def filter_client(request):
-    status = request.GET['status']
-    coming_type = int(request.GET['coming_type'])
-    debt = bool(int(request.GET['debt']))
-    queryset = Client.objects.all()
-    if status:
-        queryset = queryset.filter(status=status)
-    if coming_type:
-        queryset = queryset.filter(coming_type=coming_type)
-    if debt:
-        queryset = queryset.filter(debt=debt)
-    data = {"response":list(queryset.values())}
-    return JsonResponse(data)
-
 
 class StaticView(View):
     def get(self,request):
         return render (request,'static.html')
+
+

@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 from .models import *
-from attendance.models import MonthName
+from attendance.models import *
 
 class HomeView(View):
     def get(self,request):
@@ -36,6 +36,15 @@ class RegisterView(View):
     def get(self,request):
         tarif =  ComingType.objects.all()
 
+
+        # import calendar
+        # import datetime
+        # now = datetime.datetime.now()
+        # year = now.strftime('%Y')
+        # month = now.strftime('%m')
+        # maxday = calendar.monthrange(int(year), int(month))
+        # print(maxday[1])
+
         context = {'tarif':tarif}
         return render (request,'register.html',context)
 
@@ -44,18 +53,50 @@ class RegisterView(View):
         name = request.POST.get('name')
         phone = request.POST.get('phone')
         tarif = request.POST.get('tarif')
-        tarif = ComingType.objects.get(title=tarif)
-        status = request.POST.get('status')
+        if user and name and phone and tarif:
 
-        client = Client.objects.create(user=user,
-                                       name=name,
-                                       phone=phone,
-                                       coming_type=tarif,
-                                       status=status)
-        tarif =  ComingType.objects.all()
-        if client:
-            context = {'tarif':tarif,'client':client}
+            tarif = ComingType.objects.get(title=tarif)
+            status = request.POST.get('status')
+
+            client = Client.objects.create(user=user,
+                                        name=name,
+                                        phone=phone,
+                                        coming_type=tarif,
+                                        status=status)
+            tarif =  ComingType.objects.all()
+            context = {'tarif':tarif,'client':client, "status":"Klient hosil qilindi"}
         else:
-            context = {'tarif':tarif,}
+            context = {'tarif':tarif, "status":"Nimadur noto`g`ri ketdi"} 
+
+        # month create
+        import datetime
+        import calendar
+
+        now = datetime.datetime.now()
+        today = int(now.strftime("%d"))
+        month_days = calendar.monthrange(int(now.strftime("%Y")), int(now.strftime("%m")))[1]
+        res_days = month_days - today
+        if res_days >= client.coming_type.days:
+            coming_days = client.coming_type.days
+            price = client.coming_type.price
+        else:
+            daily_price = client.coming_type.price / client.coming_type.days
+            print(daily_price)
+            coming_days = res_days
+            price = daily_price * coming_days
+        sunday = coming_days // 7
+        coming_days -= sunday
+        month = Month.objects.create(
+            client=client,
+            coming_days=coming_days,
+            payment=int(price)
+        )
 
         return render (request,'register.html',context)
+
+
+class DetailView(View):
+    def get(self, request, id):
+        queryset = Client.objects.get(id=id)
+        months = Month.objects.filter(client=queryset)
+        return render(request, "detail.html", {"client":queryset, "months":months})

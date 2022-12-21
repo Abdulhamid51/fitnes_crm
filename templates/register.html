@@ -18,7 +18,6 @@
       <div class="row">
         <div class=" card-1 col-lg-6  ml-5  " >
 
-          salom
 
           <div class="card">
             <div class="card-body">
@@ -57,9 +56,9 @@
                   <div class="form-floating mb-3">
                     <select class="form-select" name="status" id="floatingSelect" aria-label="State">
 
-                      <option selected value="active"> active</option>
-                      <option selected value="inactive" > inactive</option>
-                      <option selected value="paused"> paused</option>
+                      <option selected value="ACTIVE"> active</option>
+                      <option selected value="INACTIVE" > inactive</option>
+                      <option selected value="PAUSED"> paused</option>
 
                     </select>
                     <label for="floatingSelect">status</label>
@@ -72,7 +71,7 @@
                 </div>
               </form><!-- End floating Labels Form -->
               <div class="text">
-                <h1> {{client.name}}</h1>
+                <p>{{ status }}</p>
               </div>
             </div>
           </div>

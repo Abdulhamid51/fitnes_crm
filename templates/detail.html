@@ -1,0 +1,61 @@
+{% extends 'wrapper.html' %}
+{% block content %}
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>{{client.name}}</h1>
+      
+    </div><hr>
+    
+    {% for month in months %}
+        
+    <div class="month">
+        <div class="title form-inline">
+            <h4 class="pagetitle">{{month.created | date:"F"}} {{month.came}}/{{month.coming_days}} 
+                
+                {% if month.payed == True %}
+                    <button class="btn btn-primary btn-sm btn-disaled">Payed</button>
+                    {% else %}
+                    <button class="btn btn-danger btn-sm">Unpayed</button>
+                {% endif %}
+                {{month.id}}
+            </h4>
+        </div>
+        <div class="row container">
+            
+            {% for day in month.days.all %}
+            
+            {% if day.came == True %}
+                
+            <div class="col-md-1 card bg-success text-light m-1">
+                <center>
+                    12 <br>
+                    {{day.date|date:"D"}}
+                </center>
+            </div>
+
+            {% else %}
+
+            <div class="col-md-1 card bg-danger text-light m-1">
+                <center>
+                    12 <br>
+                    {{day.date|date:"D"}}
+                </center>
+            </div>
+
+            {% endif %}
+                
+
+            {% endfor %}
+                
+        </div>
+    </div>
+
+    <hr>
+    {% endfor %}
+        
+
+
+  </main><!-- End #main -->
+{% endblock content %}
