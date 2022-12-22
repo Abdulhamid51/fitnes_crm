@@ -3,13 +3,76 @@
 
   <main id="main" class="main">
 
-    <div class="pagetitle">
+    <!-- <div class="pagetitle">
       <h1>{{client.name}}</h1>
       
-    </div><hr>
+    </div><hr> -->
     
     
     <div class="row">
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="card mb-4 mt-4 p-3">
+              <div class="card-body text-center mt-3 ">
+                <img src="../static/assets/img/fitnesss.jpg" alt="avatar"
+                  class="rounded-circle img-fluid" style="width: 90px; height: 90px;">
+                <h5 class="my-3">John Smith</h5>
+               
+                
+              </div>
+            </div>
+         
+          </div>
+          <div class="col-lg-8 ">
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="row mt-3">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Full Name</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0">{{ client.name }}</p>
+                  </div>
+                </div>
+                <hr>
+                
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Phone</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0">{{ client.phone }}</p>
+                  </div>
+                </div>
+                <hr>
+
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Status</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0">{{ client.status }}</p>
+                  </div>
+                </div>
+                <hr>
+
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Tarif</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0">{{ client.coming_type }}</p>
+                  </div>
+                </div>
+              
+                <hr>
+            
+              </div>
+            </div>
+         </div>
+      </div>
+      </div>
    <div class="col-md-6" style="overflow-y: scroll; height: 300px;">
     {% for month in months %}
     <div class="month">
@@ -60,22 +123,45 @@
     <hr>
     {% endfor %}
    </div>
-    <div class="col-md-6">
-        <div class="card">
-            <div class="info m-5 text-center">
-            <h3>Ismi : Oyatillo</h3>
-            <h3>Ismi : Oyatillo</h3>
-            <h3>Ismi : Oyatillo</h3>
-            </div>
-            
-        </div>
-       </div>
-    </div>
-    <div class="row mt-5">
-        <hr>
-        <h3 class="mt-5 text-success">Umumiy to'lovlar ro'yxati</h3>
-        <div class="col-md-6" style="overflow-y: scroll; height: 300px;">  
-            <table class="table table-striped">
+   
+   <div class="row mt-5">
+     <hr>
+     <h3 class="text-success">To'lov qo'shish</h3>
+     <div class="col-md-6">
+  
+         <form class="row g-3" method="post" style="margin-left: auto;"> {% csrf_token %}
+             <div class="col-md-12">
+               <div class="form-floating">
+                 <input type="number" name="summa" class="form-control" id="floatingName" placeholder="Summa">
+                 <label for="floatingName">Summa</label>
+               </div>
+  
+             </div>
+  
+  
+             <div class="col-md-12">
+               <div class="form-floating mb-3">
+                 <select class="form-select" name="month" id="floatingSelect" aria-label="State">
+                   {% for t in tarif %}
+                   <option selected value="{{t.title}}" >{{t}}</option>
+                   {% endfor %}
+                 </select>
+                 <label for="floatingSelect">Month</label>
+               </div>
+             </div>
+  
+  
+            <div class="text-left">
+               <button type="submit" class="btn btn-primary">Qoshish</button>
+             </div>
+           </form><!-- End floating Labels Form -->
+  
+  
+     </div>
+     
+     <div class="col-md-6" style="overflow-y: scroll; height: 300px;">  
+      <h3 class="text-success">Umumiy to'lovlar</h3>
+      <table class="table table-striped">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -105,37 +191,6 @@
                   </tr>
                 </tbody>
               </table>
-        </div>
-        <div class="col-md-6">
-
-            <form class="row g-3" method="post" style="margin-left: auto;"> {% csrf_token %}
-                <div class="col-md-12">
-                  <div class="form-floating">
-                    <input type="number" name="summa" class="form-control" id="floatingName" placeholder="Summa">
-                    <label for="floatingName">Summa</label>
-                  </div>
-
-                </div>
-  
-
-                <div class="col-md-12">
-                  <div class="form-floating mb-3">
-                    <select class="form-select" name="month" id="floatingSelect" aria-label="State">
-                      {% for t in tarif %}
-                      <option selected value="{{t.title}}" >{{t}}</option>
-                      {% endfor %}
-                    </select>
-                    <label for="floatingSelect">Month</label>
-                  </div>
-                </div>
-
-
-               <div class="text-left">
-                  <button type="submit" class="btn btn-primary">Qoshish</button>
-                </div>
-              </form><!-- End floating Labels Form -->
-
-
         </div>
     </div>
 

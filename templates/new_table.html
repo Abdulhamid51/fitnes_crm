@@ -19,7 +19,7 @@
 
     
 
-    <div class="container">
+    <div class="container mt-5">
         
         <!-- <div class="outer-wrapper">
             <div class="table-wrapper"> -->
@@ -51,19 +51,14 @@
             </th>
             <th>Telefon raqam</th>
             <th>Davomat</th>
-            
-            <!-- <th col-index = 5>Office
-                <select class="table-filter" onchange="filter_rows()">
-                    <option value="all"></option>
-                </select>
-            </th> -->
+    
             
         </thead>
 
         <tbody class="p-4">
             {% for c in clients %}
             <tr>
-                <td>{{ forloop.counter }}. <a href="{% url 'main:detail' c.id %}">{{ c.name }}</a></td>   
+                <td>{{ forloop.counter }}. <a href="{% url 'main:detail' c.id %}" >{{ c.name }}</a></td>   
                 <td>{{ c.coming_type }}</td>
                 
                 <td class="
@@ -73,7 +68,7 @@
                 text-danger
                 {% else %}
                 text-warning
-                {% endif %}">{{ c.status }}
+                {% endif %}">{{ c.status     }}
                 </td>
 
                 <!-- <td class="badge bg-danger">{{ c.status }}</td> -->
@@ -86,10 +81,29 @@
                 </td>
 
                 <td>{{ c.phone }}</td>
-                <td>  <button class="icons" type="button"  data-dismiss="alert" aria-label="Close" >
-                    <span class="checking{% if user.today_came == 'today_came' %} checked_icon {% else %} check_icon {% endif %}" data-id="{{ user.pk }}" aria-hidden="true" ><i class=" fa-solid fa-check"></i></span>
-                    <span class="attendance_btn attendance_icon"  data-id="{{ user.pk }}" aria-hidden="true" ><i class="fa-solid fa-plus"></i></span>
-                  </button>
+                <td class="att_td">  
+                    <span class=attendance-check-{{ c.id }}>
+                            <a href="#"  onclick="Attendance('check')">
+                                <i class="fa-sharp fa-solid fa-circle-check text-success" style="font-size: 24px;">
+                                    <p style="font-size: 12px; font-weight:bold; padding: 4px; margin-left: -5px;">Keldi</p>
+                                </i>
+                            </a>
+                    </span>
+                    <span class=attendance-x-{{ c.id }}>
+                        <a href="#"  onclick="Attendance('x')" >
+                            <i class="fa-sharp fa-solid fa-circle-xmark text-danger " style="font-size: 24px; margin-left: 10px;" >
+                                <p style="font-size: 12px; font-weight:bold; padding: 4px; margin-left: -12px;">Kelmadi</p>
+                            </i>
+                        </a>
+                    </span>
+                    <span class=attendance-edit-{{ c.id }}>
+                        <a href="#" onclick="Attendance('edit')" >
+                            <!-- <i class="fa-solid fa-pen-to-square"></i> -->
+                            <i class="fa-solid fa-pen-to-square text-warning" style="font-size:22px; margin-left: 10px;">
+                                <p style="font-size: 12px; font-weight:bold; padding: 4px; margin-left: -12px;">Tahrirlash</p>
+                            </i>
+                        </a>
+                    </span>
                 </td>
                 <!-- <td>Site 1</td> -->
             </tr>
@@ -107,8 +121,8 @@
     </script> -->
     <script src="/static/assets/example/filter.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    
     <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    
     <script>
         window.onload = () => {
             console.log(document.querySelector("#emp-table > tbody > tr:nth-child(1) > td:nth-child(2) ").innerHTML);
@@ -129,6 +143,15 @@
             }).hide();
         });
                 
+
+        
+        function Attendance(value){
+            att_check = document.querySelectorAll('.attendance-check');
+            att_x = document.querySelectorAll('.attendance-x');
+            att_edit = document.querySelectorAll('.attendance-edit');
+            // att_edit.style.display = 'none';
+            
+        }
        
     </script>
    
