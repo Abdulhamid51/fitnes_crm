@@ -43,6 +43,25 @@ def default_add_day(request, client_id):
     return JsonResponse({"status":"Kun hosil qilindi"})
 
 
+def add_day(request, day_id):
+    day = get_object_or_404(Day, id=day_id)
+    resp = request.GET.get('day_result')
+    if resp == "true":
+        day.came = True
+        day.save()
+        return JsonResponse({"came":"True"})
+    elif resp == "false":
+        day.came = False
+        day.save()
+        return JsonResponse({"came":"False"})
+    else:
+        return JsonResponse({"came":"not valid"})
+
+    
+
+
+
+
 class DavomatView(View):
     def get(self,request):
         queryset = Client.objects.all().order_by("-id")

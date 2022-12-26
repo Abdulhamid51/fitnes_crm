@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 
 class Client(models.Model):
     user = models.ForeignKey(User, related_name="clients", on_delete=models.CASCADE)
-
     name = models.CharField("Ism familiyasi", max_length=150)
     phone = models.CharField("Telefon raqami", max_length=50)
     coming_type = models.ForeignKey("main.ComingType", related_name="type_clients",

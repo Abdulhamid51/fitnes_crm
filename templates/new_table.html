@@ -82,7 +82,7 @@
 
                 <td>{{ c.phone }}</td>
                 <td class="att_td">  
-                    <span class=attendance-check-{{ c.id }}>
+                    <!-- {% comment %} <span class=attendance-check-{{ c.id }}>
                             <a href="#"  onclick="Attendance('check')">
                                 <i class="fa-sharp fa-solid fa-circle-check text-success" style="font-size: 24px;">
                                     <p style="font-size: 12px; font-weight:bold; padding: 4px; margin-left: -5px;">Keldi</p>
@@ -99,11 +99,29 @@
                     <span class=attendance-edit-{{ c.id }}>
                         <a href="#" onclick="Attendance('edit')" >
                             <!-- <i class="fa-solid fa-pen-to-square"></i> -->
-                            <i class="fa-solid fa-pen-to-square text-warning" style="font-size:22px; margin-left: 10px;">
+                            <!-- <i class="fa-solid fa-pen-to-square text-warning" style="font-size:22px; margin-left: 10px;">
                                 <p style="font-size: 12px; font-weight:bold; padding: 4px; margin-left: -12px;">Tahrirlash</p>
                             </i>
-                        </a>
-                    </span>
+                        </a> -->
+                    <!-- </span> {% endcomment %} --> 
+                    
+
+                    <label class="switch ">
+                        
+                        {% if c.months.all.last.days.all.last %}
+                            {% if c.months.all.last.days.all.last.came == True %}
+                            
+                            <input data-id="{{c.months.all.last.days.all.last.id}}" checked="true" type="checkbox" class="default davomat">
+                            <span class="slider round"></span>
+                            {% else %}
+                            <input data-id="{{c.months.all.last.days.all.last.id}}" type="checkbox" class="default davomat">
+                            <span class="slider round"></span>
+                            
+                            {% endif %}
+                            {% else %}
+                        {% endif %}
+                            
+                    </label>
                 </td>
                 <!-- <td>Site 1</td> -->
             </tr>
@@ -114,6 +132,68 @@
         </tbody>
     </table>
 
+    <style>
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width:  40px;
+            height: 24px;
+            float:left;
+        }
+        
+        /* Hide default HTML checkbox */
+        .switch input {display:none;}
+        
+        /* The slider */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgb(199, 31, 31);
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 23px;
+            width: 22px;
+            left: -2px;
+            bottom: 2px;
+            background-color: rgb(255, 255, 255);
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+        
+        input.default:checked + .slider {
+            background-color: rgb(0, 255, 13);
+        }
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+        
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+        
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+        .slider.round:before {
+  border-radius: 50%;
+}
+        </style>
+        
+        
+        
     
    
         
@@ -143,15 +223,22 @@
             }).hide();
         });
                 
+        $(".davomat").on("change", function(){
+            $id = $(this).data("id")
+            $atr = $(this).prop("checked")
+            $.ajax({
+                url:`add_day/${$id}`,
+                type:"GET",
+                data:{
+                    "day_result":$atr
+                },
+                success:function(response){
+                    console.log(response)
+                }
+            })
+        })
 
-        
-        function Attendance(value){
-            att_check = document.querySelectorAll('.attendance-check');
-            att_x = document.querySelectorAll('.attendance-x');
-            att_edit = document.querySelectorAll('.attendance-edit');
-            // att_edit.style.display = 'none';
-            
-        }
+        console.log("sa")
        
     </script>
    
