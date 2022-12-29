@@ -227,7 +227,7 @@
             $id = $(this).data("id")
             $atr = $(this).prop("checked")
             $.ajax({
-                url:`add_day/${$id}`,
+                url:`/add_day/${$id}`,
                 type:"GET",
                 data:{
                     "day_result":$atr
