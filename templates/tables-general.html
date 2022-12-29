@@ -127,7 +127,6 @@
     }else{
       $no_debt = `<span class="badge bg-danger">To'lanmagan</span>`
     }
-    console.log($tarif,$status,$debt)
     $.ajax({
       url:"/attendance/filter/",
       type:"GET",
@@ -138,7 +137,6 @@
       },
       success:function(response){
         data = response.response
-        console.log(data)
         for(res in data){
           console.log(res)
           $(".clients_list").append(`

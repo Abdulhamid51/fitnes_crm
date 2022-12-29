@@ -39,7 +39,7 @@ function getUniqueValuesFromColumn() {
     // for(i in unique_col_values_dict) {
     //     alert("Column index : " + i + " has Unique values : \n" + unique_col_values_dict[i]);
     // }
-    console.log(unique_col_values_dict)
+    // console.log(unique_col_values_dict)
     updateSelectOptions(unique_col_values_dict)
 
 };
@@ -51,7 +51,7 @@ function updateSelectOptions(unique_col_values_dict) {
 
     allFilters.forEach((filter_i) => {
         col_index = filter_i.parentElement.getAttribute('col-index')
-        console.log(col_index)
+        // console.log(col_index)
         unique_col_values_dict[col_index].forEach((i) => {
             // console.log("abc")
             // console.log(i)

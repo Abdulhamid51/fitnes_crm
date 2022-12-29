@@ -205,7 +205,7 @@
     
     <script>
         window.onload = () => {
-            console.log(document.querySelector("#emp-table > tbody > tr:nth-child(1) > td:nth-child(2) ").innerHTML);
+            
         };
 
         getUniqueValuesFromColumn()
@@ -215,7 +215,7 @@
         $('#search').keyup(function() {
             var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
 
-            console.log(val)
+            
             
             $rows.show().filter(function() {
                 var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
@@ -233,12 +233,11 @@
                     "day_result":$atr
                 },
                 success:function(response){
-                    console.log(response)
+                    
                 }
             })
         })
 
-        console.log("sa")
        
     </script>
    

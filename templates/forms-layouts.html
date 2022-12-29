@@ -25,55 +25,32 @@
 
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Floating labels Form</h5>
+              <h5 class="card-title">Klient uchun to'lov qilish</h5>
 
               <!-- Floating Labels Form -->
 
-              <div class="form-floating mb-3">
-                <select class="form-select" id="floatingSelect" aria-label="State">
-                  <option selected>User</option>
-                  <option value="1">User2</option>
-                  <option value="2">User3</option>
-                </select>
-                <label for="floatingSelect">Client</label>
-              </div>
-
-              <form class="row g-3">
-            
-          
-                <div class="col-12">
-                  <div class="form-floating">
-                    <textarea class="form-control" placeholder="Address" id="floatingTextarea" style="height: 100px;"></textarea>
-                    <label for="floatingTextarea">Address</label>
+              <form method="post" class="row g-3">
+                {% csrf_token %}
+                <div class="col-md-6">
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" id="userId" placeholder="ID" name="uid">
+                      <label for="floatingCity">Klient IDsi (skanerlang)</label>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="col-md-12">
                     <div class="form-floating">
-                      <input type="text" class="form-control" id="floatingCity" placeholder="City">
-                      <label for="floatingCity">City</label>
+                      <input type="number" class="form-control" id="payment" placeholder="payment" name="payment">
+                      <label for="floatingCity">To'lov miqdori</label>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-4">
-                  <div class="form-floating mb-3">
-                    <select class="form-select" id="floatingSelect" aria-label="State">
-                      <option selected>New York</option>
-                      <option value="1">Oregon</option>
-                      <option value="2">DC</option>
-                    </select>
-                    <label for="floatingSelect">State</label>
-                  </div>
-                </div>
-                <div class="col-md-2">
-                  <div class="form-floating">
-                    <input type="text" class="form-control" id="floatingZip" placeholder="Zip">
-                    <label for="floatingZip">Zip</label>
-                  </div>
-                </div>
+                
                 <div class="text-center">
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                  <button type="reset" class="btn btn-secondary">Reset</button>
+                  <button type="submit" class="btn btn-primary">Tasdiqlash</button>
+                  <button type="reset" class="btn btn-secondary">Tozalash</button>
                 </div>
               </form><!-- End floating Labels Form -->
 
@@ -83,6 +60,12 @@
         </div>
       </div>
     </section>
+
+    <script>
+      setInterval(function(){
+        navigator.clipboard.readText().then(text => document.getElementById("userId").value = text);
+      }, 200)
+    </script>
 
   </main><!-- End #main -->
 {% endblock content %}

@@ -3,3 +3,6 @@ from .models import*
 
 admin.site.register(Client)
 admin.site.register(ComingType)
+admin.site.register(Month)
+admin.site.register(Day)
+admin.site.register(Payment)
