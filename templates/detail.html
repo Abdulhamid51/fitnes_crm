@@ -3,99 +3,111 @@
 
   <main id="main" class="main">
 
-    <!-- <div class="pagetitle">
-      <h1>{{client.name}}</h1>
-      
-    </div><hr> -->
+  
     
     
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-6 p-1">
         <div class="row">
-          <div class="col-lg-4">
-            <div class="card mb-4 mt-4 p-3">
-              <div class="card-body text-center mt-3 ">
-                <img src="../static/assets/img/fitnesss.jpg" alt="avatar"
-                  class="rounded-circle img-fluid" style="width: 90px; height: 90px;">
-                <h5 class="my-3">John Smith</h5>
-               
-                
-              </div>
-            </div>
          
-          </div>
-          <div class="col-lg-8 ">
-            <div class="card mb-4">
+          <div class="col-lg-12 ">
+            <form action="{% url 'main:detail' client.id %}" method="post">
+            {% csrf_token %}
+
+            <div class="card ">
               <div class="card-body">
                 <div class="row mt-3">
                   <div class="col-sm-3">
-                    <p class="mb-0">Full Name</p>
+                    <h5 class="mt-2">Ism Familya</h5>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-0">{{ client.name }}</p>
+                    <input type="text"  required name="name" class="form-control" value="{{ client.name }}" placeholder="Ism" >
                   </div>
                 </div>
-                <hr>
                 
-                <div class="row">
+                <div class="row mt-4">
                   <div class="col-sm-3">
-                    <p class="mb-0">Phone</p>
+                    <h5 class="mt-2">Telefon</h5>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-0">{{ client.phone }}</p>
+                    <input type="text" maxlength="13" minlength="9" required name="phone" class="form-control" value="{{ client.phone }}" placeholder="Telefon raqam" >
                   </div>
                 </div>
-                <hr>
 
-                <div class="row">
+               
+                <div class="row mt-4">
                   <div class="col-sm-3">
-                    <p class="mb-0">Status</p>
+                    <h5 class="mt-2">Status</h5>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-0">{{ client.status }}</p>
-                  </div>
-                </div>
-                <hr>
+                    <select class="form-select" name="status" aria-label="State">
+                      {% if client.status == "ACTIVE" %}
+                      <option selected value="ACTIVE">Faol</option>
+                      <option  value="INACTIVE">Faol emas</option>
+                      <option value="PAUSED">Pauzada</option>
+                      {% elif client.status == "INACTIVE" %}
+                      <option selected value="INACTIVE">Faol emas</option>
+                      <option value="ACTIVE">Faol</option>
+                      <option value="PAUSED">Pauzada</option>
+                      {% else %}
+                      <option value="ACTIVE">Faol</option>
+                      <option selected value="PAUSED">Pauzada</option>
+                      <option  value="INACTIVE">Faol emas</option>
+                      {% endif %}
 
-                <div class="row">
-                  <div class="col-sm-3">
-                    <p class="mb-0">Tarif</p>
-                  </div>
-                  <div class="col-sm-9">
-                    <p class="text-muted mb-0">{{ client.coming_type }}</p>
+                    </select>
                   </div>
                 </div>
-              
+               
+                <div class="row mt-4">
+                  <div class="col-sm-3">
+                    <h5 class="mt-3">Tarif</h5>
+                  </div>
+                  <div class="col-sm-9">
+                    <select class="form-select" name="tarif" aria-label="State">
+                      {% for t in tarifs %}
+                      {% if t == client.coming_type %}
+                      <option selected value="{{ t }}">{{ t }}</option>
+                      {% else %}
+                      <option  value="{{ t }}">{{ t }}</option>
+                      {% endif %}
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
                 <hr>
             
+                <button type="submit" class="btn btn-primary">O'zgartirish</button>
               </div>
             </div>
+          </form>
+
          </div>
       </div>
       </div>
-   <div class="col-md-6" style="overflow-y: scroll; height: 300px;">
+
+   <div class="card col-md-6 p-4" style="overflow-y: scroll; height: 350px;">
     {% for month in months %}
     <div class="month">
         <div class="title form-inline">
             <h4 class="pagetitle">{{month.created | date:"F"}} {{month.came}}/{{month.coming_days}} 
                 
                 {% if month.payed == True %}
-                    <button class="btn btn-primary btn-sm btn-disaled">Payed</button>
+                    <button class="btn btn-primary btn-sm btn-disaled">To'langan</button>
                     {% else %}
-                    <button class="btn btn-danger btn-sm">Unpayed</button>
+                    <button class="btn btn-danger btn-sm">To'lanmagan</button>
                 {% endif %}
-                {{month.id}}
             </h4>
         </div>
         <!-- <div class="row "> -->
            <!-- <div class="col-md-6"> -->
-             <div class="row">
-                {% for day in month.days.all %}
-            
+             <div class="row mt-4">
+            {% for day in month.days.all %}
+          
             {% if day.came == True %}
             <div class="col-md-2 col-sm-4">
                 <div class="card bg-success text-light" style="width:70px; height: 70px;" >
-                    <div class="text-center text-light">
+                    <div class="text-center mt-2 text-light">
                         12 <br>
                         {{day.date|date:"D"}}
                     </div>
@@ -105,7 +117,7 @@
             {% else %}
             <div class="col-md-2 col-sm-4">
                 <div class="card bg-danger text-light " style="width:70px; height: 70px;" >
-                    <div class="text-center text-light">
+                    <div class="text-center mt-2 text-light">
                         12 <br>
                         {{day.date|date:"D"}}
                     </div>
@@ -113,6 +125,7 @@
             </div>
 
             {% endif %}
+            
 
             {% endfor %}
              </div>
@@ -124,23 +137,19 @@
     {% endfor %}
    </div>
    
-   <div class="row mt-5">
-     <hr>
-     <h3 class="text-success">To'lov qo'shish</h3>
-     <div class="col-md-6">
-  
-         <form class="row g-3" method="post" style="margin-left: auto;"> {% csrf_token %}
-             <div class="col-md-12">
-               <div class="form-floating">
+   <!-- <div class="row mt-3"> -->
+     <!-- <hr> -->
+     <div class="card col-md-6 p-3">
+       
+       <form  method="post"> {% csrf_token %}
+           <h3 class="text-dark">To'lov qo'shish</h3>
+               <div class="form-floating p-1">
                  <input type="number" name="summa" class="form-control" id="floatingName" placeholder="Summa">
                  <label for="floatingName">Summa</label>
                </div>
   
-             </div>
   
-  
-             <div class="col-md-12">
-               <div class="form-floating mb-3">
+               <div class="form-floating mb-3 mt-3 p-1">
                  <select class="form-select" name="month" id="floatingSelect" aria-label="State">
                    {% for t in tarif %}
                    <option selected value="{{t.title}}" >{{t}}</option>
@@ -148,19 +157,16 @@
                  </select>
                  <label for="floatingSelect">Month</label>
                </div>
-             </div>
-  
+ 
   
             <div class="text-left">
-               <button type="submit" class="btn btn-primary">Qoshish</button>
+               <button type="submit" class="btn  btn-primary">Qo'shish</button>
              </div>
            </form><!-- End floating Labels Form -->
-  
-  
      </div>
      
-     <div class="col-md-6" style="overflow-y: scroll; height: 300px;">  
-      <h3 class="text-success">Umumiy to'lovlar</h3>
+     <div class="card col-md-6 p-3" style="overflow-y: scroll; height: 300px;">  
+      <!-- <h3 class="text-success">Umumiy to'lovlar</h3> -->
       <table class="table table-striped">
                 <thead>
                   <tr>

@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views import View
 from .models import *
@@ -8,9 +8,7 @@ class HomeView(View):
         
         clients = Client.objects.all()
         all_clients = clients.count()
-        # active = Client.objects.filter(status="ACTIVE").count()   ## variant 1.
-        # inactive = Client.objects.filter(status="INACTIVE").count()
-        # paused = Client.objects.filter(status="PAUSED").count()
+        
 
         inactive = 0
         active = 0
@@ -18,7 +16,7 @@ class HomeView(View):
         for c in clients:
             if c.status == "ACTIVE":
                 active += 1
-            elif c.status == "INACTIVE":          ## variant 2..
+            elif c.status == "INACTIVE":          
                 inactive += 1
             else:
                 paused += 1
@@ -29,6 +27,7 @@ class HomeView(View):
             "inactive":inactive,
             "paused":paused
         }
+        
         return render (request,'index.html',context)
 
 
@@ -99,8 +98,24 @@ class DetailView(View):
     def get(self, request, id):
         queryset = Client.objects.get(id=id)
         months = Month.objects.filter(client=queryset).order_by("-id")
-        return render(request, "detail.html", {"client":queryset, "months":months})
+        tarif = ComingType.objects.all()
+        return render(request, "detail.html", {"client":queryset, "months":months, "tarifs":tarif})
 
+    def post(self, request, id):
+        name = request.POST['name']
+        phone = request.POST['phone']
+        status = request.POST['status']
+        tarif = request.POST['tarif']
+
+        tarif = ComingType.objects.get(title=tarif)
+        client = Client.objects.filter(id=id)
+
+        client.update(name=name, phone=phone, coming_type=tarif, status=status)
+
+        
+
+
+        return redirect(f"/detail/{id}")
 
 
 def default_add_month(request, client_id):
