@@ -98,7 +98,12 @@ class DetailView(View):
     def get(self, request, id):
         queryset = Client.objects.get(id=id)
         months = Month.objects.filter(client=queryset).order_by("-id")
+        payment = months
+        print()
+        print(payment)
+        print()
         tarif = ComingType.objects.all()
+
         return render(request, "detail.html", {"client":queryset, "months":months, "tarifs":tarif})
 
     def post(self, request, id):
@@ -109,11 +114,8 @@ class DetailView(View):
 
         tarif = ComingType.objects.get(title=tarif)
         client = Client.objects.filter(id=id)
-
+    
         client.update(name=name, phone=phone, coming_type=tarif, status=status)
-
-        
-
 
         return redirect(f"/detail/{id}")
 
@@ -169,10 +171,6 @@ def add_day(request, day_id):
         return JsonResponse({"came":"False"})
     else:
         return JsonResponse({"came":"not valid"})
-
-    
-
-
 
 
 class DavomatView(View):
@@ -238,3 +236,5 @@ class PaymentView(View):
             )
             Day.objects.create(month=month)
             return render(request, 'forms-layout.html', {"response":"To'lov amalga oshirildi"})
+
+

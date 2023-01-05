@@ -141,7 +141,7 @@
      <!-- <hr> -->
      <div class="card col-md-6 p-3">
        
-       <form  method="post"> {% csrf_token %}
+      <form  method="post" action=""> {% csrf_token %}
            <h3 class="text-dark">To'lov qo'shish</h3>
                <div class="form-floating p-1">
                  <input type="number" name="summa" class="form-control" id="floatingName" placeholder="Summa">
@@ -151,18 +151,19 @@
   
                <div class="form-floating mb-3 mt-3 p-1">
                  <select class="form-select" name="month" id="floatingSelect" aria-label="State">
-                   {% for t in tarif %}
-                   <option selected value="{{t.title}}" >{{t}}</option>
+                   {% for t in months %}
+
+                   <option selected value="{{t.id}}" >{{ t.created }}  </option>
                    {% endfor %}
                  </select>
                  <label for="floatingSelect">Month</label>
                </div>
  
   
+      </form><!-- End floating Labels Form -->
             <div class="text-left">
                <button type="submit" class="btn  btn-primary">Qo'shish</button>
              </div>
-           </form><!-- End floating Labels Form -->
      </div>
      
      <div class="card col-md-6 p-3" style="overflow-y: scroll; height: 300px;">  
@@ -177,24 +178,24 @@
                   </tr>
                 </thead>
                 <tbody>
+                  {% for m in months %}
+                  
                   <tr>
                     <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                    <td>{{ m.created | date:"F"}} </td>
+                    <td>
+                      {% for p in m.payments.all %}
+                      {{ p.money }}<br>
+                      {% endfor %}
+                    </td>
+                    <td>
+                      {% for p in m.payments.all %}
+                      {{ p.date }}<br>
+                      {% endfor %}
+                    </td>
                   </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                  </tr>
+                  {% endfor %}
+                  
                 </tbody>
               </table>
         </div>

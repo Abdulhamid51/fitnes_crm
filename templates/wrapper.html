@@ -90,7 +90,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="{% url 'main:home' %}">
+        <a class="nav-link collapsed " href="{% url 'main:home' %}">
           <i class="bi bi-grid"></i>
           <span>Asosiy sahifa </span>
         </a>
@@ -106,6 +106,12 @@
         <a class="nav-link collapsed" href="{% url 'main:list_client' %}">
           <i class="bi bi-person-check-fill"></i>
           <span>Umumiy Ro'yxat</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'main:payment' %}">
+          <i class="bi bi-person-check-fill"></i>
+          <span>Tolov</span>
         </a>
       </li>
       {% comment %}
