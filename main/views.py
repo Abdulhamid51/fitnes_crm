@@ -91,7 +91,7 @@ class RegisterView(View):
             payment=int(price)
         )
 
-        return render (request,'register.html',context)
+        return redirect("/")
 
 
 class DetailView(View):
@@ -225,10 +225,13 @@ class PaymentView(View):
             if month.payment <= payment:
                 month.payment = 0
                 month.payed = True
+                obj.debt = False
             else:
                 month.payment -= payment
                 month.payed = False
+                obj.debt = True
             month.save()
+            obj.save()
             Payment.objects.create(
                 month=month,
                 money=payment

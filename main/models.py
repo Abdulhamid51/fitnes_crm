@@ -17,7 +17,7 @@ def random_numbers(lenth):
 
 class Client(models.Model):
     user = models.ForeignKey(User, related_name="clients", on_delete=models.CASCADE)
-    uid = models.SlugField(blank=True)
+    uid = models.SlugField(blank=True,unique=True)
     name = models.CharField("Ism familiyasi", max_length=150)
     phone = models.CharField("Telefon raqami", max_length=50)
     coming_type = models.ForeignKey("main.ComingType", related_name="type_clients",
@@ -48,8 +48,13 @@ class ComingType(models.Model):
 @receiver(post_save, sender=Client)
 def uid_save(sender, instance, created, *args, **kargs):
     if created == True:
-        uid = random_numbers(6)
-        instance.uid = uid
+        try:
+            uid = random_numbers(6)
+            instance.uid = uid
+        except:
+            uid = random_numbers(6)
+            instance.uid = uid
+        instance.save()
 
 
 class Month(models.Model):
