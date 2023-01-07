@@ -205,11 +205,23 @@ class DavomatView(View):
 
 
 class PaymentView(View):
-    def get(self,request):
-
-        return render (request,'forms-layouts.html')
+    def get(self, request):
+        try:
+            request.GET['client_id']
+            client_id = int(request.GET['client_id'])
+            client = Client.objects.get(id=client_id)
+            month = Month.objects.filter(client=client).last()
+            data = {
+                "uid":client.uid,
+                "payment":month.payment
+            }
+            return JsonResponse(data)
+        except:
+            clients = Client.objects.all()
+            return render(request, 'forms-layouts.html', {"clients":clients})
 
     def post(self, request):
+        clients = Client.objects.all()
         uid = request.POST.get('uid')
         payment = int(request.POST.get('payment'))
         try:
@@ -217,9 +229,9 @@ class PaymentView(View):
         except:
             obj = False
         if obj == False:
-            return render(request, 'forms-layout.html', {"response":"ID notog`ri berildi"})
+            return render(request, 'forms-layouts.html', {"response":"ID noto`g`ri berildi","status":"danger","clients":clients})
         else:
-            month = Month.objects.get(client=obj)
+            month = Month.objects.filter(client=obj).last()
             if month.payment <= payment:
                 month.payment = 0
                 month.payed = True
@@ -235,6 +247,6 @@ class PaymentView(View):
                 money=payment
             )
             Day.objects.create(month=month)
-            return render(request, 'forms-layout.html', {"response":"To'lov amalga oshirildi"})
+            return render(request, 'forms-layouts.html', {"response":"To'lov amalga oshirildi","status":"success","clients":clients})
 
 
