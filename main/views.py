@@ -35,15 +35,6 @@ class RegisterView(View):
     def get(self,request):
         tarif =  ComingType.objects.all()
 
-
-        # import calendar
-        # import datetime
-        # now = datetime.datetime.now()
-        # year = now.strftime('%Y')
-        # month = now.strftime('%m')
-        # maxday = calendar.monthrange(int(year), int(month))
-        # print(maxday[1])
-
         context = {'tarif':tarif}
         return render (request,'register.html',context)
 
@@ -80,7 +71,6 @@ class RegisterView(View):
             price = client.coming_type.price
         else:
             daily_price = client.coming_type.price / client.coming_type.days
-            print(daily_price)
             coming_days = res_days
             price = daily_price * coming_days
         sunday = coming_days // 7
@@ -99,9 +89,6 @@ class DetailView(View):
         queryset = Client.objects.get(id=id)
         months = Month.objects.filter(client=queryset).order_by("-id")
         payment = months
-        print()
-        print(payment)
-        print()
         tarif = ComingType.objects.all()
 
         return render(request, "detail.html", {"client":queryset, "months":months, "tarifs":tarif})
@@ -133,7 +120,6 @@ def default_add_month(request, client_id):
         price = client.coming_type.price
     else:
         daily_price = client.coming_type.price / client.coming_type.days
-        print(daily_price)
         coming_days = res_days
         price = daily_price * coming_days
     sunday = coming_days // 7
