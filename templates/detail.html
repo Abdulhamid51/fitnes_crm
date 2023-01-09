@@ -90,7 +90,7 @@
     {% for month in months %}
     <div class="month">
         <div class="title form-inline">
-            <h4 class="pagetitle">{{month.created | date:"F"}} {{month.came}}/{{month.coming_days}} 
+            <h4 class="pagetitle">{{month.created | date:"m/Y"}} <span class="fs-6">{{month.came}}/{{month.coming_days}} </span>
                 
                 {% if month.payed == True %}
                     <button class="btn btn-primary btn-sm btn-disaled">To'langan</button>
@@ -141,7 +141,7 @@
      <!-- <hr> -->
      <div class="card col-md-6 p-3">
        
-      <form  method="post" action=""> {% csrf_token %}
+      <form  method="post" action="/detail-payment/"> {% csrf_token %}
            <h3 class="text-dark">To'lov qo'shish</h3>
                <div class="form-floating p-1">
                  <input type="number" name="summa" class="form-control" id="floatingName" placeholder="Summa">
@@ -152,18 +152,17 @@
                <div class="form-floating mb-3 mt-3 p-1">
                  <select class="form-select" name="month" id="floatingSelect" aria-label="State">
                    {% for t in months %}
-
-                   <option selected value="{{t.id}}" >{{ t.created }}  </option>
+                   <option selected value="{{t.id}}" >{{ t.created | date:"F (Y)" }}</option>
                    {% endfor %}
                  </select>
-                 <label for="floatingSelect">Month</label>
+                 <label for="floatingSelect">Oyni tanlang</label>
                </div>
  
+               <div class="text-left">
+                  <button type="submit" class="btn  btn-primary">Qo'shish</button>
+                </div>
   
       </form><!-- End floating Labels Form -->
-            <div class="text-left">
-               <button type="submit" class="btn  btn-primary">Qo'shish</button>
-             </div>
      </div>
      
      <div class="card col-md-6 p-3" style="overflow-y: scroll; height: 300px;">  
@@ -181,7 +180,7 @@
                   {% for m in months %}
                   
                   <tr>
-                    <th scope="row">1</th>
+                    <th scope="row">{{forloop.counter}}</th>
                     <td>{{ m.created | date:"F"}} </td>
                     <td>
                       {% for p in m.payments.all %}

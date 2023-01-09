@@ -195,9 +195,10 @@ class PaymentView(View):
         try:
             request.GET['client_id']
             client_id = int(request.GET['client_id'])
-            client = Client.objects.get(id=client_id)
+            client = Client.objects.get(uid=client_id)
             month = Month.objects.filter(client=client).last()
             data = {
+                "name":client.name,
                 "uid":client.uid,
                 "payment":month.payment
             }
