@@ -35,15 +35,6 @@ class RegisterView(View):
     def get(self,request):
         tarif =  ComingType.objects.all()
 
-
-        # import calendar
-        # import datetime
-        # now = datetime.datetime.now()
-        # year = now.strftime('%Y')
-        # month = now.strftime('%m')
-        # maxday = calendar.monthrange(int(year), int(month))
-        # print(maxday[1])
-
         context = {'tarif':tarif}
         return render (request,'register.html',context)
 
@@ -80,7 +71,6 @@ class RegisterView(View):
             price = client.coming_type.price
         else:
             daily_price = client.coming_type.price / client.coming_type.days
-            print(daily_price)
             coming_days = res_days
             price = daily_price * coming_days
         sunday = coming_days // 7
@@ -99,9 +89,6 @@ class DetailView(View):
         queryset = Client.objects.get(id=id)
         months = Month.objects.filter(client=queryset).order_by("-id")
         payment = months
-        print()
-        print(payment)
-        print()
         tarif = ComingType.objects.all()
 
         return render(request, "detail.html", {"client":queryset, "months":months, "tarifs":tarif})
@@ -133,7 +120,6 @@ def default_add_month(request, client_id):
         price = client.coming_type.price
     else:
         daily_price = client.coming_type.price / client.coming_type.days
-        print(daily_price)
         coming_days = res_days
         price = daily_price * coming_days
     sunday = coming_days // 7
@@ -205,11 +191,23 @@ class DavomatView(View):
 
 
 class PaymentView(View):
-    def get(self,request):
-
-        return render (request,'forms-layouts.html')
+    def get(self, request):
+        try:
+            request.GET['client_id']
+            client_id = int(request.GET['client_id'])
+            client = Client.objects.get(id=client_id)
+            month = Month.objects.filter(client=client).last()
+            data = {
+                "uid":client.uid,
+                "payment":month.payment
+            }
+            return JsonResponse(data)
+        except:
+            clients = Client.objects.all()
+            return render(request, 'forms-layouts.html', {"clients":clients})
 
     def post(self, request):
+        clients = Client.objects.all()
         uid = request.POST.get('uid')
         payment = int(request.POST.get('payment'))
         try:
@@ -217,9 +215,9 @@ class PaymentView(View):
         except:
             obj = False
         if obj == False:
-            return render(request, 'forms-layout.html', {"response":"ID notog`ri berildi"})
+            return render(request, 'forms-layouts.html', {"response":"ID noto`g`ri berildi","status":"danger","clients":clients})
         else:
-            month = Month.objects.get(client=obj)
+            month = Month.objects.filter(client=obj).last()
             if month.payment <= payment:
                 month.payment = 0
                 month.payed = True
@@ -235,6 +233,6 @@ class PaymentView(View):
                 money=payment
             )
             Day.objects.create(month=month)
-            return render(request, 'forms-layout.html', {"response":"To'lov amalga oshirildi"})
+            return render(request, 'forms-layouts.html', {"response":"To'lov amalga oshirildi","status":"success","clients":clients})
 
 
