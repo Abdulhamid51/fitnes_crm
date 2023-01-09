@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>CRMFitnes | Asosiy sahifa</title>
+  <title>CRMFitness | Asosiy sahifa</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -49,7 +49,7 @@
     <div class="d-flex align-items-center justify-content-between">
       <a href="index.html" class="logo d-flex align-items-center">
         <img src="/static/assets/img/logo.png" alt="">
-        <span class="d-none d-lg-block">CRMFitnes</span>
+        <span class="d-none d-lg-block">CRMFitness</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
@@ -98,20 +98,26 @@
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'main:register' %}">
-          <i class="bi bi-person-check-fill"></i>
-          <span>Royhatdan otkazish </span>
+          <i class="bi bi-person-plus-fill"></i>
+          <span>Ro'yhatdan o'tkazish </span>
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'main:list_client' %}">
-          <i class="bi bi-person-check-fill"></i>
+          <i class="bi bi-people-fill"></i>
           <span>Umumiy Ro'yxat</span>
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'main:payment' %}">
-          <i class="bi bi-person-check-fill"></i>
-          <span>Tolov</span>
+          <i class="bi bi-currency-dollar"></i>
+          <span>To'lov</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="{% url 'main:tarif' %}">
+          <i class="bi bi-bar-chart-steps"></i>
+          <span>Tariflar</span>
         </a>
       </li>
       {% comment %}
@@ -176,6 +182,7 @@
 
   <!-- Template Main JS File -->
   <script src="/static/assets/js/main.js"></script>
+  
   
 
 </body>

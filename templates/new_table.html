@@ -10,9 +10,8 @@
     <h1>Davomat</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index.html">Asosiy sahifa</a></li> 
-        <li class="breadcrumb-item">Davomat</li>
-        <li class="breadcrumb-item active">Davomat kiruvchilar royhati</li>
+        <li class="breadcrumb-item"><a href="/">Asosiy sahifa</a></li> 
+        <li class="breadcrumb-item"><a href="/attandance">Umumiy ro'yxat</a></li>
       </ol>
     </nav>
   </div><!-- End Page Title -->
@@ -61,15 +60,14 @@
                 <td>{{ forloop.counter }}. <a href="{% url 'main:detail' c.id %}" >{{ c.name }}</a></td>   
                 <td>{{ c.coming_type }}</td>
                 
-                <td class="
                 {% if c.status == "ACTIVE" %}
-                text-success
+                <td class="text-success">Faol</td>
                 {% elif c.status == "INACTIVE" %}
-                text-danger
+                <td class="text-danger">Faol emas</td>
                 {% else %}
-                text-warning
-                {% endif %}">{{ c.status     }}
-                </td>
+                <td class="text-warning">Pauza</td>
+                {% endif %}
+                
 
                 <!-- <td class="badge bg-danger">{{ c.status }}</td> -->
                 <td
@@ -82,30 +80,6 @@
 
                 <td>{{ c.phone }}</td>
                 <td class="att_td">  
-                    <!-- {% comment %} <span class=attendance-check-{{ c.id }}>
-                            <a href="#"  onclick="Attendance('check')">
-                                <i class="fa-sharp fa-solid fa-circle-check text-success" style="font-size: 24px;">
-                                    <p style="font-size: 12px; font-weight:bold; padding: 4px; margin-left: -5px;">Keldi</p>
-                                </i>
-                            </a>
-                    </span>
-                    <span class=attendance-x-{{ c.id }}>
-                        <a href="#"  onclick="Attendance('x')" >
-                            <i class="fa-sharp fa-solid fa-circle-xmark text-danger " style="font-size: 24px; margin-left: 10px;" >
-                                <p style="font-size: 12px; font-weight:bold; padding: 4px; margin-left: -12px;">Kelmadi</p>
-                            </i>
-                        </a>
-                    </span>
-                    <span class=attendance-edit-{{ c.id }}>
-                        <a href="#" onclick="Attendance('edit')" >
-                            <!-- <i class="fa-solid fa-pen-to-square"></i> -->
-                            <!-- <i class="fa-solid fa-pen-to-square text-warning" style="font-size:22px; margin-left: 10px;">
-                                <p style="font-size: 12px; font-weight:bold; padding: 4px; margin-left: -12px;">Tahrirlash</p>
-                            </i>
-                        </a> -->
-                    <!-- </span> {% endcomment %} --> 
-                    
-
                     <label class="switch ">
                         
                         {% if c.months.all.last.days.all.last %}
@@ -249,10 +223,6 @@
             margin-bottom: 25px;
             
         }
-
-       
-
-                
         
     </style>
  

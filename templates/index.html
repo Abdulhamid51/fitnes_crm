@@ -17,7 +17,7 @@
       <div class="row">
 
         <!-- Left side columns -->
-        <div class="col-lg-12">
+        <div class="col-lg-6">
               <div class="card info-card sales-card">
                
                 <div class="card-body">
@@ -36,12 +36,36 @@
                 </div>
 
               </div>
+              
+              <div class="card">
+                
+              <!-- Bar Chart -->
+              <div id="barChart" style="min-height: 400px;" class="echart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  echarts.init(document.querySelector("#barChart")).setOption({
+                    xAxis: {
+                      type: 'category',
+                      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+                    },
+                    yAxis: {
+                      type: 'value'
+                    },
+                    series: [{
+                      data: [120, 200, 150, 80, 70, 110, 130],
+                      type: 'bar'
+                    }]
+                  });
+                });
+              </script>
+              <!-- End Bar Chart -->
+              </div>
 
    
             
-          <div class="row">
+          <!-- <div class="row">
 
-            <!-- Revenue Card -->
             <div class="col-xxl-4 col-md-6">
               <div class="card info-card sales-card">
 
@@ -55,7 +79,6 @@
                     </div>
                     <div class="ps-3">
                       <h6 id="count_active" data-active="{{ active }}">{{ active }} ta</h6>
-                      <!-- tolovlar kunlik  -->
 
                     </div>
                   </div>
@@ -64,7 +87,6 @@
               </div>
             </div>
 
-            <!-- Customers Card -->
             <div class="col-xxl-4 col-md-6">
 
               <div class="card info-card customers-card">
@@ -87,8 +109,7 @@
                 </div>
               </div>
 
-            </div><!-- End Customers Card -->
-
+            </div>
             <div class="col-xxl-4 col-md-12">
 
               <div class="card info-card customers-card">
@@ -113,16 +134,84 @@
 
             </div>
            
-          </div>
+          </div> -->
         </div>
-     
-        </div> 
-
-
+        
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Mijozlar holati</h5>
+  
+              <!-- Pie Chart -->
+              <div id="pieChart" style="min-height: 400px;" class="echart"></div>
+  
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  
+                  echarts.init(document.querySelector("#pieChart")).setOption({
+                    // title: {
+                    //   text: 'Umumiy mijozlar',
+                    //   subtext: 'Fake Data',
+                    //   left: 'right'
+                    // },
+                    tooltip: {
+                      trigger: 'item'
+                    },
+                    legend: {
+                      orient: 'vertical',
+                      left: 'left'
+                    },
+                    series: [{
+                      // name: 'Access From',
+                      type: 'pie',
+                      radius: '62%',
+                      data: [{
+                          
+                        },
+                        {
+                          value: '{{ active }}',
+                          name:'Faol mijozlar'
+                        },
+                        {
+                          value: '{{ paused }}',
+                          name: 'Pauza holatdagi'
+                        },
+                        {
+                          value: '{{ inactive }}',
+                          name: "Faol bo'lmagan"
+                        },
+                      
+                      ],
+                      emphasis: {
+                        itemStyle: {
+                          shadowBlur: 10,
+                          shadowOffsetX: 0,
+                          shadowColor: 'rgba(0, 0, 0, 0.5)'
+                          
+                        }
+                      }
+                     
+                    }]
+                  });
+                });
+              </script>
+              <!-- End Pie Chart -->
+  
             </div>
           </div>
+        </div>
+      </div> 
 
-        
+
+            <!-- </div>
+          </div> -->
+
+
+          
+  
+  
+  
+          
           
 
      
