@@ -20,13 +20,11 @@
 
     <div class="container mt-5">
         
-        <!-- <div class="outer-wrapper">
-            <div class="table-wrapper"> -->
-                <div class="row">
-                    <div class="col-md-12">
-                
-                        <input type="text" name=""  id="search" placeholder="Search.." style="padding: 5px; width: 100%;">
-    <table id="emp-table" class="table table-border datab" style="width:100%">
+     
+    <div class="row">
+        <div class="col-md-12">
+            <input type="text" name="" class="form-control"  id="search" placeholder=" Search.." style="padding: 5px; width: 100%; ">
+        <table id="emp-table" class="table table-border datab" style="width:100%">
 
         
         <thead class="p-4">
@@ -58,28 +56,28 @@
             {% for c in clients %}
             <tr>
                 <td>{{ forloop.counter }}. <a href="{% url 'main:detail' c.id %}" >{{ c.name }}</a></td>   
-                <td>{{ c.coming_type }}</td>
+                <td class="text-center"><span class="badge bg-info status-span">{{ c.coming_type }}</span></td>
                 
                 {% if c.status == "ACTIVE" %}
-                <td class="text-success">Faol</td>
+                <!-- <td class="text-center text-success"><span class="badge bg-success status-span"><i class="bi bi-check-circle-fill me-1"></i>Faol</span></td> -->
+                <td class="text-center text-success"><span class="badge bg-success status-span"> faol</span></td>
                 {% elif c.status == "INACTIVE" %}
-                <td class="text-danger">Faol emas</td>
+                <td class=" text-center text-danger"><span class="badge bg-danger status-span">faol emas</span></td>
                 {% else %}
-                <td class="text-warning">Pauza</td>
+                <td class="text-center text-warning"><span class="badge bg-warning status-span">pauza</span></td>
                 {% endif %}
                 
 
-                <!-- <td class="badge bg-danger">{{ c.status }}</td> -->
                 <td
                 {% if c.debt == False %}
-                class="text-success">To'langan
+                class=" text-center text-success"><span class="badge bg-success status-span">To'langan</span>
                 {% else %}
-                class="text-danger">To'lanmagan
+                class="text-center text-danger"><span class="badge bg-danger status-span">To'lanmagan</span>
                 {% endif %}
                 </td>
 
-                <td>{{ c.phone }}</td>
-                <td class="att_td">  
+                <td class="text-center">{{ c.phone }}</td>
+                <td class="att_td ">  
                     <label class="switch ">
                         
                         {% if c.months.all.last.days.all.last %}
@@ -107,7 +105,20 @@
     </table>
 
     <style>
-
+        .status-span{
+            width: 45%;
+            font-size: 12px;
+        }
+        tbody tr:hover{
+            background:rgb(233, 227, 227);
+        }
+        td a{
+            color: rgba(143, 23, 223, 0.998);
+            font-size: 16px;
+        }
+        td a:hover{
+            color: black;
+        }
         .switch {
             float: left;
             position: relative;
@@ -116,10 +127,8 @@
             height: 24px;
         }
         
-        /* Hide default HTML checkbox */
         .switch input {display:none;}
         
-        /* The slider */
         .slider {
             position: absolute;
             cursor: pointer;
@@ -135,10 +144,10 @@
         .slider:before {
             position: absolute;
             content: "";
-            height: 23px;
+            height: 22px;
             width: 22px;
-            left: -2px;
-            bottom: 2px;
+            left: 0px;
+            bottom: 1px;
             background-color: rgb(255, 255, 255);
             -webkit-transition: .4s;
             transition: .4s;
@@ -159,40 +168,89 @@
         
         /* Rounded sliders */
         .slider.round {
-            border-radius: 34px;
+            border-radius: 30px;
         }
         .slider.round:before {
-  border-radius: 50%;
-}
+            border-radius: 50%;
+        }
+       
         </style>
-        
-        
-        
-    
-   
-        
-    <!-- <script>getUniqueValuesFromColumn()
-    </script> -->
+
+  
     <script src="/static/assets/example/filter.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
     
     <script>
         window.onload = () => {
-            
         };
 
-        getUniqueValuesFromColumn()
+    getUniqueValuesFromColumn()
+
+    function getUniqueValuesFromColumn() {
+    var unique_col_values_dict = {}
+
+    allFilters = document.querySelectorAll(".table-filter")
+    allFilters.forEach((filter_i) => {
+        col_index = filter_i.parentElement.getAttribute("col-index");
+        // alert(col_index) 
+        const rows = document.querySelectorAll("#emp-table > tbody > tr")
+        rows.forEach((row) => {
+            cell_value = row.querySelector("td:nth-child("+col_index+")").innerHTML;
+            // if the col index is already present in the dict
+            if (col_index in unique_col_values_dict) {
+
+                // if the cell value is already present in the array
+                if (unique_col_values_dict[col_index].includes(cell_value)) {
+                    // alert(cell_value + " is already present in the array : " + unique_col_values_dict[col_index])
+
+                } else {
+                    unique_col_values_dict[col_index].push(cell_value)
+                    // alert("Array after adding the cell value : " + unique_col_values_dict[col_index])
+
+                }
+
+
+            } else {
+                unique_col_values_dict[col_index] = new Array(cell_value)
+            }
+        });
+
         
+    });
+    // for(i in unique_col_values_dict) {
+    //     alert("Column index : " + i + " has Unique values : \n" + unique_col_values_dict[i]);
+    // }
+        updateSelectOptions(unique_col_values_dict)
 
-        var $rows = $('#emp-table tr');
+
+};
+
+        function updateSelectOptions(unique_col_values_dict) {
+        allFilters = document.querySelectorAll(".table-filter")
+        allFilters.forEach((filter_i) => {
+            col_index = filter_i.parentElement.getAttribute('col-index')
+
+            unique_col_values_dict[col_index].forEach((i) => {
+
+                let b = new DOMParser().parseFromString(i,'text/xml');
+                b = b.firstChild.innerHTML;
+                
+                filter_i.innerHTML = filter_i.innerHTML + `\n<option value="${b}">${b}</option>`
+            });
+
+        });
+    };
+        
+        let $rows = $('#emp-table tr');
         $('#search').keyup(function() {
-            var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+            let val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
 
             
-            
+
             $rows.show().filter(function() {
-                var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                let text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
                 return !~text.indexOf(val);
             }).hide();
         });
@@ -217,18 +275,10 @@
    
 
 
-    <style>
-        .dataTable-search{
-            width: 100%;
-            margin-bottom: 25px;
-            
-        }
-    </style>
- 
+   
 </div>
 </div>
-<!-- </div>
-</div> -->
+
 
 </div>
 

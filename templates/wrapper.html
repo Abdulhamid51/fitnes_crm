@@ -29,6 +29,7 @@
   <link href="/static/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="/static/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="/static/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  
 
   <!-- Template Main CSS File -->
   <link href="/static/assets/css/style.css" rel="stylesheet">
@@ -70,19 +71,14 @@
           </a>
         </li><!-- End Search Icon-->
 
-        
-
-              <!-- <a class="dropdown-item d-flex align-items-center" href="#">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Sign Out</span>
-              </a> -->
-
-          
 
       </ul>
     </nav><!-- End Icons Navigation -->
 
   </header><!-- End Header -->
+
+  
+
 
   <!-- ======= Sidebar ======= -->
   <aside id="sidebar" class="sidebar">
@@ -120,33 +116,14 @@
           <span>Tariflar</span>
         </a>
       </li>
-      {% comment %}
-      <!-- <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-journal-check"></i><span>Tolovlar</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-         
-          <li>
-            <a href="{% url 'payment:payment' %}">
-              <i class="bi bi-circle"></i><span>Tolov qoshish</span>
-            </a>
-          </li>
-
-          
-  
-
-            <a href="{% url 'payment:list' %}">
-              <i class="bi bi-circle"></i><span>Mudati tugaganlar</span>
-            </a>
-          </li> -->
-      {% endcomment %}
+     
         
         </ul>
       </li><!-- End Forms Nav -->
 
       <!-- End Tables Nav -->
 
+      
     
 
 
@@ -161,7 +138,7 @@
     {% endblock content %}
 
   <!-- ======= Footer ======= -->
-  <footer id="footer" class="footer">
+  <footer id="footer" class="footer mt-5">
     <div class="copyright">
       &copy; Copyright <strong><span>Texnopark Back-end Team</span></strong>. All Rights Reserved
     </div>
@@ -183,7 +160,15 @@
   <!-- Template Main JS File -->
   <script src="/static/assets/js/main.js"></script>
   
-  
+  <style>
+    .nav-item:hover a{
+      transform: scale(1.2);
+    }
+    .nav-item:hover i{
+      margin-left: 20px;
+
+    }
+  </style>
 
 </body>
 

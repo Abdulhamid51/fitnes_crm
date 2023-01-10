@@ -4,11 +4,11 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>REGISTER</h1>
+      <h1>Ro'yxatdan o'tkazish</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Asosiy sahifa</a></li>
-          <li class="breadcrumb-item active"></li>
+          <li class="breadcrumb-item active">Ro'yxatdan o'tkazish</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -21,7 +21,7 @@
 
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Royhatdan otkazish</h5>
+              <h5 class="card-title">Ro'yhatdan o'tkazish</h5>
 
               <!-- Floating Labels Form -->
               {% if status %}
@@ -67,15 +67,14 @@
                       <option selected value="INACTIVE" > Faol emas</option>
                       <option value="PAUSED"> Pauza</option>
 
-                    </select>
                     <label for="floatingSelect">Xolati</label>
                   </div>
                 </div>
+                <div class="text-left">
+                   <button type="submit" class="btn btn-primary">Qo'shish</button>
+                   <!-- <button type="reset" class="btn btn-secondary">Qayta o'rnatish</button> -->
+                 </div>
 
-               <div class="text-center">
-                  <button type="submit" class="btn btn-primary">Qoshish</button>
-                  <button type="reset" class="btn btn-secondary">Qayta o'rnatish</button>
-                </div>
               </form><!-- End floating Labels Form -->
               {% endif %}
             </div>
