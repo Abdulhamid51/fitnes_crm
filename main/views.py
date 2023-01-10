@@ -137,6 +137,8 @@ def default_add_day(request):
     for client in clients:
         try:
             month = client.months.last()
+            month.came += 1
+            month.save()
             day = Day.objects.create(
                 month=month
             )
