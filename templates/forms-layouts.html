@@ -141,7 +141,20 @@
     });
 
     function handleBarcode(scanned_barcode) {
-        
+      console.log('sssssss')
+        var client_id = scanned_barcode
+        $.ajax({
+          url: "/payment/",
+          type: "GET",
+          data: {
+            "client_id":client_id
+          },
+          success: function(response){
+            $("#userId").val(response['uid'])
+            $("#payment").val(response['payment'])
+            $("#client-select").val(response['name'])
+          }
+        })
     }
 
     </script>
