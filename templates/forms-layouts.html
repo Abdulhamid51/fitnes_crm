@@ -39,13 +39,12 @@
               <form method="post" class="row g-3">
                 {% csrf_token %}
                 <div class="form-floating">
-                  <select id="client-select" class="form-control">
-                    <option value="0">Klientni tanlang</option>
+                  <input list="brow" id="client-select" class="form-control">
+                  <datalist id="brow">
                     {% for cl in clients %}
-                    <option value="{{cl.id}}">{{cl.name}}</option>
+                    <option value="{{cl.uid}}">{{cl.name}}</option>
                     {% endfor %}
-                      
-                  </select>
+                  </datalist>  
                   <label for="client-select">Klientni tanlang</label>
                 </div>
                 <div class="col-md-6">
@@ -91,15 +90,73 @@
             "client_id":client_id
           },
           success: function(response){
-            navigator.clipboard.writeText(response['uid'])
+            $("#userId").val(response['uid'])
             $("#payment").val(response['payment'])
+            $("#client-select").val(response['name'])
           }
         })
       })
 
-      setInterval(function(){
-        navigator.clipboard.readText().then(text => document.getElementById("userId").value = text);
-      }, 200)
+      // let qwerty = true
+
+      // let text1;
+
+      // function abs(text) {
+        
+      // }
+
+      // setInterval(function(){
+      //   if (qwerty == true) {
+      //     navigator.clipboard.readText().then(text => document.getElementById("userId").value = text);
+      //     navigator.clipboard.readText().then(text => text1 = text);
+      //     console.log('sssssss')
+      //     qwerty = false
+
+      //   }
+
+      //   // var interval;
+      //   // if (interval) {
+      //   //   clearInterval(interval)
+      //   // }
+      // }, 200)
+
+    var barcode = '';
+    var interval;
+    document.addEventListener('keydown', function(evt) {
+        
+        if (interval)
+        clearInterval(interval);
+        
+        if (evt.code == 'Enter') {
+            if (barcode)
+                handleBarcode(barcode);
+            barcode = '';
+            return;
+        }
+        
+        if (evt.key != 'Shift')
+            barcode += evt.key;
+        interval = setInterval (() => barcode = '', 20);
+
+    });
+
+    function handleBarcode(scanned_barcode) {
+      console.log('sssssss')
+        var client_id = scanned_barcode
+        $.ajax({
+          url: "/payment/",
+          type: "GET",
+          data: {
+            "client_id":client_id
+          },
+          success: function(response){
+            $("#userId").val(response['uid'])
+            $("#payment").val(response['payment'])
+            $("#client-select").val(response['name'])
+          }
+        })
+    }
+
     </script>
 
   </main><!-- End #main -->
