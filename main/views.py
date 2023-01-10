@@ -81,7 +81,7 @@ class RegisterView(View):
             payment=int(price)
         )
 
-        return redirect("/")
+        return render(request, 'register.html', context)
 
 
 class DetailView(View):
@@ -132,19 +132,20 @@ def default_add_month(request, client_id):
     return JsonResponse({"status":"Oy hosil qilindi"})
 
 
-def default_add_day(request, client_id):
-    client = get_object_or_404(Client, id=client_id)
-    try:
-        month = client.months.last()
-        day = Day.objects.create(
-            month=month
-        )
-    except:
-        month = "salom"
+def default_add_day(request):
+    clients = Client.objects.all()
+    for client in clients:
+        try:
+            month = client.months.last()
+            day = Day.objects.create(
+                month=month
+            )
+        except:
+            month = "salom"
     return JsonResponse({"status":"Kun hosil qilindi"})
 
 
-def add_day(request, day_id):
+def edit_day(request, day_id):
     day = get_object_or_404(Day, id=day_id)
     resp = request.GET.get('day_result')
     if resp == "true":
@@ -170,23 +171,23 @@ class DavomatView(View):
         return render (request,'new_table.html', data)
 
     
-    def post(self, request):
-        tarif = ComingType.objects.all()
-        status = request.POST['status']
-        coming_type = request.POST['tarif']
-        debt = request.POST['debt']
-        queryset = Client.objects.all()
-        if status:
-            queryset = queryset.filter(status=status)
-        if coming_type:
-            queryset = queryset.filter(coming_type=int(coming_type))
-        if debt:
-            queryset = queryset.filter(debt=bool(int(debt)))
-        data = {
-            "clients":queryset,
-            "tarif":tarif
-        }
-        return render (request,'tables-general.html', data)
+    # def post(self, request):
+    #     tarif = ComingType.objects.all()
+    #     status = request.POST['status']
+    #     coming_type = request.POST['tarif']
+    #     debt = request.POST['debt']
+    #     queryset = Client.objects.all()
+    #     if status:
+    #         queryset = queryset.filter(status=status)
+    #     if coming_type:
+    #         queryset = queryset.filter(coming_type=int(coming_type))
+    #     if debt:
+    #         queryset = queryset.filter(debt=bool(int(debt)))
+    #     data = {
+    #         "clients":queryset,
+    #         "tarif":tarif
+    #     }
+    #     return render (request,'tables-general.html', data)
 
 
 
