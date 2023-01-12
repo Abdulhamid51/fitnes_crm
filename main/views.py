@@ -236,7 +236,6 @@ class PaymentView(View):
                 month=month,
                 money=payment
             )
-            Day.objects.create(month=month)
             return render(request, 'forms-layouts.html', {"response":"To'lov amalga oshirildi","status":"success","clients":clients})
 
 
