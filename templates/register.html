@@ -24,10 +24,17 @@
               <h5 class="card-title">Ro'yhatdan o'tkazish</h5>
 
               <!-- Floating Labels Form -->
+              {% if status %}
+                <hr>
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                  {{status}}
+                  <a class="btn-close" href="/register/"></a>
+                </div>
+              {% else %}
                <form class="row g-3" method="post"> {% csrf_token %}
                 <div class="col-md-12">
                   <div class="form-floating">
-                    <input type="text" name="name" class="form-control" id="floatingName" placeholder="Your Name">
+                    <input type="text" name="name" class="form-control" id="floatingName" placeholder="Your Name" required>
                     <label for="floatingName">Ismi</label>
                   </div>
 
@@ -37,7 +44,7 @@
                 <div class="col-md-12">
                   <div class="col-md-12">
                     <div class="form-floating">
-                      <input type="text" name="phone" class="form-control" id="floatingCity" placeholder="City">
+                      <input type="text" name="phone" class="form-control" id="floatingCity" placeholder="City" required>
                       <label for="floatingCity">Telefon raqam</label>
                     </div>
                   </div>
@@ -56,12 +63,11 @@
                   <div class="form-floating mb-3">
                     <select class="form-select" name="status" id="floatingSelect" aria-label="State">
 
-                      <option selected value="ACTIVE"> faol</option>
-                      <option selected value="INACTIVE" > faol emas</option>
-                      <option selected value="PAUSED"> pauza</option>
-
+                      <option value="ACTIVE"> Faol</option>
+                      <option selected value="INACTIVE" > Faol emas</option>
+                      <option value="PAUSED"> Pauza</option>
                     </select>
-                    <label for="floatingSelect">status</label>
+                    <label for="floatingSelect">Xolati</label>
                   </div>
                 </div>
                 <div class="text-left">
@@ -70,9 +76,7 @@
                  </div>
 
               </form><!-- End floating Labels Form -->
-              <div class="text">
-                <p>{{ status }}</p>
-              </div>
+              {% endif %}
             </div>
           </div>
 

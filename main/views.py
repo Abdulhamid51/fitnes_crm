@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views import View
 from .models import *
+import json
 
 class HomeView(View):
     def get(self,request):
@@ -81,7 +82,7 @@ class RegisterView(View):
             payment=int(price)
         )
 
-        return redirect("/")
+        return render(request, 'register.html', context)
 
 
 class DetailView(View):
@@ -132,19 +133,22 @@ def default_add_month(request, client_id):
     return JsonResponse({"status":"Oy hosil qilindi"})
 
 
-def default_add_day(request, client_id):
-    client = get_object_or_404(Client, id=client_id)
-    try:
-        month = client.months.last()
-        day = Day.objects.create(
-            month=month
-        )
-    except:
-        month = "salom"
+def default_add_day(request):
+    clients = Client.objects.all()
+    for client in clients:
+        try:
+            month = client.months.last()
+            month.came += 1
+            month.save()
+            day = Day.objects.create(
+                month=month
+            )
+        except:
+            month = "salom"
     return JsonResponse({"status":"Kun hosil qilindi"})
 
 
-def add_day(request, day_id):
+def edit_day(request, day_id):
     day = get_object_or_404(Day, id=day_id)
     resp = request.GET.get('day_result')
     if resp == "true":
@@ -168,26 +172,6 @@ class DavomatView(View):
             "tarif":tarif
         }
         return render (request,'new_table.html', data)
-
-    
-    def post(self, request):
-        tarif = ComingType.objects.all()
-        status = request.POST['status']
-        coming_type = request.POST['tarif']
-        debt = request.POST['debt']
-        queryset = Client.objects.all()
-        if status:
-            queryset = queryset.filter(status=status)
-        if coming_type:
-            queryset = queryset.filter(coming_type=int(coming_type))
-        if debt:
-            queryset = queryset.filter(debt=bool(int(debt)))
-        data = {
-            "clients":queryset,
-            "tarif":tarif
-        }
-        return render (request,'tables-general.html', data)
-
 
 
 class PaymentView(View):
@@ -233,7 +217,26 @@ class PaymentView(View):
                 month=month,
                 money=payment
             )
-            Day.objects.create(month=month)
             return render(request, 'forms-layouts.html', {"response":"To'lov amalga oshirildi","status":"success","clients":clients})
 
 
+def detail_payment(request):
+    month_id = int(request.POST.get('month_id'))
+    payment = int(request.POST.get('payment'))
+    month = Month.objects.get(id=month_id)
+    obj = month.client
+    if month.payment <= payment:
+        month.payment = 0
+        month.payed = True
+        obj.debt = False
+    else:
+        month.payment -= payment
+        month.payed = False
+        obj.debt = True
+    month.save()
+    obj.save()
+    py = Payment.objects.create(
+        month=month,
+        money=payment
+    )
+    return JsonResponse({"status":"ok"})

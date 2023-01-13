@@ -23,9 +23,9 @@ class Client(models.Model):
     coming_type = models.ForeignKey("main.ComingType", related_name="type_clients",
                                     on_delete=models.SET_NULL, blank=True, null=True)
     STATUS_TYPES = (
-        ("ACTIVE","active"),
-        ("INACTIVE","inactive"),
-        ("PAUSED","paused")
+        ("ACTIVE","Faol"),
+        ("INACTIVE","Faolmas"),
+        ("PAUSED","Pauza")
     )
     status = models.CharField(choices=STATUS_TYPES, max_length=50, blank=True, null=True)
     debt = models.BooleanField("Qarzi bor", default=True)
