@@ -47,6 +47,17 @@
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
 
+    <div class="load-spinner">
+      <div class="p-1 spinner-grow text-danger" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div class="p-3 spinner-grow text-warning " role="status">
+        <span class="visually-hidden ">Loading...</span>
+      </div>
+      <div class="p-4 spinner-grow text-info" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
     <div class="d-flex align-items-center justify-content-between">
       <a href="index.html" class="logo d-flex align-items-center">
         <img src="/static/assets/img/logo.png" alt="">
@@ -77,6 +88,28 @@
 
   </header><!-- End Header -->
 
+  <style>
+    .nav-item:hover a{
+      transform: scale(1.2);
+    }
+    .nav-item:hover i{
+      margin-left: 20px;
+
+    }
+    .load-spinner{
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: white;      
+    }
+    
+  </style>
   
 
 
@@ -91,7 +124,6 @@
           <span>Asosiy sahifa </span>
         </a>
       </li><!-- End Dashboard Nav -->
-
       <li class="nav-item">
         <a class="nav-link collapsed" href="{% url 'main:register' %}">
           <i class="bi bi-person-plus-fill"></i>
@@ -160,15 +192,21 @@
   <!-- Template Main JS File -->
   <script src="/static/assets/js/main.js"></script>
   
-  <style>
-    .nav-item:hover a{
-      transform: scale(1.2);
-    }
-    .nav-item:hover i{
-      margin-left: 20px;
+ 
 
-    }
-  </style>
+  <script>
+    const spinner = document.querySelector(".load-spinner");
+    window.addEventListener('load', () => {
+      spinner.style.opacity = '0';
+      
+      setTimeout(() => {
+        spinner.style.display = 'none';
+      }, 200)
+
+    });
+  </script>
+  
+  
 
 </body>
 
