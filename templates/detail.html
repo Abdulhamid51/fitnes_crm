@@ -141,67 +141,101 @@
      <!-- <hr> -->
      <div class="card col-md-6 p-3">
        
-      <form  method="post" action="/detail-payment/"> {% csrf_token %}
+      <form class="payment"> 
+        {% csrf_token %}
            <h3 class="text-dark">To'lov qo'shish</h3>
                <div class="form-floating p-1">
-                 <input type="number" name="summa" class="form-control" id="floatingName" placeholder="Summa">
-                 <label for="floatingName">Summa</label>
+                 <input type="number" name="summa" class="form-control" id="payment" placeholder="Summa">
+                 <label for="payment">Summa</label>
                </div>
-  
   
                <div class="form-floating mb-3 mt-3 p-1">
-                 <select class="form-select" name="month" id="floatingSelect" aria-label="State">
+                 <select class="form-select" name="month" id="month" aria-label="State">
                    {% for t in months %}
-                   <option selected value="{{t.id}}" >{{ t.created | date:"F (Y)" }}</option>
+                   <option value="{{t.id}}" >{{ t.created | date:"F (Y)" }}</option>
                    {% endfor %}
                  </select>
-                 <label for="floatingSelect">Oyni tanlang</label>
+                 <label for="month">Oyni tanlang</label>
                </div>
  
-               <div class="text-left">
-                  <button type="submit" class="btn  btn-primary">Qo'shish</button>
-                </div>
+              <div class="text-left">
+                <button type="button" onclick="sendData()" class="btn btn-primary">Qo'shish</button>
+              </div>
   
       </form><!-- End floating Labels Form -->
+      <div class="status">
+        
+      </div>
      </div>
      
-     <div class="card col-md-6 p-3" style="overflow-y: scroll; height: 300px;">  
+    <div class="card col-md-6 p-3" style="overflow-y: scroll; height: 300px;">  
       <!-- <h3 class="text-success">Umumiy to'lovlar</h3> -->
       <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Oy nomi</th>
-                    <th scope="col">To'langan summa</th>
-                    <th scope="col">To'langan sana</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for m in months %}
-                  
-                  <tr>
-                    <th scope="row">{{forloop.counter}}</th>
-                    <td>{{ m.created | date:"F"}} </td>
-                    <td>
-                      {% for p in m.payments.all %}
-                      {{ p.money }}<br>
-                      {% endfor %}
-                    </td>
-                    <td>
-                      {% for p in m.payments.all %}
-                      {{ p.date }}<br>
-                      {% endfor %}
-                    </td>
-                  </tr>
-                  {% endfor %}
-                  
-                </tbody>
-              </table>
-        </div>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Oy nomi</th>
+            <th scope="col">To'langan summa</th>
+            <th scope="col">To'langan sana</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in months %}
+          
+          <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{ m.created | date:"F"}} </td>
+            <td>
+              {% for p in m.payments.all %}
+              {{ p.money }}<br>
+              {% endfor %}
+            </td>
+            <td>
+              {% for p in m.payments.all %}
+              {{ p.date }}<br>
+              {% endfor %}
+            </td>
+          </tr>
+          {% endfor %}
+          
+        </tbody>
+      </table>
     </div>
+</div>
 
         
 
 
   </main><!-- End #main -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+  <script>
+    function sendData(){
+      var payment = $('#payment').val()
+      var month_id = $('#month').val()
+      var csrf = $('input[name="csrfmiddlewaretoken"]').val()
+      $.ajax({
+        url:'/detail-payment/',
+        type:'post',
+        data: {
+          'month_id':month_id,
+          'payment':payment,
+          'csrfmiddlewaretoken':csrf
+        },
+        success: function(response){
+          if(response['status'] === 'ok'){
+            $('form.payment').hide()
+            $('div.status').html(`
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+              To'lov amalga oshdi.
+              <a class="btn-close" href="/detail/{{client.id}}"></a>
+            </div>
+            `)
+          }
+        }
+      })
+    }
+  </script>
+
 {% endblock content %}

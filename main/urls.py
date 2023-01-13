@@ -14,6 +14,7 @@ urlpatterns = [
     path('add_default_month/<int:client_id>', default_add_month, name='add_month'),
     path('add_day/<int:day_id>', edit_day, name='add_day'),
     path('payment/', PaymentView.as_view(), name='payment'),
+    path('detail-payment/', detail_payment, name='detail-payment'),
 
     path('tarif', TarifView.as_view(),name = 'tarif'),
     path('add/tarif', AddTarif.as_view(),name = 'addtarif'),

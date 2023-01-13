@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views import View
 from .models import *
+import json
 
 class HomeView(View):
     def get(self,request):
@@ -172,26 +173,6 @@ class DavomatView(View):
         }
         return render (request,'new_table.html', data)
 
-    
-    # def post(self, request):
-    #     tarif = ComingType.objects.all()
-    #     status = request.POST['status']
-    #     coming_type = request.POST['tarif']
-    #     debt = request.POST['debt']
-    #     queryset = Client.objects.all()
-    #     if status:
-    #         queryset = queryset.filter(status=status)
-    #     if coming_type:
-    #         queryset = queryset.filter(coming_type=int(coming_type))
-    #     if debt:
-    #         queryset = queryset.filter(debt=bool(int(debt)))
-    #     data = {
-    #         "clients":queryset,
-    #         "tarif":tarif
-    #     }
-    #     return render (request,'tables-general.html', data)
-
-
 
 class PaymentView(View):
     def get(self, request):
@@ -239,3 +220,23 @@ class PaymentView(View):
             return render(request, 'forms-layouts.html', {"response":"To'lov amalga oshirildi","status":"success","clients":clients})
 
 
+def detail_payment(request):
+    month_id = int(request.POST.get('month_id'))
+    payment = int(request.POST.get('payment'))
+    month = Month.objects.get(id=month_id)
+    obj = month.client
+    if month.payment <= payment:
+        month.payment = 0
+        month.payed = True
+        obj.debt = False
+    else:
+        month.payment -= payment
+        month.payed = False
+        obj.debt = True
+    month.save()
+    obj.save()
+    py = Payment.objects.create(
+        month=month,
+        money=payment
+    )
+    return JsonResponse({"status":"ok"})
