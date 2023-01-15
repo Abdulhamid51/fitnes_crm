@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import *
 from .t_view import *
+from . import filter
 from django.contrib.auth.decorators import login_required
 
 app_name = 'main'
@@ -20,4 +21,6 @@ urlpatterns = [
     path('add/tarif', AddTarif.as_view(),name = 'addtarif'),
     path('update/tarif/<int:pk>',TarifUpdateview.as_view(),name='tarif_update'),
     path('delete/tarif/<int:pk>',TarifDeleteview.as_view(),name='tarif_delite'),
+
+    path("year_mount/", filter.getyear_view, name="year"),
 ]

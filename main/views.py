@@ -2,7 +2,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views import View
 from .models import *
-import json
 
 class HomeView(View):
     def get(self,request):
