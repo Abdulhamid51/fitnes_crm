@@ -41,24 +41,32 @@
                 
               <!-- Bar Chart -->
               <div id="barChart" style="min-height: 400px;" class="echart"></div>
-
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
               <script>
-                let months;
-                let values;
                 document.addEventListener("DOMContentLoaded", () => {
-                  echarts.init(document.querySelector("#barChart")).setOption({
-                    xAxis: {
-                      type: 'category',
-                      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Wed', 'Thu', 'Fri', 'Sat']
+                  var $date =  new Date().getFullYear();
+                  $.ajax({
+                    url:'/year_mount/',
+                    type:'get',
+                    data:{
+                      'year':$date
                     },
-                    yAxis: {
-                      type: 'value'
-                    },
-                    series: [{
-                      data: [120, 500, 150, 80, 70, 110, 200],
-                      type: 'bar'
-                    }]
-                  });
+                    success:function(response){
+                      echarts.init(document.querySelector("#barChart")).setOption({
+                        xAxis: {
+                          type: 'category',
+                          data: response['months']
+                        },
+                        yAxis: {
+                          type: 'value'
+                        },
+                        series: [{
+                          data: response['mount'],
+                          type: 'bar'
+                        }]
+                      });
+                    }
+                  })
                 });
               </script>
               <!-- End Bar Chart -->
