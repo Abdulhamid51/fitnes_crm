@@ -25,4 +25,5 @@ urlpatterns = [
     path('expense', ExpenseView.as_view(), name='expense'),
 
     path("year_mount/", filter.getyear_view, name="year"),
+    path("client_year_mount/", filter.getclient_view, name="client"),
 ]
