@@ -89,77 +89,7 @@
 
    
             
-          <!-- <div class="row">
-
-            <div class="col-xxl-4 col-md-6">
-              <div class="card info-card sales-card">
-
-
-                <div class="card-body">
-                  <h4 class="card-title">Active mijozlar soni<span></span></h4>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-check-circle-fill" style="color:rgb(32, 236, 32); "></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6 id="count_active" data-active="{{ active }}">{{ active }} ta</h6>
-
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            <div class="col-xxl-4 col-md-6">
-
-              <div class="card info-card customers-card">
-
-                
-
-                <div class="card-body">
-                  <h5 class="card-title">Vaqtincha to'xtatilgan mijozlar soni<span>| Pauza</span></h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-pause-fill text-warning "></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6 id="count_paused" data-paused="{{ paused }}">{{ paused }} ta</h6>
-
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-            <div class="col-xxl-4 col-md-12">
-
-              <div class="card info-card customers-card">
-
-                
-
-                <div class="card-body">
-                  <h5 class="card-title">Aktiv bo'lmagan mijozlar soni<span>| Inactive</span></h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-x-circle-fill" style="color: red;"></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6 id="count_inactive" data-inactive="{{ inactive }}">{{ inactive }} ta</h6>
-
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-           
-          </div> -->
+         
         </div>
         
         <div class="col-lg-6">
@@ -169,7 +99,7 @@
   
               <!-- Pie Chart -->
               <div id="pieChart" style="min-height: 400px;" class="echart"></div>
-  
+              
               <script>
                 document.addEventListener("DOMContentLoaded", () => {
                   
@@ -191,8 +121,8 @@
                       type: 'pie',
                       radius: '62%',
                       data: [{
-                          
-                        },
+                        
+                      },
                         {
                           value: '{{ active }}',
                           name:'Faol mijozlar'
@@ -205,7 +135,7 @@
                           value: '{{ inactive }}',
                           name: "Faol bo'lmagan"
                         },
-                      
+                        
                       ],
                       emphasis: {
                         itemStyle: {
@@ -215,15 +145,76 @@
                           
                         }
                       }
-                     
+                      
                     }]
                   });
                 });
-              </script>
+                </script>
               <!-- End Pie Chart -->
-  
+              
             </div>
           </div>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Yangi mijozlarning o'sib borish statistikasi </h5>
+
+              <!-- Bar Chart -->
+              <canvas id="barChart" style="max-height: 400px;"></canvas>
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new Chart(document.querySelector('#barChart'), {
+                    type: 'bar',
+                    data: {
+                      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                      datasets: [{
+                        label: 'Oylar hisobida',
+                        data: [95, 59, 80, 81, 56, 55, 40, 50,95, 59, 80, 81,],
+                        backgroundColor: [
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(255, 159, 64, 0.2)',
+                          'rgba(255, 205, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(153, 102, 255, 0.2)',
+                          'rgba(201, 203, 207, 0.2)',
+                          'rgba(191, 203, 107, 0.2)',
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(255, 159, 64, 0.2)',
+                          'rgba(255, 205, 86, 0.2)',
+                          'rgba(75, 192, 192, 0.2)',
+                        ],
+                        borderColor: [
+                          'rgb(255, 99, 132)',
+                          'rgb(255, 159, 64)',
+                          'rgb(255, 205, 86)',
+                          'rgb(75, 192, 192)',
+                          'rgb(54, 162, 235)',
+                          'rgb(153, 102, 255)',
+                          'rgb(201, 203, 207)',
+                          'rgb(201, 203, 207)',
+                          'rgb(255, 99, 132)',
+                          'rgb(255, 159, 64)',
+                          'rgb(255, 205, 86)',
+                          'rgb(75, 192, 192)',
+                        ],
+                        borderWidth: 1
+                      }]
+                    },
+                    options: {
+                      scales: {
+                        y: {
+                          beginAtZero: true
+                        }
+                      }
+                    }
+                  });
+                });
+              </script>
+              <!-- End Bar CHart -->
+
+            </div>
+          </div>
+          
         </div>
       </div> 
 
