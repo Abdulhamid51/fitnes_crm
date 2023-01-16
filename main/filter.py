@@ -30,7 +30,7 @@ def getclient_view(request):
     for m in months:
         months_obj = Client.objects.filter(created__year=year, created__month=m)
         mount_month = 0
-        for m in months_obj:
+        for i in months_obj:
             mount_month += 1
         count_year.append(mount_month)
         months_name.append(calendar.month_abbr[m])
