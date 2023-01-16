@@ -23,4 +23,5 @@ urlpatterns = [
     path('delete/tarif/<int:pk>',TarifDeleteview.as_view(),name='tarif_delite'),
 
     path("year_mount/", filter.getyear_view, name="year"),
+    path("client_year_mount/", filter.getclient_view, name="client"),
 ]
