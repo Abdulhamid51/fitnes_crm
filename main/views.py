@@ -239,3 +239,6 @@ def detail_payment(request):
         money=payment
     )
     return JsonResponse({"status":"ok"})
+
+
+

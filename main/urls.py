@@ -22,5 +22,7 @@ urlpatterns = [
     path('update/tarif/<int:pk>',TarifUpdateview.as_view(),name='tarif_update'),
     path('delete/tarif/<int:pk>',TarifDeleteview.as_view(),name='tarif_delite'),
 
+    path('expense', ExpenseView.as_view(), name='expense'),
+
     path("year_mount/", filter.getyear_view, name="year"),
 ]

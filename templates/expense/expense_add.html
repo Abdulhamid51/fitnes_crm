@@ -1,0 +1,89 @@
+{% extends 'wrapper.html' %}
+{% block content %}
+
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>Tariflar qo'shish</h1>
+      <nav>
+        <ol class="breadcrumb mt-1">
+          <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Asosiy sahifa</a></li>
+          <li class="breadcrumb-item active"><a href="{% url 'main:tarif' %}">Tariflar</a></li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+
+
+ 
+
+ 
+    <section class="section">
+      <div class="row">
+        <!-- style="margin: 0 auto;float: none; margin-bottom: 10px;" -->
+        <div class="card-1 col-lg-6  ml-5 "  >  
+          <div class="card">
+            <div class="card-body">
+
+              <h4 class="card-title" style="font-size: 20px;">Tarif qo'shish</h5>
+
+              <!-- Floating Labels Form -->
+               <form class="row g-3" method="post"> {% csrf_token %}
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" required name="name" class="form-control" id="floatingName" placeholder="Your Name" >
+                    <label for="floatingName">Tarif nomi </label>
+                  </div>
+
+                </div>
+                <div class="col-md-12">
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="number" required name="days" class="form-control" id="floatingCity" placeholder="City">
+                      <label for="floatingCity">Kunlar soni</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <div class="form-floating">
+                            <input type="number" name="price" required class="form-control" id="floatingCity" placeholder="City">
+                      <label for="floatingCity">Narxi</label>
+                    </div>
+                  </div>
+                </div>
+             
+                <div class="col-md-12">
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                        <input type="text" name="info" class="form-control" id="floatingCity" placeholder="City">
+                        <label for="floatingCity">Qo'shimcha ma'lumot</label>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right">
+               <button type="submit" class="btn btn-primary">Qo'shish</button>
+             </div>
+        </div>
+             
+
+              </form><!-- End floating Labels Form -->
+            </div>
+          </div>
+          <div class="col-lg-6 card ml-4 p-2" style="height: 50%;">
+            <div class="card-title p-3" style="font-size: 24px; ">Hozirda mavjud tariflar:  
+            {% for t in tarif %}
+            <span class="badge rounded-pill bg-warning text-light m-1" style="font-size: 20px;">{{ t }}</span>
+
+            {% endfor %}
+            </div>
+            
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+
+  </main><!-- End #main -->
+{% endblock content %}

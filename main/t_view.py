@@ -100,3 +100,12 @@ class TarifDeleteview(View):
         tarif.delete()
         return JsonResponse({"status":"ok"})
 
+
+
+# Chiqimlar
+
+
+class ExpenseView(View):
+    def get(self,request):
+        return render(request,'expense/main_expense.html')
+
