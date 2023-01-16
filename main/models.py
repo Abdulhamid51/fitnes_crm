@@ -87,3 +87,22 @@ class Payment(models.Model):
 
     def __str__(self):
         return str(self.date)
+
+
+class ExpenseCategory(models.Model):
+    title = models.CharField(max_length=255)
+    created = models.DateField("Qo'shilgan sana", auto_now_add=True)
+
+    def __str__(self):
+        return str(self.title)
+
+
+class Expense(models.Model):
+    category = models.ForeignKey(ExpenseCategory, on_delete=models.CASCADE , related_name='expense_category')
+    summa = models.IntegerField(default=0)
+    info = models.TextField(blank=True, null=True)
+    created = models.DateField("Qo'shilgan sana", auto_now_add=True)
+
+    def __str__(self):
+        return str(self.summa)
+

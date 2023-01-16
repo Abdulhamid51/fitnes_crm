@@ -40,7 +40,7 @@
               <div class="card">
                 
               <!-- Bar Chart -->
-              <div id="barChart" style="min-height: 400px;" class="echart"></div>
+              <div id="lineChart" style="min-height: 400px;" class="echart"></div>
               <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
               <script>
                 document.addEventListener("DOMContentLoaded", () => {
@@ -52,19 +52,34 @@
                       'year':$date
                     },
                     success:function(response){
-                      echarts.init(document.querySelector("#barChart")).setOption({
-                        xAxis: {
-                          type: 'category',
-                          data: response['months']
-                        },
-                        yAxis: {
-                          type: 'value'
-                        },
-                        series: [{
-                          data: response['mount'],
-                          type: 'bar'
-                        }]
-                      });
+                      new ApexCharts(document.querySelector("#lineChart"), {
+                    series: [{
+                      name: "So'm",
+                      data: response['mount'],
+                    }],
+                    chart: {
+                      height: 350,
+                      type: 'line',
+                      zoom: {
+                        enabled: false
+                      }
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      curve: 'straight'
+                    },
+                    grid: {
+                      row: {
+                        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                      },
+                    },
+                    xaxis: {
+                      categories: response['months'],
+                    }
+                  }).render();
                     }
                   })
                 });
@@ -74,77 +89,7 @@
 
    
             
-          <!-- <div class="row">
-
-            <div class="col-xxl-4 col-md-6">
-              <div class="card info-card sales-card">
-
-
-                <div class="card-body">
-                  <h4 class="card-title">Active mijozlar soni<span></span></h4>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-check-circle-fill" style="color:rgb(32, 236, 32); "></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6 id="count_active" data-active="{{ active }}">{{ active }} ta</h6>
-
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            <div class="col-xxl-4 col-md-6">
-
-              <div class="card info-card customers-card">
-
-                
-
-                <div class="card-body">
-                  <h5 class="card-title">Vaqtincha to'xtatilgan mijozlar soni<span>| Pauza</span></h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-pause-fill text-warning "></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6 id="count_paused" data-paused="{{ paused }}">{{ paused }} ta</h6>
-
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-            <div class="col-xxl-4 col-md-12">
-
-              <div class="card info-card customers-card">
-
-                
-
-                <div class="card-body">
-                  <h5 class="card-title">Aktiv bo'lmagan mijozlar soni<span>| Inactive</span></h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-x-circle-fill" style="color: red;"></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6 id="count_inactive" data-inactive="{{ inactive }}">{{ inactive }} ta</h6>
-
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-           
-          </div> -->
+         
         </div>
         
         <div class="col-lg-6">
@@ -154,7 +99,7 @@
   
               <!-- Pie Chart -->
               <div id="pieChart" style="min-height: 400px;" class="echart"></div>
-  
+              
               <script>
                 document.addEventListener("DOMContentLoaded", () => {
                   
@@ -176,8 +121,8 @@
                       type: 'pie',
                       radius: '62%',
                       data: [{
-                          
-                        },
+                        
+                      },
                         {
                           value: '{{ active }}',
                           name:'Faol mijozlar'
@@ -190,7 +135,7 @@
                           value: '{{ inactive }}',
                           name: "Faol bo'lmagan"
                         },
-                      
+                        
                       ],
                       emphasis: {
                         itemStyle: {
@@ -200,15 +145,88 @@
                           
                         }
                       }
-                     
+                      
                     }]
                   });
                 });
-              </script>
+                </script>
               <!-- End Pie Chart -->
-  
+              
             </div>
           </div>
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Yangi mijozlarning o'sib borish statistikasi </h5>
+
+              <!-- Bar Chart -->
+              <canvas id="barChart" style="max-height: 400px;"></canvas>
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  var $date =  new Date().getFullYear();
+
+                  $.ajax({
+                    url:'/client_year_mount/',
+                    type:'get',
+                    data:{
+                      'year':$date
+                    },
+                    success:function(response){
+
+                      new Chart(document.querySelector('#barChart'), {
+                        type: 'bar',
+                        data: {
+                          labels: response['months'],
+                          datasets: [{
+                            label: 'Oylar hisobida',
+                            data: response['mount'],
+                            backgroundColor: [
+                              'rgba(255, 99, 132, 0.2)',
+                              'rgba(255, 159, 64, 0.2)',
+                              'rgba(255, 205, 86, 0.2)',
+                              'rgba(75, 192, 192, 0.2)',
+                              'rgba(54, 162, 235, 0.2)',
+                              'rgba(153, 102, 255, 0.2)',
+                              'rgba(201, 203, 207, 0.2)',
+                              'rgba(191, 203, 107, 0.2)',
+                              'rgba(255, 99, 132, 0.2)',
+                              'rgba(255, 159, 64, 0.2)',
+                              'rgba(255, 205, 86, 0.2)',
+                              'rgba(75, 192, 192, 0.2)',
+                            ],
+                            borderColor: [
+                              'rgb(255, 99, 132)',
+                              'rgb(255, 159, 64)',
+                              'rgb(255, 205, 86)',
+                              'rgb(75, 192, 192)',
+                              'rgb(54, 162, 235)',
+                              'rgb(153, 102, 255)',
+                              'rgb(201, 203, 207)',
+                              'rgb(201, 203, 207)',
+                              'rgb(255, 99, 132)',
+                              'rgb(255, 159, 64)',
+                              'rgb(255, 205, 86)',
+                              'rgb(75, 192, 192)',
+                            ],
+                            borderWidth: 1
+                          }]
+                        },
+                        options: {
+                          scales: {
+                            y: {
+                              beginAtZero: true
+                            }
+                          }
+                        }
+                      });
+                    }
+                  })
+                });
+              </script>
+              <!-- End Bar CHart -->
+
+            </div>
+          </div>
+          
         </div>
       </div> 
 
@@ -230,33 +248,6 @@
   </main><!-- End #main -->
 
 
-<script>
 
-const counterAnim = (qSelector, start = 0, end, duration = 1000) => {
- const target = document.querySelector(qSelector);
- let startTimestamp = null;
- const step = (timestamp) => {
-  if (!startTimestamp) startTimestamp = timestamp;
-  const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-  target.innerText = Math.floor(progress * (end - start) + start);
-  if (progress < 1) {
-   window.requestAnimationFrame(step);
-  }
- };
- window.requestAnimationFrame(step);
-};
-const c_ounter = document.querySelectorAll('h6')
-let all_c = c_ounter[0].getAttribute("data-all");
-let active_c = c_ounter[1].getAttribute("data-active");
-let paused_c = c_ounter[2].getAttribute("data-paused");
-let inactive_c = c_ounter[3].getAttribute("data-inactive");
-
-document.addEventListener("DOMContentLoaded", () => {
- counterAnim("#count_all", 0, all_c, 1500);
- counterAnim("#count_active", 0, active_c, 1000);
- counterAnim("#count_inactive", 0, inactive_c, 1000);
- counterAnim("#count_paused", 0, paused_c, 1000);
-});
-</script>
   
   {% endblock content %}
