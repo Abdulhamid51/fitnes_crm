@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.views import View
 from .models import *
+import datetime
+import calendar
 
 class HomeView(View):
     def get(self,request):
@@ -59,8 +61,6 @@ class RegisterView(View):
             context = {'tarif':tarif, "status":"Nimadur noto`g`ri ketdi"} 
 
         # month create
-        import datetime
-        import calendar
 
         now = datetime.datetime.now()
         today = int(now.strftime("%d"))
@@ -108,8 +108,7 @@ class DetailView(View):
 
 
 def default_add_month(request):
-    import datetime
-    import calendar
+
     clients = Client.objects.all()
     for client in clients:
         print('hhhhhhhhh')
@@ -138,12 +137,15 @@ def default_add_day(request):
     clients = Client.objects.all()
     for client in clients:
         try:
-            month = client.months.last()
-            month.came += 1
-            month.save()
-            day = Day.objects.create(
-                month=month
-            )
+            if client.status == "PAUSED":
+                pass
+            else:
+                month = client.months.last()
+                month.came += 1
+                month.save()
+                day = Day.objects.create(
+                    month=month
+                )
         except:
             month = "salom"
     return JsonResponse({"status":"Kun hosil qilindi"})
@@ -224,6 +226,16 @@ class PaymentView(View):
                 month=month,
                 money=payment
             )
+            try:
+                last_day = month.days.last().date
+            except:
+                last_day = 'no last day'
+            today = datetime.datetime.now()
+            if last_day == today:
+                print("kun qoshilmadi")
+            else:
+                Day.objects.create(month=month)
+                print("kun qoshildi")
             return render(request, 'forms-layouts.html', {"response":"To'lov amalga oshirildi","status":"success","clients":clients})
 
 
