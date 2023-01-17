@@ -107,28 +107,30 @@ class DetailView(View):
         return redirect(f"/detail/{id}")
 
 
-def default_add_month(request, client_id):
+def default_add_month(request):
     import datetime
     import calendar
-    client = get_object_or_404(Client, id=client_id)
-    now = datetime.datetime.now()
-    today = int(now.strftime("%d"))
-    month_days = calendar.monthrange(int(now.strftime("%Y")), int(now.strftime("%m")))[1]
-    res_days = month_days - today
-    if res_days >= client.coming_type.days:
-        coming_days = client.coming_type.days
-        price = client.coming_type.price
-    else:
-        daily_price = client.coming_type.price / client.coming_type.days
-        coming_days = res_days
-        price = daily_price * coming_days
-    sunday = coming_days // 7
-    coming_days -= sunday
-    month = Month.objects.create(
-        client=client,
-        coming_days=coming_days,
-        payment=int(price)
-    )
+    clients = Client.objects.all()
+    for client in clients:
+        print('hhhhhhhhh')
+        now = datetime.datetime.now()
+        today = int(now.strftime("%d"))
+        month_days = calendar.monthrange(int(now.strftime("%Y")), int(now.strftime("%m")))[1]
+        res_days = month_days - today
+        if res_days >= client.coming_type.days:
+            coming_days = client.coming_type.days
+            price = client.coming_type.price
+        else:
+            daily_price = client.coming_type.price / client.coming_type.days
+            coming_days = res_days
+            price = daily_price * coming_days
+        sunday = coming_days // 7
+        coming_days -= sunday
+        month = Month.objects.create(
+            client=client,
+            coming_days=coming_days,
+            payment=int(price)
+        )
     return JsonResponse({"status":"Oy hosil qilindi"})
 
 
@@ -202,10 +204,16 @@ class PaymentView(View):
             return render(request, 'forms-layouts.html', {"response":"ID noto`g`ri berildi","status":"danger","clients":clients})
         else:
             month = Month.objects.filter(client=obj).last()
-            if month.payment <= payment:
+            if month.payment == payment:
                 month.payment = 0
                 month.payed = True
                 obj.debt = False
+            elif month.payment < payment:
+                balance = payment - month.payment
+                month.payment = 0
+                month.payed = True
+                obj.debt = False
+                obj.balance += balance
             else:
                 month.payment -= payment
                 month.payed = False
