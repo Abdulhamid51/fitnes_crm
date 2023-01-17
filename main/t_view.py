@@ -107,5 +107,53 @@ class TarifDeleteview(View):
 
 class ExpenseView(View):
     def get(self,request):
-        return render(request,'expense/main_expense.html')
+        expense_category = ExpenseCategory.objects.all()
+        expense = Expense.objects.all().order_by('-id')
+        context = {
+            "expense_category":expense_category,
+            'expense':expense
+        }
+        return render(request,'expense/main_expense.html',context)
+
+    def post(self, request):
+        expense = request.POST.get('expense')
+        summa = request.POST.get('summa')
+        info = request.POST.get('info')
+        category = request.POST.get('add_expense')
+
+        edit_expense = request.POST.get('edit_expense')
+
+        if expense is not None:
+            c = ExpenseCategory.objects.get(id=expense)
+            Expense.objects.create(category=c, summa=summa, info=info)
+            messages.success(request, "Chiqim muvaffaqiyatli qo'shildi ! ")
+
+        if category is not None:
+            ExpenseCategory.objects.create(title=category)
+            messages.success(request, "Chiqim turi muvaffaqiyatli qo'shildi ! ")
+            
+
+        return redirect('/expense')
+
+
+class ExpenseDelUp(View):
+    def get(self, request, pk):
+        cmd = request.GET.get('cmd')
+        if cmd == "category":
+            c = ExpenseCategory.objects.get(id=int(pk))
+            c.delete()
+        if cmd == "expense":
+            c = Expense.objects.get(id=int(pk))
+            c.delete()
+
+        return JsonResponse({"status":"ok"})
+    
+    def post(self, request,pk):
+        title = request.POST.get('edit_expense')
+        c = ExpenseCategory.objects.get(id=int(pk))
+        c.title = title
+        c.save()
+
+        messages.success(request, "Chiqim turi muvaffaqiyatli o'zgartirildi ! ")
+        return redirect('/expense')
 
