@@ -4,6 +4,8 @@ from django.views import View
 from .models import *
 import datetime
 import calendar
+from django.contrib import messages
+
 
 class HomeView(View):
     def get(self,request):
@@ -56,9 +58,12 @@ class RegisterView(View):
                                         coming_type=tarif,
                                         status=status)
             tarif =  ComingType.objects.all()
-            context = {'tarif':tarif,'client':client, "status":"Klient hosil qilindi"}
+            # context = {'tarif':tarif,'client':client, "status":"Klient hosil qilindi"}
+            messages.success(request, "Mijoz muvaffaqiyatli ro'yxatga olindi ! ")
+
         else:
-            context = {'tarif':tarif, "status":"Nimadur noto`g`ri ketdi"} 
+            messages.success(request, "Xatolik qaytadan harakat qiling ! ")
+            # context = {'tarif':tarif, "status":"Nimadur noto`g`ri ketdi"} 
 
         # month create
 
@@ -81,7 +86,7 @@ class RegisterView(View):
             payment=int(price)
         )
 
-        return render(request, 'register.html', context)
+        return redirect('/register')
 
 
 class DetailView(View):
@@ -236,7 +241,8 @@ class PaymentView(View):
             else:
                 Day.objects.create(month=month)
                 print("kun qoshildi")
-            return render(request, 'forms-layouts.html', {"response":"To'lov amalga oshirildi","status":"success","clients":clients})
+            messages.success(request, "To'lov amalga oshirildi ! ")
+            return redirect('/payment')
 
 
 def detail_payment(request):

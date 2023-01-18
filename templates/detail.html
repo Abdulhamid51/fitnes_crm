@@ -139,7 +139,7 @@
    
    <!-- <div class="row mt-3"> -->
      <!-- <hr> -->
-     <div class="card col-md-6 p-3">
+     <div class="col-md-6 card  p-3">
        
       <form class="payment"> 
         {% csrf_token %}
@@ -192,7 +192,7 @@
             </td>
             <td>
               {% for p in m.payments.all %}
-              {{ p.date }}<br>
+              {{ p.date | date:"d.m.Y" }}<br>
               {% endfor %}
             </td>
           </tr>

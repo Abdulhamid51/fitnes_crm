@@ -83,7 +83,37 @@
 
   </header><!-- End Header -->
 
+  {% if messages %}
+  <ul class="messages">
+      {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show msg" role="alert "   >
+        <i class="bi bi-check-circle me-1"></i>
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      
+      {% endfor %}
+  </ul>
+  {% else %}
+{% endif %}
+
   <style>
+     .msg{
+        position: fixed;
+        top: 80px;
+        right: 0;
+        width: 30%;
+        animation: run 1s linear ;
+        z-index: 100;
+      }
+      @keyframes run {
+      from{ 
+          transform: translateX(500px);   
+      }
+      to{
+          transform: translateX(-8px);   
+      }
+}
     .nav-item:hover a{
       transform: scale(1.2);
     }

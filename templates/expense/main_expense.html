@@ -17,19 +17,7 @@
       </nav>
     </div><!-- End Page Title -->
 
-    {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <div class="alert alert-success alert-dismissible fade show msg" role="alert "   >
-                  <i class="bi bi-check-circle me-1"></i>
-                  {{ message }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                
-                {% endfor %}
-            </ul>
-            {% else %}
-    {% endif %}
+  
           
 
 
@@ -61,8 +49,8 @@
                 {% csrf_token %}
                 <div class="col-md-12">
                   <div class="form-floating mb-3">
-                    <input type="text" name="edit_expense"  class="form-control edit-value" id="floatingTitle"  placeholder="Your Name" required>
-                    <label for="floatingTitle">Nomi</label>
+                    <input type="text" name="edit_expense"  class="form-control edit-value" id="edit-value"  placeholder="Your Name" required>
+                    <label for="edit-value">Nomi</label>
                   </div>
                 </div>
                 <div class="text-center">
@@ -139,12 +127,12 @@
       
       </div>
       <div class="col-md-12">
-        <div class="card">
+        <div class="card " style="overflow-y: scroll; max-height: 35%; min-height: 180px;">
           <div class="card-body">
             <h5 class="card-title">Chiqimlar ro'yxati</h5>
     
             <!-- Table with hoverable rows -->
-            <table class="table table-bordered table-hover table-light">
+            <table class="table table-bordered table-hover table-light" >
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -163,7 +151,7 @@
                     <td>{{ e.summa }} so'm</td>
                     <td>{{ e.info }}</td>
                     <td>{{ e.created | date:"d.m.Y " }}</td>
-                    <td><span type="submit" onclick="delExpense('expense','{{ e.id }}')" class="badge bg-danger">O'chirish</span></td>
+                    <td class="text-center"><span type="submit" onclick="delExpense('expense','{{ e.id }}')" class="badge bg-danger"> O'chirish</span></td>
                   </tr>
                   {% endfor %}
             
@@ -221,22 +209,7 @@
       opacity: 0.9;
       display: none;
     }
-    .msg{
-        position: fixed;
-        top: 80px;
-        right: 0;
-        width: 30%;
-        animation: run 1s linear ;
-        z-index: 100;
-      }
-      @keyframes run {
-      from{ 
-          transform: translateX(500px);   
-      }
-      to{
-          transform: translateX(-8px);   
-      }
-}
+   
     @keyframes animate{
       from{
         transform: rotate(2deg);
@@ -266,7 +239,6 @@
     let add_form = document.querySelector('.form-filter');
     let edit_form = document.querySelector('.edit');
 
-    let input_val = document.querySelector('.edit_value')
 
 
     function back(command){
@@ -306,7 +278,10 @@
         add_form.style.display = 'block'
         edit_form.style.display = 'block'
         document.getElementById('form-edit').action = `/expense/${Number(id)}`;
-        console.log(edit_form, "form")
+        let category = document.querySelector(`.category-${ id }`).textContent;
+        document.getElementById('edit-value').value = category;
+
+        
 
       }
     }
