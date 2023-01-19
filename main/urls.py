@@ -28,4 +28,6 @@ urlpatterns = [
 
     path("year_mount/", filter.getyear_view, name="year"),
     path("client_year_mount/", filter.getclient_view, name="client"),
+    path('login',LoginView.as_view(),name='login'),
+    path('logout',logout_,name='logout'),
 ]

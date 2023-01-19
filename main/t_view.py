@@ -4,10 +4,11 @@ from .models import *
 from django.contrib.auth import  login ,logout
 from django.contrib import messages
 from django.http import JsonResponse
+from django.shortcuts import redirect
+from .filter import deco_login
 
 
-
-class LoginView(View):
+class LoginView(View):   
     def get(self,request):
         if  request.user.is_authenticated == True:
             return redirect('main:home')
@@ -33,6 +34,7 @@ def logout_(request):
 
 
 class TarifView(View):
+    @deco_login
     def get(self,request):
         tarif = ComingType.objects.all()
         context = {'tarif':tarif}
@@ -40,6 +42,7 @@ class TarifView(View):
         return render(request,'tarif/tarif.html',context)
 
 class AddTarif(View):
+    @deco_login
     def get(self,request):
         tarif = ComingType.objects.all()
         return render(request, 'tarif/comingtype.html', {"tarif":tarif})
@@ -59,6 +62,7 @@ class AddTarif(View):
             # messages.success(request, "Tarif muvaffaqiyatli qo'shildi. ")
             return render(request, 'tarif/comingtype.html')
 class TarifUpdateview(View):
+    @deco_login
     def get(self,request,pk):
         tarif = ComingType.objects.get(id=int(pk))
         context = {'tarif':tarif}
@@ -87,6 +91,7 @@ class TarifUpdateview(View):
 
 
 class TarifDeleteview(View):
+    @deco_login
     def get(self,request,pk):
 
         tarif = ComingType.objects.filter(id=int(pk))[0]
@@ -106,6 +111,7 @@ class TarifDeleteview(View):
 
 
 class ExpenseView(View):
+    @deco_login
     def get(self,request):
         expense_category = ExpenseCategory.objects.all()
         expense = Expense.objects.all().order_by('-id')
@@ -137,6 +143,7 @@ class ExpenseView(View):
 
 
 class ExpenseDelUp(View):
+    @deco_login
     def get(self, request, pk):
         cmd = request.GET.get('cmd')
         if cmd == "category":

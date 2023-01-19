@@ -2,6 +2,7 @@ from .models import *
 from django.http import JsonResponse
 import datetime as dt
 import calendar
+from django.shortcuts import redirect
 
 NOW = dt.datetime.now()
 
@@ -53,3 +54,9 @@ def getclient_view(request):
         months_name.append(calendar.month_abbr[m])
     
     return JsonResponse({'mount':count_year,'months':months_name})
+def deco_login(fun):
+    def wrapper(self,request,*args,**kwargs):
+        if request.user.is_authenticated:
+            return fun(self, request, *args, **kwargs)
+        return redirect('main:login')
+    return wrapper
