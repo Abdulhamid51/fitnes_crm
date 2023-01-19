@@ -2,8 +2,6 @@
 {% block content %}
 
   <main id="main" class="main">
-  <script src="../../static/assets/js/jquery-3.6.1.min.js"></script>
-
 
     <div class="pagetitle">
       <h1>Chiqimlar ro'yxati</h1>
@@ -17,308 +15,162 @@
       </nav>
     </div><!-- End Page Title -->
 
-  
-          
-
-
-    
-    <div class="row">
-        <div class="form-filter">
-
-          <div class="card expense-form ">
-            <div class="card-body ">
-              <div class="card-title">Chiqim turini qo'shish <span type="button" style="float: right;" onclick="add('close')"><i class="bi bi-x-lg" ></i></span></div>
-              <form action="" method="post">
-                {% csrf_token %}
-                <div class="col-md-12">
-                  <div class="form-floating mb-3">
-                    <input type="text" name="add_expense"  class="form-control" id="floatingTitle" placeholder="Your Name" required>
-                    <label for="floatingTitle">Nomi</label>
-                  </div>
+    {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show msg" role="alert "   >
+                  <i class="bi bi-check-circle me-1"></i>
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <div class="text-center">
-                  <button type="submit" class="btn btn-primary">Qo'shish</button>
-                </div>
-              </form>
-          </div>
-        </div>
-          <div class="card expense-form edit">
-            <div class="card-body ">
-              <div class="card-title">Chiqim turini o'zgartirish <span type="button" style="float: right;" onclick="add('close')"><i class="bi bi-x-lg" ></i></span></div>
-              <form method="post" id="form-edit">
-                {% csrf_token %}
-                <div class="col-md-12">
-                  <div class="form-floating mb-3">
-                    <input type="text" name="edit_expense"  class="form-control edit-value" id="edit-value"  placeholder="Your Name" required>
-                    <label for="edit-value">Nomi</label>
-                  </div>
-                </div>
-                <div class="text-center">
-                  <button type="submit" class="btn btn-primary ">O'zgartirish</button>
-                </div>
-              </form>
-          </div>
-        </div>
-      </div>
- 
-
-      <div class="col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Chiqim qo'shish</h5>
-            <form action="" method="post">
-              {% csrf_token %}
-              <div class="col-md-12">
-                <div class="form-floating mb-3">
-                  <select class="form-select" name="expense" id="floatingSelect" aria-label="State">
-                    {% for c in expense_category %}
-                    <option selected value="{{ c.id }}" >{{ c }}</option>
-                    {% endfor %}
-                  </select>
-                  <label for="floatingSelect">Chiqim turini tanlang</label>
-                </div>
-              </div>
-              <div class="col-md-12">
-                <div class="form-floating mb-3">
-                  <input type="number" name="summa"  class="form-control" id="floatingSum" placeholder="Your Name" required>
-                  <label for="floatingSum">Summa</label>
-                </div>
-              </div>
-              <div class="col-md-12">
-                <div class="form-floating mb-3">
-                    <textarea name="info" class="form-control" id="floatingText" cols="30" rows="10"></textarea>
-                  <label for="floatingText">Izoh</label>
-                </div>
-              </div>
-              
-              <div class="text-left">
-                <button class="btn btn-success text-light">Qo'shish</button>
-              </div>
-    
-            </form>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card" style="overflow-y:scroll; max-height: 74.5%;">
-          <div class=" card-body">
-            <h5 class="card-title" style="font-size: 20px; float: left;">Chiqim turlari:</h5>
-            <p class="title mb-5 mt-3">
-              <span type="button" onclick="back('back')" class="badge bg-info text-light m-1 back-btn" style="float: right; font-size: 16px; display: none;">Orqaga</span> 
-              <span type="button" onclick="back('delete')" class="badge bg-danger text-light m-1 delete-btn" style="float: right; font-size: 16px;">O'chirish</span> 
-              <span type="button" onclick="add('open')" class="badge bg-success text-light m-1 add-btn " style="float: right; font-size: 16px;">Qo'shish <i class="bi bi-plus"></i></span> 
-            </p>
-             
-            <p class="card-title">
-              {% for c in expense_category %}
-              <span class="ex-btn category-{{ c.id }} badge rounded-pill bg-info text-light m-1" data-value="{{ c }}" style="font-size: 18px;">{{ c }} <a href="#" onclick="delExpense('category','{{ c.id }}')">
-                 <i class="ex-i bi bi-x-circle text-light ml-1 "></i></a>
-                <a href="#" onclick="add('edit', '{{ c.id }}' )"><i class="ex-edit ri-pencil-line text-light ml-1 "></i></a>
-              </span>
-              {% endfor %}
-  
-              
-            </p>
-            
-          </div>
-        </div>
-
-      
-      
-      </div>
-      <div class="col-md-12">
-        <div class="card " style="overflow-y: scroll; max-height: 35%; min-height: 180px;">
-          <div class="card-body">
-            <h5 class="card-title">Chiqimlar ro'yxati</h5>
-    
-            <!-- Table with hoverable rows -->
-            <table class="table table-bordered table-hover table-light" >
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Chiqim turi</th>
-                  <th scope="col">Summa</th>
-                  <th scope="col">Izoh</th>
-                  <th scope="col">Sanasi</th>
-                  <th scope="col"></th>
-                </tr>
-              </thead>
-              <tbody>
-                  {% for e in expense %}
-                  <tr class="c-{{ e.category.id }} e-{{ e.id }}">
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ e.category.title }}</td>
-                    <td>{{ e.summa }} so'm</td>
-                    <td>{{ e.info }}</td>
-                    <td>{{ e.created | date:"d.m.Y " }}</td>
-                    <td class="text-center"><span type="submit" onclick="delExpense('expense','{{ e.id }}')" class="badge bg-danger"> O'chirish</span></td>
-                  </tr>
-                  {% endfor %}
-            
                 
-              </tbody>
-            </table>
-            <!-- End Table with hoverable rows -->
-    
-          </div>
-        </div>
+                {% endfor %}
+            </ul>
+            {% else %}
+    {% endif %}
 
-        
+  <div class="row confirm-row">
+    <div class="card col-lg-3 confirm-card p-3">
+      <div class="card-title text-center">
+        Ushbu tarifni o'chirishni xoxlaysizmi ?
+      </div>
+      <div class="card-body text-center">
+        <span class="btn bg-success text-light m-2" onclick="confirmYes('yes')">Ha</span>
+        <span class="btn bg-danger text-light m-2" onclick="confirmYes('no')">Yo'q</span>
       </div>
     </div>
+  </div>
 
 
+    <section class="section">
+      <div class="row"><div class="col-12 mb-3">
+      <a href="{% url 'main:addtarif' %}" class="badge bg-primary p-2 pe-2 info" style="font-size: 19px; width: 200px; height: 45px; color: white; float: right;">
+        Chiqim qo'shish <i class="bi bi-plus-circle"></i></a>
+
+      </div></div>
+      <div class="row">
+        {% for i in tarif %}
+        <div class="card-1 col-lg-6 c-info-{{ i.id }} info" >
+
+          <div class="card  p-3">
+            <div class="card-title p-2" style="font-size: 20px;">
+              <div class="text"><div class="badge bg-info" style="font-size: 18px;">{{ i.title }}</div>  tarifi quyidagi afzalliklarga ega!
+            </div>
+
+            <ul class="mt-2 pt-2 ">
+              <li>Bir oyda <div class="badge bg-warning" style="font-size: 17px;">{{ i.days }} kun</div> davomida doimiy mashg'ulot.</li>
+              <li class="mt-1">Oylik to'lov <div class="badge bg-success" style="font-size: 17px;">{{ i.price }} so'm</div></li>
+            </ul>
+
+              <div class="text text-secondary">Qo'shimcha ma'lumot: </div>{{ i.info }}
+            </div>
+            <div>
+              
+              <a href="update/tarif/{{ i.id }}" class="badge bg-warning text-light p-2" style="font-size: 16px;"><i class="bi bi-pencil-square me-1 text-dark"></i> Tahrirlash</a>
+              
+              <!-- <a href="delete/tarif/{{ i.id }}" onclick="confirmDelete()" class="badge bg-danger text-light p-2" style="font-size: 16px;"><i class="bi bi-x-circle-fill me-1 "></i> O'chirish</a> -->
+              <a href="#" onclick="confirmDelete('delete', '{{ i.id }}')" data-id="{{ i.id }}"  class="badge bg-danger text-light p-2 delete" style="font-size: 16px;"><i class="bi bi-x-circle-fill me-1 "></i> O'chirish</a>
+            </div>
+          </div>
+
+        </div>
+        {% endfor %}
+      </div>
+
+
+
+    </section>
+
+    <style>
+      .info{
+
+        animation: slide 1s linear;
+      }
+      @keyframes slide{
+        from{
+          transform: translateY(-100px);
+          opacity: 0;
+        }
+        to{
+          transform: translateY(7px);
+          opacity: 1;
+        }
+      }
+      .msg{
+        position: fixed;
+        top: 80px;
+        right: 0;
+        width: 30%;
+        animation: run 1.5s linear ;
+        z-index: 100;
+      }
+    @keyframes run {
+      from{ 
+          transform: translateX(500px);   
+      }
+      to{
+          transform: translateX(-8px);   
+      }
+}
+  .confirm-card{
+    display: none;
+    position: fixed;
+    left: 45%;
+    top:65px;
+    z-index: 150;
+    animation: todown 0.8s ;
+  }
+  @keyframes todown {
+    from{
+      transform: translateY(-50px);
+    }
+    to{
+      transform: translateY(0px);
+    }
+  }
     
+    </style>
+
+    <script>
+      function confirmDelete(answer,id){
+        let card = document.querySelector('.confirm-card')
+        
+        if(answer === 'delete'){
+          card.style.display = 'block';
+          card.setAttribute('data-id',id )
+          
+        }
+        
+      }
+      function confirmYes(answer){
+        let card = document.querySelector('.confirm-card')
+        let id =  card.getAttribute('data-id')
+
+        if(answer === 'no'){
+          card.style.display = 'none';
+        }
+        else if(answer === 'yes'){
+
+          $.ajax({
+              url:`delete/tarif/${Number(id)}`,
+              type:"GET",
+              data:{ 
+                  "msg":"ok"
+              },
+              success:function(response){
+                let c_info = document.querySelector(`.c-info-${id}`).style.display = 'none';
+
+              }
+          })
+          card.style.display = 'none';
+       
+        }
+      }
+
+    </script>
 
   </main><!-- End #main -->
 
-
-  <style>
-    .expense-btn{
-      background-color: red !important;
-      animation: 8ms animate infinite ;
-    }
-    .ex-i{
-      display:none;
-    }
-    .expense-btn i{
-      display:inline-block;
-    }
-    .expense-btn i.ex-edit{
-      display: none;
-    }
-
-   .expense-form{
-    display: block;
-    position: fixed;
-    width: 36%;
-    top:0%;
-    left: 34%;
-    z-index: 9999;
-    animation: 1s to_bottom ;
-    
-   }
-   .form-filter{
-      width: 100%;
-      height: 100%;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 9999;
-      background:  white;
-      opacity: 0.9;
-      display: none;
-    }
-   
-    @keyframes animate{
-      from{
-        transform: rotate(2deg);
-
-      }
-      to{
-        transform: rotate(-2deg);
-      }
-    } 
-    @keyframes to_bottom{
-      from{
-        opacity: 0.2;
-        transform: translateY(-200px);
-      }
-      to{
-        opacity: 1;
-        transform: translateY(1px);
-      }
-    }
-  </style>
-
-  <script>
-    let back_btn = document.querySelector('.back-btn');
-    let delete_btn = document.querySelector('.delete-btn');
-    let expense_btn = document.querySelectorAll('.ex-btn')
-    let add_btn = document.querySelector('.add-btn');
-    let add_form = document.querySelector('.form-filter');
-    let edit_form = document.querySelector('.edit');
-
-
-
-    function back(command){
-      if(command === 'back'){
-        back_btn.style.display = 'none'
-        delete_btn.style.display = 'block'
-        add_btn.style.display = 'block'
-
-
-        expense_btn.forEach(element => {
-          element.classList.remove('expense-btn');
-        });
-        
-      }
-      else if(command === 'delete'){
-        delete_btn.style.display = 'none'
-        back_btn.style.display = 'block'
-        add_btn.style.display = 'none'
-        
-        expense_btn.forEach(element => {
-          
-          element.classList.add('expense-btn');
-        });
-        
-      }
-    }
-
-    function add(cmd, id){
-      if(cmd === 'open'){
-        add_form.style.display = 'block'
-        edit_form.style.display = 'none'
-
-      }else if(cmd === 'close'){
-        add_form.style.display = 'none'
-      }
-      else if(cmd === 'edit'){
-        add_form.style.display = 'block'
-        edit_form.style.display = 'block'
-        document.getElementById('form-edit').action = `/expense/${Number(id)}`;
-        let category = document.querySelector(`.category-${ id }`).textContent;
-        document.getElementById('edit-value').value = category;
-
-        
-
-      }
-    }
-
-    function delExpense(cmd,id){
-      if(cmd === 'category'){
-        $.ajax({
-                url:`expense/${Number(id)}`,
-                type:"GET",
-                data:{ 
-                    "cmd":"category"
-                },
-                success:function(response){
-                  let category = document.querySelector(`.category-${ id }`).style.display = 'none';
-                  let tr = document.querySelectorAll(`.c-${ id }`);
-                  
-                  tr.forEach(element => {
-                    element.style.display = 'none'
-                  });
-  
-                }
-            })
-      }else{
-        $.ajax({
-                url:`expense/${Number(id)}`,
-                type:"GET",
-                data:{ 
-                    "cmd":"expense"
-                },
-                success:function(response){
-                  let tr = document.querySelector(`.e-${ id }`).style.display = 'none';
-                  
-                }
-            })
-      }
-    }
-
-  </script
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 
 {% endblock content %}

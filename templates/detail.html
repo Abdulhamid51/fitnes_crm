@@ -76,11 +76,22 @@
                   </div>
                 </div>
                 <hr>
-            
+
+                <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary">O'zgartirish</button>
+
+                  </div>
+              </form>
+              <hr>
+              <form action="" method="post">{% csrf_token %}
+                <div class="d-grid gap-2">
+                  <input type="text" name="delete" value="delete" style="display:none" >
+                  
+                  <button type="submit" class="btn btn-danger">O'chirish</button>
+                </div>
+              </form>
               </div>
             </div>
-          </form>
 
          </div>
       </div>
@@ -95,6 +106,7 @@
                 {% if month.payed == True %}
                     <button class="btn btn-primary btn-sm btn-disaled">To'langan</button>
                     {% else %}
+                    
                     <button class="btn btn-danger btn-sm">To'lanmagan</button>
                 {% endif %}
             </h4>
@@ -139,7 +151,7 @@
    
    <!-- <div class="row mt-3"> -->
      <!-- <hr> -->
-     <div class="col-md-6 card  p-3">
+     <div class="card col-md-6 p-3">
        
       <form class="payment"> 
         {% csrf_token %}
@@ -158,7 +170,8 @@
                  <label for="month">Oyni tanlang</label>
                </div>
  
-              <div class="text-left">
+              <div class="text-left  d-grid gap-2">
+                
                 <button type="button" onclick="sendData()" class="btn btn-primary">Qo'shish</button>
               </div>
   
@@ -192,7 +205,7 @@
             </td>
             <td>
               {% for p in m.payments.all %}
-              {{ p.date | date:"d.m.Y" }}<br>
+              {{ p.date }}<br>
               {% endfor %}
             </td>
           </tr>

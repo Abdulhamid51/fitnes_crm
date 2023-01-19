@@ -18,7 +18,7 @@
     </div><!-- End Page Title -->
     <section class="section">
       <div class="row">
-        <div class="col-lg-6 " style="margin: 0 auto; float:none; ">
+        <div class="col-lg-6">
 
           
 
@@ -28,7 +28,13 @@
 
               <!-- Floating Labels Form -->
               
-             
+              {% if response %}
+                <hr>
+                <div class="alert alert-{{status}} alert-dismissible fade show" role="alert">
+                  {{response}}
+                  <a class="btn-close" href="/payment/"></a>
+                </div>
+              {% else %}
               <form method="post" class="row g-3 p-1">
                 {% csrf_token %}
                 <div class="form-floating">
@@ -62,6 +68,7 @@
                   <button type="reset" class="btn btn-secondary">Tozalash</button>
                 </div>
               </form><!-- End floating Labels Form -->
+              {% endif %}
                 
 
             </div>
