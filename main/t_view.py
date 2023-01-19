@@ -4,7 +4,8 @@ from .models import *
 from django.contrib.auth import  login ,logout
 from django.contrib import messages
 from django.http import JsonResponse
-
+from django.contrib.auth.models import User
+from .filter import deco_login
 
 
 class LoginView(View):
@@ -14,18 +15,19 @@ class LoginView(View):
         return render (request,'pages-login.html')
 
     def post(self,request):
-        if  request.user.is_authenticated == True:
-            return redirect('main:home')
+        try:
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            if username and password:
+                user =  User.objects.filter(username=username)[0]
 
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        if username and password:
-            user =  User.objects.filter(username=username)[0]
-
-            if user is not None:
-                login(request,user)
-                return redirect('main:home')
-        return render(request, 'pages-login.html')
+                if user is not None:
+                    login(request,user)
+                    return redirect('main:home')
+            return render(request, 'pages-login.html')
+        except:
+            context ={'login':'login yoki parol hato '}
+            return render(request, 'pages-login.html',context)
 
 def logout_(request):
     logout(request)
@@ -33,13 +35,14 @@ def logout_(request):
 
 
 class TarifView(View):
+    @deco_login
     def get(self,request):
         tarif = ComingType.objects.all()
         context = {'tarif':tarif}
-
         return render(request,'tarif/tarif.html',context)
 
 class AddTarif(View):
+    @deco_login
     def get(self,request):
         tarif = ComingType.objects.all()
         return render(request, 'tarif/comingtype.html', {"tarif":tarif})
@@ -59,6 +62,7 @@ class AddTarif(View):
             # messages.success(request, "Tarif muvaffaqiyatli qo'shildi. ")
             return render(request, 'tarif/comingtype.html')
 class TarifUpdateview(View):
+    @deco_login
     def get(self,request,pk):
         tarif = ComingType.objects.get(id=int(pk))
         context = {'tarif':tarif}
@@ -87,11 +91,12 @@ class TarifUpdateview(View):
 
 
 class TarifDeleteview(View):
+    @deco_login
     def get(self,request,pk):
 
         tarif = ComingType.objects.filter(id=int(pk))[0]
         tarif.delete()
-        
+
         return JsonResponse({"status":"ok"})
 
     def post(self,request,pk):
@@ -106,54 +111,14 @@ class TarifDeleteview(View):
 
 
 class ExpenseView(View):
+    @deco_login
     def get(self,request):
-        expense_category = ExpenseCategory.objects.all()
-        expense = Expense.objects.all().order_by('-id')
-        context = {
-            "expense_category":expense_category,
-            'expense':expense
-        }
-        return render(request,'expense/main_expense.html',context)
-
-    def post(self, request):
-        expense = request.POST.get('expense')
-        summa = request.POST.get('summa')
-        info = request.POST.get('info')
-        category = request.POST.get('add_expense')
-
-        edit_expense = request.POST.get('edit_expense')
-
-        if expense is not None:
-            c = ExpenseCategory.objects.get(id=expense)
-            Expense.objects.create(category=c, summa=summa, info=info)
-            messages.success(request, "Chiqim muvaffaqiyatli qo'shildi ! ")
-
-        if category is not None:
-            ExpenseCategory.objects.create(title=category)
-            messages.success(request, "Chiqim turi muvaffaqiyatli qo'shildi ! ")
-            
-
-        return redirect('/expense')
+        return render(request,'expense/main_expense.html')
 
 
-class ExpenseDelUp(View):
-    def get(self, request, pk):
-        cmd = request.GET.get('cmd')
-        if cmd == "category":
-            c = ExpenseCategory.objects.get(id=int(pk))
-            c.delete()
-        if cmd == "expense":
-            c = Expense.objects.get(id=int(pk))
-            c.delete()
 
-        return JsonResponse({"status":"ok"})
-    
-    def post(self, request,pk):
-        title = request.POST.get('edit_expense')
-        c = ExpenseCategory.objects.get(id=int(pk))
-        c.title = title
-        c.save()
+def handler_404(request,exception):
+    return render(request, "404.html")
 
-        messages.success(request, "Chiqim turi muvaffaqiyatli o'zgartirildi ! ")
-        return redirect('/expense')
-
+def handler_500(request):
+    return render(request, "500.html")

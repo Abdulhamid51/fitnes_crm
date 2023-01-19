@@ -32,8 +32,6 @@ class Client(models.Model):
     created = models.DateField("Qo'shilgan sana", auto_now_add=True)
     updated = models.DateTimeField("O'zgartirilgan vaqt", auto_now=True)
 
-    balance = models.IntegerField(default=0)
-
     def __str__(self):
         return self.name
 
