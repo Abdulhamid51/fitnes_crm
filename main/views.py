@@ -5,9 +5,11 @@ from .models import *
 import datetime
 import calendar
 from django.contrib import messages
+from .filter import deco_login
 
 
 class HomeView(View):
+    @deco_login
     def get(self,request):
         print()
         clients = Client.objects.all()
@@ -36,6 +38,8 @@ class HomeView(View):
 
 
 class RegisterView(View):
+    @deco_login
+
     def get(self,request):
         tarif =  ComingType.objects.all()
 
@@ -91,6 +95,8 @@ class RegisterView(View):
 
 
 class DetailView(View):
+    @deco_login
+
     def get(self, request, id):
         queryset = Client.objects.get(id=id)
         months = Month.objects.filter(client=queryset).order_by("-id")
@@ -100,18 +106,20 @@ class DetailView(View):
         return render(request, "detail.html", {"client":queryset, "months":months, "tarifs":tarif})
 
     def post(self, request, id):
-        name = request.POST['name']
-        phone = request.POST['phone']
-        status = request.POST['status']
-        tarif = request.POST['tarif']
+        if request.POST.get('delete'):
+            client = Client.objects.filter(id=int(id))
+            client.delete()
+            return redirect("main:list_client")
+        else:
 
-        tarif = ComingType.objects.get(title=tarif)
-        client = Client.objects.filter(id=id)
-    
-        client.update(name=name, phone=phone, coming_type=tarif, status=status)
-
+            name = request.POST['name']
+            phone = request.POST['phone']
+            status = request.POST['status']
+            tarif = request.POST['tarif']
+            tarif = ComingType.objects.get(title=tarif)
+            client = Client.objects.filter(id=id)
+            client.update(name=name, phone=phone, coming_type=tarif, status=status)
         return redirect(f"/detail/{id}")
-
 
 def default_add_month(request):
 
@@ -186,6 +194,8 @@ def barcode_came(request, uid):
 
 
 class DavomatView(View):
+    @deco_login
+
     def get(self,request):
         queryset = Client.objects.all().order_by("-id")
         tarif = ComingType.objects.all()
@@ -197,6 +207,8 @@ class DavomatView(View):
 
 
 class PaymentView(View):
+    @deco_login
+
     def get(self, request):
         try:
             request.GET['client_id']
