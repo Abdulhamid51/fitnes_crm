@@ -1,0 +1,161 @@
+{% extends 'wrapper.html' %}
+
+{% block content %}
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Davomat</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Asosiy sahifa</a></li>
+          <li class="breadcrumb-item">Davomat</li>
+          <li class="breadcrumb-item active">Davomat kiruvchilar royhati</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+
+          <div class="card">
+           
+            <div class="card-body">
+              <h5 class="card-title">Klientlar ro'yxati <span>| Today</span></h5>
+              <form method="post" action="{% url 'attendance:list_client' %}">
+                {% csrf_token %}
+                <div class="row">
+                  <div class="col-md-3 col-sm-6">
+                    
+                    <select class="form-select" name="tarif">
+                      <option value="">All</option>
+                      {% for tarif in tarif %}
+                      <option value="{{tarif.id}}">{{tarif.title}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="col-md-3 col-sm-6">
+                    <select class="form-select" name="status">
+                      <option value="">All</option>
+                      <option value="ACTIVE">ACTIVE</option>
+                      <option value="INACTIVE">INACTIVE</option>
+                      <option value="PAUSED">PAUSED</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3 col-sm-6">
+                    
+                    <select class="form-select" name="debt">
+                      <option value="">All</option>
+                      <option value="0">To'lagan</option>
+                      <option value="1">To'lamagan</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3 col-sm-6">
+                    <button type="submit" class="btn btn-success">Filterlash</button>
+                  </div>
+                  
+                </div>
+              </form>  
+              <table class="table table-borderless datatable">
+                  
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ISM FAMILIYA</th>
+                    <th scope="col">TEL NO.</th>
+                    <th scope="col">TARIFI</th>
+                    <th scope="col">TO'LOVLAR</th>
+                    <th scope="col">STATUS</th>
+                  </tr>
+                </thead>
+                <tbody class="clients_list">
+
+                    {% for client in clients %}
+                    <tr class="default">
+                      <th scope="row"><a href="#">#{{ forloop.counter }}</a></th>
+                      <td><a href="#">{{ client.name }}</a></td>
+                      <td>{{ client.phone }}</td>
+                      <td>{{ client.coming_type }}</td>
+                      <td>
+                        
+                        {% if client.debt == False %}
+                        <span class="badge bg-success">To'langan</span>
+                        {% else %}
+                        <span class="badge bg-danger">To'lanmagan</span>
+                        {% endif %}
+                        
+                      </td>
+                      <td>
+                        {% if client.status == "ACTIVE" %}
+                        <span class="badge bg-success">{{client.status}}</span>
+                        {% elif client.status == "INACTIVE" %}
+                        <span class="badge bg-danger">{{client.status}}</span>
+                        {% else %}
+                        <span class="badge bg-warning">{{client.status}}</span>
+                        {% endif %}
+                      </td>
+                    </tr>
+                    {% endfor %}
+                    
+                    
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+       
+        
+          </div>
+
+        </div>
+      </div>
+    </section>
+    
+  </main><!-- End #main -->
+  <script src="/static/assets/js/jquery-3.6.1.min.js"></script>
+<script>
+  $(".filter").on("click", function(){
+    $(".default").hide()
+    
+    $tarif = $(".tarif").val()
+    $status = $(".status").val()
+    $debt = $(".debt").val()
+    if($debt == "0"){
+      $no_debt = `<span class="badge bg-success">To'langan</span>`
+    }else{
+      $no_debt = `<span class="badge bg-danger">To'lanmagan</span>`
+    }
+    $.ajax({
+      url:"/attendance/filter/",
+      type:"GET",
+      data:{
+        status:$status,
+        coming_type:$tarif,
+        debt:$debt
+      },
+      success:function(response){
+        data = response.response
+        for(res in data){
+          console.log(res)
+          $(".clients_list").append(`
+              <tr class="default">
+                <th scope="row"><a href="#">#${Number(res)+1}</a></th>
+                <td><a href="#">${data[res].name}</a></td>
+                <td>${data[res].phone}</td>
+                <td>${response["ct_name"]}</td>
+                <td>${$no_debt}</td>
+                <td>${$status}</td>
+              </tr>
+            `)
+          }
+      }
+    })
+  
+})
+</script>
+
+
+  {% endblock %}
+  

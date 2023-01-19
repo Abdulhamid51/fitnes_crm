@@ -1,0 +1,282 @@
+{% extends 'wrapper.html' %}
+{% block content %}
+
+  
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Asosiy sahifa</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Asosiy sahifa</a></li>
+          <li class="breadcrumb-item active"></li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-6">
+              <div class="card info-card sales-card">
+               
+                <div class="card-body">
+                  <h5 class="card-title">Mijozlar soni <span>| Umumiy</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-people"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6 id="count_all" data-all="{{ all_clients }}">{{ all_clients }} ta</h6>
+                      <!-- tolovlar kunlik  -->
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              
+        
+
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Mijozlar holati</h5>
+      
+                  <!-- Pie Chart -->
+                  <div id="pieChart" style="min-height: 400px;" class="echart"></div>
+                  
+                  <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                      
+                      echarts.init(document.querySelector("#pieChart")).setOption({
+                        // title: {
+                        //   text: 'Umumiy mijozlar',
+                        //   subtext: 'Fake Data',
+                        //   left: 'right'
+                        // },
+                        tooltip: {
+                          trigger: 'item'
+                        },
+                        legend: {
+                          orient: 'vertical',
+                          left: 'left'
+                        },
+                        series: [{
+                          // name: 'Access From',
+                          type: 'pie',
+                          radius: '62%',
+                          data: [{
+                            
+                          },
+                            {
+                              value: '{{ active }}',
+                              name:'Faol mijozlar'
+                            },
+                            {
+                              value: '{{ paused }}',
+                              name: 'Pauza holatdagi'
+                            },
+                            {
+                              value: '{{ inactive }}',
+                              name: "Faol bo'lmagan"
+                            },
+                            
+                          ],
+                          emphasis: {
+                            itemStyle: {
+                              shadowBlur: 10,
+                              shadowOffsetX: 0,
+                              shadowColor: 'rgba(0, 0, 0, 0.5)'
+                              
+                            }
+                          }
+                          
+                        }]
+                      });
+                    });
+                    </script>
+                  <!-- End Pie Chart -->
+                  
+                </div>
+              </div>
+              
+              
+              
+         
+        </div>
+        
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Daromad va xarajatlar statistikasi <span>| Yillik</span></h5>
+
+              <!-- Column Chart -->
+              <div id="columnChart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  var $date =  new Date().getFullYear();
+                  $.ajax({
+                    url:'/year_mount/',
+                    type:'get',
+                    data:{
+                      'year':$date
+                    },
+                    success:function (response) {
+                      
+                    new ApexCharts(document.querySelector("#columnChart"), {
+                    series: [{
+                      name: 'Tushum',
+                      data: response['earnings']
+                    }, 
+                    {
+                      name: 'Sof daromad',
+                      data: response['income']
+                    }, 
+                    {
+                      name: 'Chiqim',
+                      data: response['expense']
+                    }
+                  ],
+                    chart: {
+                      type: 'bar',
+                      height: 350
+                    },
+                    plotOptions: {
+                      bar: {
+                        horizontal: false,
+                        columnWidth: '100%',
+                        endingShape: 'rounded'
+                      },
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      show: true,
+                      width: 2,
+                      colors: ['transparent']
+                    },
+                    xaxis: {
+                      categories: response['months'],
+                    },
+                    yaxis: {
+                      title: {
+                        // text: '$ (thousands)'
+                      }
+                    },
+                    fill: {
+                      opacity: 1
+                    },
+                    tooltip: {
+                      y: {
+                        formatter: function(val) {
+                          return val  + " so'm"
+                        }
+                      }
+                    }
+                  }).render();
+                }
+              });
+                });
+
+
+             
+              </script>
+              <!-- End Column Chart -->
+
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Yangi mijozlarning o'sib borish statistikasi </h5>
+
+              <!-- Bar Chart -->
+              <canvas id="barChart" style="max-height: 400px;"></canvas>
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  var $date =  new Date().getFullYear();
+
+                  $.ajax({
+                    url:'/client_year_mount/',
+                    type:'get',
+                    data:{
+                      'year':$date
+                    },
+                    success:function(response){
+
+                      new Chart(document.querySelector('#barChart'), {
+                        type: 'bar',
+                        data: {
+                          labels: response['months'],
+                          datasets: [{
+                            label: 'Oylar hisobida',
+                            data: response['mount'],
+                            backgroundColor: [
+                              'rgba(255, 99, 132, 0.2)',
+                              'rgba(255, 159, 64, 0.2)',
+                              'rgba(255, 205, 86, 0.2)',
+                              'rgba(75, 192, 192, 0.2)',
+                              'rgba(54, 162, 235, 0.2)',
+                              'rgba(153, 102, 255, 0.2)',
+                              'rgba(201, 203, 207, 0.2)',
+                              'rgba(191, 203, 107, 0.2)',
+                              'rgba(255, 99, 132, 0.2)',
+                              'rgba(255, 159, 64, 0.2)',
+                              'rgba(255, 205, 86, 0.2)',
+                              'rgba(75, 192, 192, 0.2)',
+                            ],
+                            borderColor: [
+                              'rgb(255, 99, 132)',
+                              'rgb(255, 159, 64)',
+                              'rgb(255, 205, 86)',
+                              'rgb(75, 192, 192)',
+                              'rgb(54, 162, 235)',
+                              'rgb(153, 102, 255)',
+                              'rgb(201, 203, 207)',
+                              'rgb(201, 203, 207)',
+                              'rgb(255, 99, 132)',
+                              'rgb(255, 159, 64)',
+                              'rgb(255, 205, 86)',
+                              'rgb(75, 192, 192)',
+                            ],
+                            borderWidth: 1
+                          }]
+                        },
+                        options: {
+                          scales: {
+                            y: {
+                              beginAtZero: true
+                            }
+                          }
+                        }
+                      });
+                    }
+                  })
+                });
+              </script>
+              <!-- End Bar CHart -->
+
+            </div>
+          </div>
+        
+        </div>
+      </div> 
+
+
+        
+    <script src="../static/assets/js/jquery-3.6.1.min.js"></script>
+
+     
+    </section>
+
+  </main><!-- End #main -->
+
+
+
+  
+  {% endblock content %}

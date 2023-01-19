@@ -1,0 +1,291 @@
+{% extends 'wrapper.html' %}
+{% block content %}
+<link rel="stylesheet" href="/static/assets/example/css_final.css">
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+
+<main id="main" class="main">
+
+
+<div class="pagetitle">
+    <h1>Davomat</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Asosiy sahifa</a></li> 
+        <li class="breadcrumb-item"><a href="/attandance">Umumiy ro'yxat</a></li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+    
+
+    <div class="container mt-5">
+        
+     
+    <div class="row">
+        <div class="col-md-12">
+            <input type="text" name="" class="form-control"  id="search" placeholder=" Search.." style="padding: 5px; width: 100%; ">
+        <table id="emp-table" class="table table-border datab" style="width:100%">
+
+        
+        <thead class="p-4">
+            
+            <th col-index = 1 >Ism Familya</th>
+            <th col-index = 2>
+                <select  class="table-filter  form-select" onchange="filter_rows()">
+                    <option value="all">Barcha tariflar</option>
+                </select>
+            </th>
+
+            <th col-index = 3>
+                <select class="table-filter form-select" onchange="filter_rows()">
+                    <option value="all">Barcha statuslar</option>
+                </select>
+            </th>
+            <th col-index = 4>
+                <select class="table-filter form-select" onchange="filter_rows()">
+                    <option value="all">Barcha to'lovlar</option>
+                </select>
+            </th>
+            <th>Telefon raqam</th>
+            <th>Davomat</th>
+    
+            
+        </thead>
+
+        <tbody class="p-4">
+            {% for c in clients %}
+            <tr>
+                <td>{{ forloop.counter }}. <a href="{% url 'main:detail' c.id %}" >{{ c.name }}</a></td>   
+                <td class="text-center"><span class="badge bg-info status-span">{{ c.coming_type }}</span></td>
+                
+                {% if c.status == "ACTIVE" %}
+                <!-- <td class="text-center text-success"><span class="badge bg-success status-span"><i class="bi bi-check-circle-fill me-1"></i>Faol</span></td> -->
+                <td class="text-center text-success"><span class="badge bg-success status-span"> faol</span></td>
+                {% elif c.status == "INACTIVE" %}
+                <td class=" text-center text-danger"><span class="badge bg-danger status-span">faol emas</span></td>
+                {% else %}
+                <td class="text-center text-warning"><span class="badge bg-warning status-span">pauza</span></td>
+                {% endif %}
+                
+
+                <td
+                {% if c.debt == False %}
+                class=" text-center text-success"><span class="badge bg-success status-span">To'langan</span>
+                {% else %}
+                class="text-center text-danger"><span class="badge bg-danger status-span">To'lanmagan</span>
+                {% endif %}
+                </td>
+
+                <td class="text-center">{{ c.phone }}</td>
+                <td class="att_td ">  
+                    <label class="switch ">
+                        
+                        {% if c.months.all.last.days.all.last %}
+                            {% if c.months.all.last.days.all.last.came == True %}
+                            
+                            <input data-id="{{c.months.all.last.days.all.last.id}}" checked="true" type="checkbox" class="default davomat">
+                            <span class="slider round"></span>
+                            {% else %}
+                            <input data-id="{{c.months.all.last.days.all.last.id}}" type="checkbox" class="default davomat">
+                            <span class="slider round"></span>
+                            
+                            {% endif %}
+                            {% else %}
+                        {% endif %}
+                            
+                    </label>
+                </td>
+                <!-- <td>Site 1</td> -->
+            </tr>
+            {% endfor %}
+
+            
+
+        </tbody>
+    </table>
+
+    <style>
+        .status-span{
+            width: 45%;
+            font-size: 12px;
+        }
+        tbody tr:hover{
+            background:rgb(233, 227, 227);
+        }
+        td a{
+            color: rgba(143, 23, 223, 0.998);
+            font-size: 16px;
+        }
+        td a:hover{
+            color: black;
+        }
+        .switch {
+            float: left;
+            position: relative;
+            display: inline-block;
+            width:  40px;
+            height: 24px;
+        }
+        
+        .switch input {display:none;}
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgb(199, 31, 31);
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 0px;
+            bottom: 1px;
+            background-color: rgb(255, 255, 255);
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+        
+        input.default:checked + .slider {
+            background-color: rgb(0, 255, 13);
+        }
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+        
+        input:checked + .slider:before {
+            -webkit-transform: translateX(18px);
+            -ms-transform: translateX(18px);
+            transform: translateX(18px);
+        }
+        
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 30px;
+        }
+        .slider.round:before {
+          
+            border-radius: 50%;
+        }
+       
+        </style>
+
+  
+    <script src="/static/assets/example/filter.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    
+    <script>
+        window.onload = () => {
+        };
+
+    getUniqueValuesFromColumn()
+
+    function getUniqueValuesFromColumn() {
+    var unique_col_values_dict = {}
+
+    allFilters = document.querySelectorAll(".table-filter")
+    allFilters.forEach((filter_i) => {
+        col_index = filter_i.parentElement.getAttribute("col-index");
+        // alert(col_index) 
+        const rows = document.querySelectorAll("#emp-table > tbody > tr")
+        rows.forEach((row) => {
+            cell_value = row.querySelector("td:nth-child("+col_index+")").innerHTML;
+            // if the col index is already present in the dict
+            if (col_index in unique_col_values_dict) {
+
+                // if the cell value is already present in the array
+                if (unique_col_values_dict[col_index].includes(cell_value)) {
+                    // alert(cell_value + " is already present in the array : " + unique_col_values_dict[col_index])
+
+                } else {
+                    unique_col_values_dict[col_index].push(cell_value)
+                    // alert("Array after adding the cell value : " + unique_col_values_dict[col_index])
+
+                }
+
+
+            } else {
+                unique_col_values_dict[col_index] = new Array(cell_value)
+            }
+        });
+
+        
+    });
+    // for(i in unique_col_values_dict) {
+    //     alert("Column index : " + i + " has Unique values : \n" + unique_col_values_dict[i]);
+    // }
+        updateSelectOptions(unique_col_values_dict)
+
+
+};
+
+        function updateSelectOptions(unique_col_values_dict) {
+        allFilters = document.querySelectorAll(".table-filter")
+        allFilters.forEach((filter_i) => {
+            col_index = filter_i.parentElement.getAttribute('col-index')
+
+            unique_col_values_dict[col_index].forEach((i) => {
+
+                let b = new DOMParser().parseFromString(i,'text/xml');
+                b = b.firstChild.innerHTML;
+                
+                filter_i.innerHTML = filter_i.innerHTML + `\n<option value="${b}">${b}</option>`
+            });
+
+        });
+    };
+        
+        let $rows = $('#emp-table tr');
+        $('#search').keyup(function() {
+            let val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+
+            
+
+            $rows.show().filter(function() {
+                let text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+                return !~text.indexOf(val);
+            }).hide();
+        });
+                
+        $(".davomat").on("change", function(){
+            $id = $(this).data("id")
+            $atr = $(this).prop("checked")
+            $.ajax({
+                url:`/add_day/${$id}`,
+                type:"GET",
+                data:{
+                    "day_result":$atr
+                },
+                success:function(response){
+                    
+                }
+            })
+        })
+
+       
+    </script>
+   
+
+
+   
+</div>
+</div>
+
+
+</div>
+
+
+</main>
+
+
+{% endblock content %}
+

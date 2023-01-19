@@ -1,0 +1,89 @@
+{% extends 'wrapper.html' %}
+{% block content %}
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Ro'yxatdan o'tkazish</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Asosiy sahifa</a></li>
+          <li class="breadcrumb-item active">Ro'yxatdan o'tkazish</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+  <center>
+    <section class="section">
+      <div class="row">
+        <div class=" card-1 col-lg-6  ml-5  " style="margin: 0 auto; float:none;">
+
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Ro'yhatdan o'tkazish</h5>
+
+              <!-- Floating Labels Form -->
+              {% if status %}
+                <hr>
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                  {{status}}
+                  <a class="btn-close" href="/register/"></a>
+                </div>
+              {% else %}
+               <form class="row g-3" method="post"> {% csrf_token %}
+                <div class="col-md-12">
+                  <div class="form-floating">
+                    <input type="text" name="name" class="form-control" id="floatingName" placeholder="Your Name" required>
+                    <label for="floatingName">Ismi</label>
+                  </div>
+
+                </div>
+  
+
+                <div class="col-md-12">
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="text" name="phone" class="form-control" id="floatingCity" placeholder="City" required>
+                      <label for="floatingCity">Telefon raqam</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-floating mb-3">
+                    <select class="form-select" name="tarif" id="floatingSelect" aria-label="State">
+                      {% for t in tarif %}
+                      <option selected value="{{t.title}}" >{{t}}</option>
+                      {% endfor %}
+                    </select>
+                    <label for="floatingSelect">Tarif</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-floating mb-3">
+                    <select class="form-select" name="status" id="floatingSelect" aria-label="State">
+
+                      <option value="ACTIVE"> Faol</option>
+                      <option selected value="INACTIVE" > Faol emas</option>
+                      <option value="PAUSED"> Pauza</option>
+                    </select>
+                    <label for="floatingSelect">Xolati</label>
+                  </div>
+                </div>
+                <div class="text-left">
+                   <button type="submit" class="btn btn-primary">Qo'shish</button>
+                   <!-- <button type="reset" class="btn btn-secondary">Qayta o'rnatish</button> -->
+                 </div>
+
+              </form><!-- End floating Labels Form -->
+              {% endif %}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </center>
+
+  </main><!-- End #main -->
+{% endblock content %}

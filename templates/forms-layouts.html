@@ -1,0 +1,157 @@
+{% extends 'wrapper.html' %}
+{% block content %}
+
+
+  <!-- ======= Sidebar ======= -->
+
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>To'lov qo'shish</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Asosiy sahifa</a></li>
+          <li class="breadcrumb-item active">To'lov qo'shish</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-6 " style="margin: 0 auto; float:none; ">
+
+          
+
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Mijoz uchun to'lov qilish</h5>
+
+              <!-- Floating Labels Form -->
+              
+             
+              <form method="post" class="row g-3 p-1">
+                {% csrf_token %}
+                <div class="form-floating">
+                  <input list="brow" id="client-select" class="form-control">
+                  <datalist id="brow">
+                    {% for cl in clients %}
+                      <option  value="{{cl.uid}}">{{cl.name}}</option>
+                    {% endfor %}
+                  </datalist>  
+                  <label for="client-select">Mijozni tanlang</label>
+                </div>
+                <div class="col-md-6">
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="number" class="form-control" id="userId" placeholder="ID" name="uid" required>
+                      <label for="floatingCity">Mijoz ID si (skanerlang)</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="number" class="form-control" id="payment" placeholder="payment" name="payment" required>
+                      <label for="floatingCity">To'lov miqdori</label>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="text-left">
+                  <button type="submit" class="btn btn-primary">Tasdiqlash</button>
+                  <button type="reset" class="btn btn-secondary">Tozalash</button>
+                </div>
+              </form><!-- End floating Labels Form -->
+                
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script>
+
+      $('#client-select').on('change', function(){
+        var client_id = $(this).val()
+        $.ajax({
+          url: "/payment/",
+          type: "GET",
+          data: {
+            "client_id":client_id
+          },
+          success: function(response){
+            $("#userId").val(response['uid'])
+            $("#payment").val(response['payment'])
+            $("#client-select").val(response['name'])
+            console.log(response) 
+
+          }
+        })
+      })
+
+      // let qwerty = true
+
+      // let text1;
+
+      // function abs(text) {
+        
+      // }
+
+      // setInterval(function(){
+      //   if (qwerty == true) {
+      //     navigator.clipboard.readText().then(text => document.getElementById("userId").value = text);
+      //     navigator.clipboard.readText().then(text => text1 = text);
+      //     console.log('sssssss')
+      //     qwerty = false
+
+      //   }
+
+      //   // var interval;
+      //   // if (interval) {
+      //   //   clearInterval(interval)
+      //   // }
+      // }, 200)
+
+    var barcode = '';
+    var interval;
+    document.addEventListener('keydown', function(evt) {
+        
+        if (interval)
+        clearInterval(interval);
+        
+        if (evt.code == 'Enter') {
+            if (barcode)
+                handleBarcode(barcode);
+            barcode = '';
+            return;
+        }
+        
+        if (evt.key != 'Shift')
+            barcode += evt.key;
+        interval = setInterval (() => barcode = '', 20);
+
+    });
+
+    function handleBarcode(scanned_barcode) {
+      console.log('sssssss')
+        var client_id = scanned_barcode
+        $.ajax({
+          url: "/payment/",
+          type: "GET",
+          data: {
+            "client_id":client_id
+          },
+          success: function(response){
+            $("#userId").val(response['uid'])
+            $("#payment").val(response['payment'])
+            $("#client-select").val(response['name'])
+          }
+        })
+    }
+
+    </script>
+
+  </main><!-- End #main -->
+{% endblock content %}

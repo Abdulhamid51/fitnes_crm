@@ -1,0 +1,241 @@
+{% extends 'wrapper.html' %}
+{% block content %}
+
+  <main id="main" class="main">
+
+  
+    
+    
+    <div class="row">
+      <div class="col-md-6 p-1">
+        <div class="row">
+         
+          <div class="col-lg-12 ">
+            <form action="{% url 'main:detail' client.id %}" method="post">
+            {% csrf_token %}
+
+            <div class="card ">
+              <div class="card-body">
+                <div class="row mt-3">
+                  <div class="col-sm-3">
+                    <h5 class="mt-2">Ism Familya</h5>
+                  </div>
+                  <div class="col-sm-9">
+                    <input type="text"  required name="name" class="form-control" value="{{ client.name }}" placeholder="Ism" >
+                  </div>
+                </div>
+                
+                <div class="row mt-4">
+                  <div class="col-sm-3">
+                    <h5 class="mt-2">Telefon</h5>
+                  </div>
+                  <div class="col-sm-9">
+                    <input type="text" maxlength="13" minlength="9" required name="phone" class="form-control" value="{{ client.phone }}" placeholder="Telefon raqam" >
+                  </div>
+                </div>
+
+               
+                <div class="row mt-4">
+                  <div class="col-sm-3">
+                    <h5 class="mt-2">Status</h5>
+                  </div>
+                  <div class="col-sm-9">
+                    <select class="form-select" name="status" aria-label="State">
+                      {% if client.status == "ACTIVE" %}
+                      <option selected value="ACTIVE">Faol</option>
+                      <option  value="INACTIVE">Faol emas</option>
+                      <option value="PAUSED">Pauzada</option>
+                      {% elif client.status == "INACTIVE" %}
+                      <option selected value="INACTIVE">Faol emas</option>
+                      <option value="ACTIVE">Faol</option>
+                      <option value="PAUSED">Pauzada</option>
+                      {% else %}
+                      <option value="ACTIVE">Faol</option>
+                      <option selected value="PAUSED">Pauzada</option>
+                      <option  value="INACTIVE">Faol emas</option>
+                      {% endif %}
+
+                    </select>
+                  </div>
+                </div>
+               
+                <div class="row mt-4">
+                  <div class="col-sm-3">
+                    <h5 class="mt-3">Tarif</h5>
+                  </div>
+                  <div class="col-sm-9">
+                    <select class="form-select" name="tarif" aria-label="State">
+                      {% for t in tarifs %}
+                      {% if t == client.coming_type %}
+                      <option selected value="{{ t }}">{{ t }}</option>
+                      {% else %}
+                      <option  value="{{ t }}">{{ t }}</option>
+                      {% endif %}
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <hr>
+            
+                <button type="submit" class="btn btn-primary">O'zgartirish</button>
+              </div>
+            </div>
+          </form>
+
+         </div>
+      </div>
+      </div>
+
+   <div class="card col-md-6 p-4" style="overflow-y: scroll; height: 350px;">
+    {% for month in months %}
+    <div class="month">
+        <div class="title form-inline">
+            <h4 class="pagetitle">{{month.created | date:"m/Y"}} <span class="fs-6">{{month.came}}/{{month.coming_days}} </span>
+                
+                {% if month.payed == True %}
+                    <button class="btn btn-primary btn-sm btn-disaled">To'langan</button>
+                    {% else %}
+                    <button class="btn btn-danger btn-sm">To'lanmagan</button>
+                {% endif %}
+            </h4>
+        </div>
+        <!-- <div class="row "> -->
+           <!-- <div class="col-md-6"> -->
+             <div class="row mt-4">
+            {% for day in month.days.all %}
+          
+            {% if day.came == True %}
+            <div class="col-md-2 col-sm-4">
+                <div class="card bg-success text-light" style="width:70px; height: 70px;" >
+                    <div class="text-center mt-2 text-light">
+                        12 <br>
+                        {{day.date|date:"D"}}
+                    </div>
+                </div>
+            </div>
+
+            {% else %}
+            <div class="col-md-2 col-sm-4">
+                <div class="card bg-danger text-light " style="width:70px; height: 70px;" >
+                    <div class="text-center mt-2 text-light">
+                        12 <br>
+                        {{day.date|date:"D"}}
+                    </div>
+                </div>
+            </div>
+
+            {% endif %}
+            
+
+            {% endfor %}
+             </div>
+            
+        
+    </div>
+
+    <hr>
+    {% endfor %}
+   </div>
+   
+   <!-- <div class="row mt-3"> -->
+     <!-- <hr> -->
+     <div class="col-md-6 card  p-3">
+       
+      <form class="payment"> 
+        {% csrf_token %}
+           <h3 class="text-dark">To'lov qo'shish</h3>
+               <div class="form-floating p-1">
+                 <input type="number" name="summa" class="form-control" id="payment" placeholder="Summa">
+                 <label for="payment">Summa</label>
+               </div>
+  
+               <div class="form-floating mb-3 mt-3 p-1">
+                 <select class="form-select" name="month" id="month" aria-label="State">
+                   {% for t in months %}
+                   <option value="{{t.id}}" >{{ t.created | date:"F (Y)" }}</option>
+                   {% endfor %}
+                 </select>
+                 <label for="month">Oyni tanlang</label>
+               </div>
+ 
+              <div class="text-left">
+                <button type="button" onclick="sendData()" class="btn btn-primary">Qo'shish</button>
+              </div>
+  
+      </form><!-- End floating Labels Form -->
+      <div class="status">
+        
+      </div>
+     </div>
+     
+    <div class="card col-md-6 p-3" style="overflow-y: scroll; height: 300px;">  
+      <!-- <h3 class="text-success">Umumiy to'lovlar</h3> -->
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Oy nomi</th>
+            <th scope="col">To'langan summa</th>
+            <th scope="col">To'langan sana</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in months %}
+          
+          <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{ m.created | date:"F"}} </td>
+            <td>
+              {% for p in m.payments.all %}
+              {{ p.money }}<br>
+              {% endfor %}
+            </td>
+            <td>
+              {% for p in m.payments.all %}
+              {{ p.date | date:"d.m.Y" }}<br>
+              {% endfor %}
+            </td>
+          </tr>
+          {% endfor %}
+          
+        </tbody>
+      </table>
+    </div>
+</div>
+
+        
+
+
+  </main><!-- End #main -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+  <script>
+    function sendData(){
+      var payment = $('#payment').val()
+      var month_id = $('#month').val()
+      var csrf = $('input[name="csrfmiddlewaretoken"]').val()
+      $.ajax({
+        url:'/detail-payment/',
+        type:'post',
+        data: {
+          'month_id':month_id,
+          'payment':payment,
+          'csrfmiddlewaretoken':csrf
+        },
+        success: function(response){
+          if(response['status'] === 'ok'){
+            $('form.payment').hide()
+            $('div.status').html(`
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+              To'lov amalga oshdi.
+              <a class="btn-close" href="/detail/{{client.id}}"></a>
+            </div>
+            `)
+          }
+        }
+      })
+    }
+  </script>
+
+{% endblock content %}
