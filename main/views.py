@@ -172,6 +172,19 @@ def edit_day(request, day_id):
         return JsonResponse({"came":"not valid"})
 
 
+def barcode_came(request, uid):
+    try:
+        client = get_object_or_404(Client, uid=uid)
+        day = client.months.last().days.last()
+        day.came = True
+        day.save()
+        status = "Mujos bugun mashg'ulotga keldi keldi"
+    except:
+        status = "UID noto`g`ri"
+    print(day)
+    return JsonResponse({"status":status})
+
+
 class DavomatView(View):
     def get(self,request):
         queryset = Client.objects.all().order_by("-id")

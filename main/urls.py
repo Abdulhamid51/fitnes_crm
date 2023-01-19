@@ -28,4 +28,6 @@ urlpatterns = [
 
     path("year_mount/", filter.getyear_view, name="year"),
     path("client_year_mount/", filter.getclient_view, name="client"),
+
+    path("client_barcode_came/<int:uid>", barcode_came, name="barcode_came"),
 ]
