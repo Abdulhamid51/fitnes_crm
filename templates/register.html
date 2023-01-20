@@ -1,7 +1,29 @@
 {% extends 'wrapper.html' %}
 {% block content %}
+<script src="../static/assets/js/barcode-3.11.5.js"></script>
+
 
   <main id="main" class="main">
+    {% if uid %}  
+    <ul class="messages" >
+      <div class="alert alert-light alert-dismissible fade show msg text-center" role="alert " style="width: 20%; margin-top: 70px;"  >
+        <div class="card-title">Mijoz: {{ name }}
+         
+        </div>
+        <div class="card-title">Barcode (skanerlang)
+          <svg id="barcode" class="mt-2"></svg>
+        </div>
+            <script>
+              JsBarcode("#barcode", '{{ uid }}', {
+                height: 40,
+              });
+            </script>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
+      </ul>
+    {% else %}
+  {% endif %}
 
     <div class="pagetitle">
       <h1>Ro'yxatdan o'tkazish</h1>
@@ -13,7 +35,8 @@
       </nav>
     </div><!-- End Page Title -->
 
-  <center>
+
+  
     <section class="section">
       <div class="row">
         <div class=" card-1 col-lg-6  ml-5  " style="margin: 0 auto; float:none;">
@@ -70,8 +93,8 @@
                     <label for="floatingSelect">Xolati</label>
                   </div>
                 </div>
-                <div class="text-left">
-                   <button type="submit" class="btn btn-primary">Qo'shish</button>
+                <div class="text-center">
+                   <button type="submit" class="btn btn-primary ">Qo'shish</button>
                    <!-- <button type="reset" class="btn btn-secondary">Qayta o'rnatish</button> -->
                  </div>
 
@@ -83,7 +106,8 @@
         </div>
       </div>
     </section>
-  </center>
 
-  </main><!-- End #main -->
+   
+
+  </main><!-- End #main --> 
 {% endblock content %}

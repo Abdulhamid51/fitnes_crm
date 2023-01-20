@@ -74,19 +74,36 @@
                       {% endfor %}
                     </select>
                   </div>
+                  
                 </div>
-                <hr>
-            
-                <button type="submit" class="btn btn-primary">O'zgartirish</button>
-              </form>
-              <div class="col-md-2">
-                <form action="" method="post">{% csrf_token %}
-                  <div class="d-grid gap-2 mt-3">
-                    <input type="text" name="delete" value="delete" style="display:none" >
-                    
-                    <button type="submit" class="btn btn-danger ">O'chirish</button>
+                <div class="row">
+                  <div class="col-sm-3">
+                      <h5 class="mt-3">Barcode: </h5>
                   </div>
-                </form>
+                  <div class="col-sm-9">
+                    <svg id="barcode" class="mt-2"></svg>
+                  </div>
+                </div>
+                
+                <hr>
+                
+                <button type="submit" class="btn btn-primary">O'zgartirish</button>
+                
+              </form>
+              <div class="row">
+                <div class="col-sm-5">
+                  <h5 class="card-title text-right">Mijozni ro'yxatdan </h5>
+                </div>
+                <div class="col-sm-7" style="margin-left: -50px;">
+                  <form action=""  method="post">{% csrf_token %}
+                    <div class="mt-3">
+                      <input type="text" name="delete" value="delete" style="display:none" >
+                      
+                      <button type="submit"  class="badge bg-danger p-2" style="width: 40%; float: left; border:none;">O'chirish</butt>
+                    </div>
+                  </form>
+                </div>
+                
               </div>
               </div>
             </div>
@@ -218,9 +235,14 @@
 
   </main><!-- End #main -->
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="../static/assets/js/jquery-3.6.1.min.js"></script>
+<script src="../static/assets/js/barcode-3.11.5.js"></script>
 
   <script>
+    JsBarcode("#barcode", '{{ client.uid }}', {
+      height: 40,
+    });
+
     function sendData(){
       var payment = $('#payment').val()
       var month_id = $('#month').val()

@@ -19,7 +19,7 @@ class Client(models.Model):
     user = models.ForeignKey(User, related_name="clients", on_delete=models.CASCADE)
     uid = models.SlugField(blank=True,unique=True)
     name = models.CharField("Ism familiyasi", max_length=150)
-    phone = models.CharField("Telefon raqami", max_length=50)
+    phone = models.CharField("Telefon raqami", max_length=50, unique=True)
     coming_type = models.ForeignKey("main.ComingType", related_name="type_clients",
                                     on_delete=models.SET_NULL, blank=True, null=True)
     STATUS_TYPES = (
