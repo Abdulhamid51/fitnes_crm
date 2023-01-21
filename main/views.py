@@ -189,7 +189,6 @@ def barcode_came(request, uid):
         status = "Mujos bugun mashg'ulotga keldi keldi"
     except:
         status = "UID noto`g`ri"
-    print(day)
     return JsonResponse({"status":status})
 
 

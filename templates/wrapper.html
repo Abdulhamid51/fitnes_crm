@@ -107,6 +107,16 @@
   {% else %}
 {% endif %}
 
+<ul class="messages">
+
+  <div class="alert alert-success alert-dismissible fade show msg" role="alert "   >
+    <i class="bi bi-check-circle me-1"></i>
+    <span class="message-barcode"></span>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+</ul>
+
   <style>
      .msg{
         position: fixed;
@@ -233,9 +243,14 @@
   <!-- Template Main JS File -->
   <script src="/static/assets/js/main.js"></script>
   
- 
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script>
+
+  </script>
+  <script>
+    $('ul.messages').hide()
+
+
     const spinner = document.querySelector(".load-spinner");
     window.addEventListener('load', () => {
       spinner.style.opacity = '0';
@@ -245,6 +260,41 @@
       }, 200)
 
     });
+
+    
+    var barcode = '';
+    var interval;
+    document.addEventListener('keydown', function(evt) {
+        
+        if (interval)
+        clearInterval(interval);
+        
+        if (evt.code == 'Enter') {
+            if (barcode)
+                handleBarcode(barcode);
+            barcode = '';
+            return;
+        }
+        
+        if (evt.key != 'Shift')
+            barcode += evt.key;
+        interval = setInterval (() => barcode = '', 20);
+
+    });
+
+    function handleBarcode(scanned_barcode) {
+        console.log('sssssss')
+        var client_id = scanned_barcode
+        $.ajax({
+          url: `/client_barcode_came/${scanned_barcode}`,
+          type: "GET",
+          data: {},
+          success: function(response){
+            $('ul.messages').show()
+            $('span.message-barcode').html(response['status'])
+          }
+        })
+    }
   </script>
   
   
