@@ -92,16 +92,27 @@
     </nav><!-- End Icons Navigation -->
 
   </header><!-- End Header -->
-
   {% if messages %}
   <ul class="messages">
       {% for message in messages %}
-      <div class="alert alert-success alert-dismissible fade show msg" role="alert "   >
-        <i class="bi bi-check-circle me-1"></i>
+      
+      {% if message.tags == 'success' %}
+      
+        <div class="alert alert-success alert-dismissible fade show msg" role="alert" >
+          <i class="bi bi-check-circle me-1"></i>
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% elif message.tags == 'error' %}
+        <div class="alert alert-danger alert-dismissible fade show msg" role="alert "   >
+          <i class="bi bi-x-circle me-1"></i>
         {{ message }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
       
+      {% else %}
+      {% endif %}
+
       {% endfor %}
   </ul>
   {% else %}

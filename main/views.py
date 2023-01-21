@@ -39,12 +39,11 @@ class HomeView(View):
 
 class RegisterView(View):
     @deco_login
-
     def get(self,request):
         tarif =  ComingType.objects.all()
 
         context = {'tarif':tarif}
-        return render (request,'register.html',context)
+        return render(request,'register.html',context)
 
     def post(self,request):
         user = request.user
@@ -55,17 +54,22 @@ class RegisterView(View):
 
             tarif = ComingType.objects.get(title=tarif)
             status = request.POST.get('status')
-
+            for c in Client.objects.all():
+                if phone == c.phone:
+                    messages.error(request, "Xatolik !!! Bu telefon raqam oldin ro'yxatdan o'tgan.")
+                    return redirect('/register')
+                else:
+                    pass
             client = Client.objects.create(user=user,
-                                        name=name,
-                                        phone=phone,
-                                        coming_type=tarif,
-                                        status=status,
-                                        )
+                                    name=name,
+                                    phone=phone,
+                                    coming_type=tarif,
+                                    status=status,
+                                    )
             tarif =  ComingType.objects.all()
-            # context = {'tarif':tarif,'client':client, "status":"Klient hosil qilindi"}
-            messages.success(request, "Mijoz muvaffaqiyatli ro'yxatga olindi ! ")
-
+            context = {'tarif':tarif,'client':client, "uid":client.uid,"name":client.name}
+            messages.success(request, "Mijoz ro'yxatga olindi !")
+            
         else:
             messages.success(request, "Xatolik qaytadan harakat qiling ! ")
             # context = {'tarif':tarif, "status":"Nimadur noto`g`ri ketdi"} 
@@ -91,7 +95,7 @@ class RegisterView(View):
             payment=int(price)
         )
 
-        return redirect('/register')
+        return render(request,'register.html',context)
 
 
 class DetailView(View):
@@ -109,6 +113,7 @@ class DetailView(View):
         if request.POST.get('delete'):
             client = Client.objects.filter(id=int(id))
             client.delete()
+            messages.success(request, "Mijoz ro'yxatdan o'chirildi !")
             return redirect("main:list_client")
         else:
 
@@ -186,7 +191,7 @@ def barcode_came(request, uid):
         day = client.months.last().days.last()
         day.came = True
         day.save()
-        status = "Mujos bugun mashg'ulotga keldi keldi"
+        status = "Mijoz bugun mashg'ulotga keldi keldi"
     except:
         status = "UID noto`g`ri"
     return JsonResponse({"status":status})
@@ -207,7 +212,6 @@ class DavomatView(View):
 
 class PaymentView(View):
     @deco_login
-
     def get(self, request):
         try:
             request.GET['client_id']
