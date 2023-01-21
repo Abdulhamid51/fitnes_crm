@@ -17,6 +17,19 @@
       </nav>
     </div><!-- End Page Title -->
 
+    
+  <div class="row confirm-row">
+    <div class="card col-lg-3 confirm-card p-3">
+      <div class="card-title text-center">
+        Ushbu chiqim turiga doir barcha ma'lumotlarni o'chirishni xoxlaysizmi ?
+      </div>
+      <div class="card-body text-center">
+        <span class="btn bg-success text-light m-2" onclick="confirmYes('yes')">Ha</span>
+        <span class="btn bg-danger text-light m-2" onclick="confirmYes('no')">Yo'q</span>
+      </div>
+    </div>
+  </div>
+
   
           
 
@@ -111,10 +124,7 @@
              
             <p class="card-title">
               {% for c in expense_category %}
-              <span class="ex-btn category-{{ c.id }} badge rounded-pill bg-info text-light m-1" data-value="{{ c }}" style="font-size: 18px;">{{ c }} <a href="#" onclick="delExpense('category','{{ c.id }}')">
-                 <i class="ex-i bi bi-x-circle text-light ml-1 "></i></a>
-                <a href="#" onclick="add('edit', '{{ c.id }}' )"><i class="ex-edit ri-pencil-line text-light ml-1 "></i></a>
-              </span>
+              <span class="ex-btn category-{{ c.id }} badge rounded-pill bg-info text-light m-1" data-value="{{ c }}" style="font-size: 18px;">{{ c }}<a href="#" onclick="delExpense('category','{{ c.id }}')"><i class="ex-i bi bi-x-circle text-light ml-1 "></i></a><a href="#" onclick="add('edit', '{{ c.id }}' )"><i class="ex-edit ri-pencil-line text-light ml-1 "></i></a></span>
               {% endfor %}
   
               
@@ -127,7 +137,7 @@
       
       </div>
       <div class="col-md-12">
-        <div class="card " style="overflow-y: scroll; max-height: 35%; min-height: 180px;">
+        <div class="card " style="overflow-y: scroll; max-height: 85%; ">
           <div class="card-body">
             <h5 class="card-title">Chiqimlar ro'yxati</h5>
     
@@ -209,6 +219,23 @@
       opacity: 0.9;
       display: none;
     }
+
+    .confirm-card{
+    display: none;
+    position: fixed;
+    left: 45%;
+    top:65px;
+    z-index: 150;
+    animation: todown 0.8s ;
+  }
+  @keyframes todown {
+    from{
+      transform: translateY(-50px);
+    }
+    to{
+      transform: translateY(0px);
+    }
+  }
    
     @keyframes animate{
       from{
@@ -238,6 +265,7 @@
     let add_btn = document.querySelector('.add-btn');
     let add_form = document.querySelector('.form-filter');
     let edit_form = document.querySelector('.edit');
+    let confirm_card = document.querySelector('.confirm-card');
 
 
 
@@ -286,36 +314,64 @@
       }
     }
 
+    function confirmYes(command){
+      let id = confirm_card.getAttribute('data-id');
+          if(command === 'yes'){
+            $.ajax({
+                    url:`expense/${Number(id)}`,
+                    type:"GET",
+                    data:{ 
+                        "cmd":"category_all"
+                    },
+                    success:function(response){
+                      let category = document.querySelector(`.category-${ id }`).style.display = 'none';
+                      let tr = document.querySelectorAll(`.c-${ id }`);
+                      
+                      tr.forEach(element => {
+                        console.log(element)
+                        element.style.display = 'none'
+                      });
+                      window.location.href = "/expense";
+                    }
+                })
+              }else{
+                $.ajax({
+                        url:`expense/${Number(id)}`,
+                        type:"GET",
+                        data:{ 
+                            "cmd":"category"
+                        },
+                        success:function(response){
+                          let category = document.querySelector(`.category-${ id }`).style.display = 'none';
+                          let tr = document.querySelectorAll(`.c-${ id }`);
+                          tr.forEach(element => {
+                            element.style.display = 'none'
+                          });
+                          window.location.href = "/expense";
+                        }
+                    })
+              }
+            }
+
     function delExpense(cmd,id){
       if(cmd === 'category'){
-        $.ajax({
-                url:`expense/${Number(id)}`,
-                type:"GET",
-                data:{ 
-                    "cmd":"category"
-                },
-                success:function(response){
-                  let category = document.querySelector(`.category-${ id }`).style.display = 'none';
-                  let tr = document.querySelectorAll(`.c-${ id }`);
-                  
-                  tr.forEach(element => {
-                    element.style.display = 'none'
-                  });
-  
-                }
-            })
-      }else{
-        $.ajax({
-                url:`expense/${Number(id)}`,
-                type:"GET",
-                data:{ 
-                    "cmd":"expense"
-                },
-                success:function(response){
-                  let tr = document.querySelector(`.e-${ id }`).style.display = 'none';
-                  
-                }
-            })
+        confirm_card.style.display = 'block'
+        confirm_card.setAttribute('data-id',id )
+        
+
+          }else{
+                $.ajax({
+                        url:`expense/${Number(id)}`,
+                        type:"GET",
+                        data:{ 
+                            "cmd":"expense"
+                        },
+                        success:function(response){
+                          let tr = document.querySelector(`.e-${ id }`).style.display = 'none';
+
+                          
+                        }
+                    })
       }
     }
 

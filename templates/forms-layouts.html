@@ -237,16 +237,24 @@
              
               <form method="post" class="row g-3 p-1">
                 {% csrf_token %}
-                <div class="form-floating">
-                  <input list="brow" id="client-select" class="form-control">
-                  <datalist id="brow">
-                    {% for cl in clients %}
-                      <option  value="{{cl.uid}}">{{cl.name}}</option>
-                    {% endfor %}
-                  </datalist>  
-                  <label for="client-select">Mijozni tanlang</label>
+                <div class="col-md-8">
+                  <div class="form-floating">
+                    <input list="brow" id="client-select" class="form-control">
+                    <datalist id="brow">
+                      {% for cl in clients %}
+                        <option  value="{{cl.uid}}">{{cl.name}}</option>
+                      {% endfor %}
+                    </datalist>  
+                    <label for="client-select">Mijozni tanlang</label>
+                  </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
+                  <div class="form-floating">
+                    <input type="number" id="balance" class="form-control" name="balance" required>
+                    <label for="balance">Balansi</label>
+                  </div>
+                </div>
+                <div class="col-md-4">
                   <div class="col-md-12">
                     <div class="form-floating">
                       <input type="number" class="form-control" id="userId" placeholder="ID" name="uid" required>
@@ -254,11 +262,20 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <div class="col-md-12">
                     <div class="form-floating">
                       <input type="number" class="form-control" id="payment" placeholder="payment" name="payment" required>
                       <label for="floatingCity">To'lov miqdori</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="col-md-12">
+                    <div class="form-floating">
+                      <input type="number" value="0" class="form-control" id="discount" placeholder="payment" name="discount" required>
+                      <label for="floatingCity">Chegirma</label>
                     </div>
                   </div>
                 </div>
@@ -288,37 +305,17 @@
             "client_id":client_id
           },
           success: function(response){
+            console.log('response')
             $("#userId").val(response['uid'])
-            $("#payment").val(response['payment'])
+            var balanced = response['payment'] - response['balance']
+            $("#payment").val(balanced)
+            $("#balance").val(response['balance'])
             $("#client-select").val(response['name'])
-            console.log(response) 
-
+            
           }
         })
       })
 
-      // let qwerty = true
-
-      // let text1;
-
-      // function abs(text) {
-        
-      // }
-
-      // setInterval(function(){
-      //   if (qwerty == true) {
-      //     navigator.clipboard.readText().then(text => document.getElementById("userId").value = text);
-      //     navigator.clipboard.readText().then(text => text1 = text);
-      //     console.log('sssssss')
-      //     qwerty = false
-
-      //   }
-
-      //   // var interval;
-      //   // if (interval) {
-      //   //   clearInterval(interval)
-      //   // }
-      // }, 200)
 
     var barcode = '';
     var interval;
@@ -353,6 +350,7 @@
             $("#userId").val(response['uid'])
             $("#payment").val(response['payment'])
             $("#client-select").val(response['name'])
+            $("#balance").val(response['balance'])
           }
         })
     }

@@ -14,8 +14,8 @@ class HomeView(View):
         print()
         clients = Client.objects.all()
         all_clients = clients.count()
+        payment = Payment.objects.all().order_by("-id")
         
-
         inactive = 0
         active = 0
         paused = 0
@@ -31,7 +31,9 @@ class HomeView(View):
             "all_clients":all_clients,
             "active":active,
             "inactive":inactive,
-            "paused":paused
+            "paused":paused,
+            "payment":payment
+
         }
         
         return render (request,'index.html',context)
@@ -69,7 +71,6 @@ class RegisterView(View):
             tarif =  ComingType.objects.all()
             context = {'tarif':tarif,'client':client, "uid":client.uid,"name":client.name}
             messages.success(request, "Mijoz ro'yxatga olindi !")
-            
         else:
             messages.success(request, "Xatolik qaytadan harakat qiling ! ")
             # context = {'tarif':tarif, "status":"Nimadur noto`g`ri ketdi"} 
@@ -191,7 +192,7 @@ def barcode_came(request, uid):
         day = client.months.last().days.last()
         day.came = True
         day.save()
-        status = "Mijoz bugun mashg'ulotga keldi keldi"
+        status = f"{client.name} bugun mashg'ulotga keldi keldi"
     except:
         status = "UID noto`g`ri"
     return JsonResponse({"status":status})
@@ -214,14 +215,14 @@ class PaymentView(View):
     @deco_login
     def get(self, request):
         try:
-            request.GET['client_id']
-            client_id = int(request.GET['client_id'])
+            client_id = request.GET['client_id']
             client = Client.objects.get(uid=client_id)
             month = Month.objects.filter(client=client).last()
             data = {
                 "name":client.name,
                 "uid":client.uid,
-                "payment":month.payment
+                "payment":month.payment,
+                "balance":client.balance
             }
             return JsonResponse(data)
         except:
@@ -232,6 +233,9 @@ class PaymentView(View):
         clients = Client.objects.all()
         uid = request.POST.get('uid')
         payment = int(request.POST.get('payment'))
+        discount = int(request.POST.get('discount'))
+        balance = int(request.POST.get('balance'))
+        discounted = payment + discount + balance
         try:
             obj = get_object_or_404(Client, uid=uid)
         except:
@@ -240,25 +244,27 @@ class PaymentView(View):
             return render(request, 'forms-layouts.html', {"response":"ID noto`g`ri berildi","status":"danger","clients":clients})
         else:
             month = Month.objects.filter(client=obj).last()
-            if month.payment == payment:
+            if month.payment == discounted:
                 month.payment = 0
                 month.payed = True
                 obj.debt = False
-            elif month.payment < payment:
-                balance = payment - month.payment
+            elif month.payment < discounted:
+                balance = discounted - month.payment
                 month.payment = 0
                 month.payed = True
                 obj.debt = False
                 obj.balance += balance
             else:
-                month.payment -= payment
+                month.payment -= discounted
                 month.payed = False
                 obj.debt = True
             month.save()
+            obj.balance -= balance
             obj.save()
             Payment.objects.create(
                 month=month,
-                money=payment
+                money=payment,
+                discount=discount
             )
             try:
                 last_day = month.days.last().date

@@ -84,6 +84,14 @@
                     <svg id="barcode" class="mt-2"></svg>
                   </div>
                 </div>
+                <div class="row">
+                  <div class="col-sm-3">
+                      <h5 class="mt-3">Balans: </h5>
+                  </div>
+                  <div class="col-sm-9">
+                    <h5 class="mt-3">{{ client.balance }} so'm</h5>
+                  </div>
+                </div>
                 
                 <hr>
                 
@@ -203,10 +211,11 @@
             <th scope="col">#</th>
             <th scope="col">Oy nomi</th>
             <th scope="col">To'langan summa</th>
+            <th scope="col">Chegirma</th>
             <th scope="col">To'langan sana</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="text-center">
           {% for m in months %}
           
           <tr>
@@ -214,7 +223,12 @@
             <td>{{ m.created | date:"F"}} </td>
             <td>
               {% for p in m.payments.all %}
-              {{ p.money }}<br>
+              <span class="badge bg-success "> {{ p.money }}</span> so'm <br> 
+              {% endfor %}
+            </td>
+            <td>
+              {% for p in m.payments.all %}
+            <span class="badge bg-warning"> {{ p.discount }}</span> so'm <br> 
               {% endfor %}
             </td>
             <td>

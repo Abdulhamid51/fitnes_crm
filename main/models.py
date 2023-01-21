@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import  User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -12,6 +12,7 @@ def random_numbers(lenth):
         r = random.choice(RANDOM_NUMS)
         rnums += str(r)
     return rnums
+
 
 
 
@@ -60,12 +61,11 @@ def uid_save(sender, instance, created, *args, **kargs):
 
 
 class Month(models.Model):
-    client = models.ForeignKey(Client, related_name="months", on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, related_name="months", on_delete=models.SET_NULL, null=True, blank=True)
     # main coming_types dan olinadi
     coming_days = models.PositiveIntegerField("kelishi kerak bo`ldan kunlar")
     payment = models.PositiveIntegerField("to`lashi kerak bo`lgan summa")
     created = models.DateField(auto_now_add=True)
-    
     came = models.PositiveIntegerField("kelgan kunlari", default=0)
     payed = models.BooleanField("To`landi", default=False)
 
@@ -86,6 +86,7 @@ class Payment(models.Model):
     month = models.ForeignKey(Month, related_name="payments", on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True)
     money = models.IntegerField("Puli")
+    discount = models.PositiveIntegerField("chegirma", default=0)
 
     def __str__(self):
         return str(self.date)
@@ -100,11 +101,12 @@ class ExpenseCategory(models.Model):
 
 
 class Expense(models.Model):
-    category = models.ForeignKey(ExpenseCategory, on_delete=models.CASCADE , related_name='expense_category')
+    category = models.ForeignKey(ExpenseCategory, on_delete=models.SET_NULL , related_name='expense_category', null=True, blank=True)
     summa = models.IntegerField(default=0)
     info = models.TextField(blank=True, null=True)
     created = models.DateField("Qo'shilgan sana", auto_now_add=True)
 
     def __str__(self):
         return str(self.summa)
+
 

@@ -146,6 +146,13 @@ class ExpenseDelUp(View):
     @deco_login
     def get(self, request, pk):
         cmd = request.GET.get('cmd')
+        if cmd == "category_all":
+            c = ExpenseCategory.objects.get(id=int(pk))
+            c.expense_category.all()
+            for i in c.expense_category.all():
+                i.delete()
+            
+            c.delete()
         if cmd == "category":
             c = ExpenseCategory.objects.get(id=int(pk))
             c.delete()

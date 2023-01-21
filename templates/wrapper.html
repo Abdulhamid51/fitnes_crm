@@ -40,6 +40,7 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  <script src="/static/assets/js/jquery-3.6.1.min.js"></script>
 </head>
 
 <body>
@@ -118,7 +119,7 @@
   {% else %}
 {% endif %}
 
-<ul class="messages">
+<ul class="messages-attendance">
 
   <div class="alert alert-success alert-dismissible fade show msg" role="alert "   >
     <i class="bi bi-check-circle me-1"></i>
@@ -254,12 +255,12 @@
   <!-- Template Main JS File -->
   <script src="/static/assets/js/main.js"></script>
   
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
   <script>
 
   </script>
   <script>
-    $('ul.messages').hide()
+    $('ul.messages-attendance').hide()
 
 
     const spinner = document.querySelector(".load-spinner");
@@ -294,14 +295,13 @@
     });
 
     function handleBarcode(scanned_barcode) {
-        console.log('sssssss')
         var client_id = scanned_barcode
         $.ajax({
           url: `/client_barcode_came/${scanned_barcode}`,
           type: "GET",
           data: {},
           success: function(response){
-            $('ul.messages').show()
+            $('ul.messages-attendance').show()
             $('span.message-barcode').html(response['status'])
           }
         })

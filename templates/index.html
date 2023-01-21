@@ -103,7 +103,42 @@
                 </div>
               </div>
               
-              
+              <div class="card p-4" style="overflow: scroll; max-height: 60%; ">
+               <span class="card-title"> Butun davr mobaynida bajarilgan to'lovlar jadvali</span>
+                <table class="table  table-hover table-striped datatable text-center" >
+                  <style>
+                   
+                  </style>
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Mijoz nomi</th>
+                      <th scope="col">To'langan summa</th>
+                      
+                      <th scope="col">To'langan sana</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-center">
+                    {% for p in payment %}
+                    
+                    <tr>
+                      <th scope="row">{{forloop.counter}}</th>
+                      <td>{{ p.month.client.name }} </td>
+                      <td>
+                        {{p.money}}
+                      </td>
+                  
+                      <td>
+                      
+                        {{ p.date | date:"d.m.Y" }}
+                        
+                      </td>
+                    </tr>
+                    {% endfor %}
+                    
+                  </tbody>
+                </table>
+              </div>
               
          
         </div>
@@ -262,8 +297,10 @@
               <!-- End Bar CHart -->
 
             </div>
+
           </div>
         
+
         </div>
       </div> 
 
