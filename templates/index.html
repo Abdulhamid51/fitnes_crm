@@ -40,7 +40,7 @@
               <div class="card">
                 
               <!-- Bar Chart -->
-              <div id="barChart" style="min-height: 400px;" class="echart"></div>
+              <div id="lineChart" style="min-height: 400px;" class="echart"></div>
               <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
               <script>
                 document.addEventListener("DOMContentLoaded", () => {
@@ -52,19 +52,34 @@
                       'year':$date
                     },
                     success:function(response){
-                      echarts.init(document.querySelector("#barChart")).setOption({
-                        xAxis: {
-                          type: 'category',
-                          data: response['months']
-                        },
-                        yAxis: {
-                          type: 'value'
-                        },
-                        series: [{
-                          data: response['mount'],
-                          type: 'bar'
-                        }]
-                      });
+                      new ApexCharts(document.querySelector("#lineChart"), {
+                    series: [{
+                      name: "Desktops",
+                      data: response['mount']
+                    }],
+                    chart: {
+                      height: 350,
+                      type: 'line',
+                      zoom: {
+                        enabled: false
+                      }
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      curve: 'straight'
+                    },
+                    grid: {
+                      row: {
+                        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                      },
+                    },
+                    xaxis: {
+                      categories: response['months'],
+                    }
+                  }).render();
                     }
                   })
                 });
