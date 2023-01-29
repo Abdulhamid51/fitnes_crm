@@ -259,7 +259,7 @@ class PaymentView(View):
                 month.payed = False
                 obj.debt = True
             month.save()
-            obj.balance -= balance
+            # obj.balance -= balance
             obj.save()
             Payment.objects.create(
                 month=month,
