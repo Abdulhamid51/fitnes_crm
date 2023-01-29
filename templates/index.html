@@ -103,31 +103,39 @@
                 </div>
               </div>
               
-              <div class="card p-4" style="overflow: scroll; max-height: 60%; ">
+              <div class="card p-4">
                <span class="card-title"> Butun davr mobaynida bajarilgan to'lovlar jadvali</span>
-                <table class="table  table-hover table-striped datatable text-center" >
-                  <style>
-                   
-                  </style>
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Mijoz nomi</th>
-                      <th scope="col">To'langan summa</th>
-                      
-                      <th scope="col">To'langan sana</th>
-                    </tr>
-                  </thead>
-                  <tbody class="text-center">
-                    {% for p in payment %}
-                    
+
+                <div class="row">
+                  <div class="col-md-6">
+                      <h4 class="card-title"><span id="from_val">Yil/Oy/Kun</span> dan</h4>
+                      <input type="date" class="form-control" id="datefilterfrom" data-date-split-input="true">
+                  </div>
+                  <div class="col-md-6">
+                      <h4 class="card-title"><span id="to_val">Yil/Oy/Kun</span> gacha</h4>
+                    <input type="date" class="form-control" id="datefilterto" data-date-split-input="true">
+                  </div>
+                  </div>
+
+          <table  id="testTable" class="table table-bordered table-light table-hover mt-4">
+
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Mijoz nomi</th>
+                <th scope="col">To'langan summa</th>
+                
+                <th scope="col">To'langan sana</th>
+              </tr>
+            </thead>
+            
+            {% for p in payment %}
                     <tr>
                       <th scope="row">{{forloop.counter}}</th>
                       <td>{{ p.month.client.name }} </td>
                       <td>
-                        {{p.money}}
+                        {{p.money}} so'm
                       </td>
-                  
                       <td>
                       
                         {{ p.date | date:"d.m.Y" }}
@@ -136,12 +144,14 @@
                     </tr>
                     {% endfor %}
                     
-                  </tbody>
-                </table>
+          </table>
+        
               </div>
               
          
         </div>
+        
+        
         
         <div class="col-lg-6">
           <div class="card">
@@ -307,7 +317,37 @@
 
         
     <script src="../static/assets/js/jquery-3.6.1.min.js"></script>
+    <script src="/static/assets/js/moment_js_2.222.js"></script>
 
+    <script>
+      function filterRows() {
+      var from = $('#datefilterfrom').val();
+      var to = $('#datefilterto').val();
+      let span_from = document.getElementById('from_val');
+      let span_to = document.getElementById('to_val');
+      span_from.innerText = String(from);
+      span_to.innerText = String(to);
+     
+      if (!from && !to) { // no value for from and to
+        return;
+      }
+      from = from || '1970-01-01'; // default from to a old date if it is not set
+      to = to || '2999-12-31';
+
+      var dateFrom = moment(from);
+      var dateTo = moment(to);
+     
+      $('#testTable tr').each(function(i, tr) {
+        var val = $(tr).find("td:nth-child(4)").text();
+        var dateVal = moment(val, "DD/MM/YYYY");
+        var visible = (dateVal.isBetween(dateFrom, dateTo, null, [])) ? "" : "none"; // [] for inclusive
+        $(tr).css('display', visible);
+      });
+    }
+
+    $('#datefilterfrom').on("change", filterRows);
+    $('#datefilterto').on("change", filterRows);
+  </script>
      
     </section>
 

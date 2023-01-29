@@ -20,6 +20,7 @@
     
   <div class="row confirm-row">
     <div class="card col-lg-3 confirm-card p-3">
+      <a href="#" type="button" onclick="confirmYes('close')" style="float:right;"><i class="bi bi-x" style="font-size: 20px;"></i></a>
       <div class="card-title text-center">
         Ushbu chiqim turiga doir barcha ma'lumotlarni o'chirishni xoxlaysizmi ?
       </div>
@@ -124,7 +125,7 @@
              
             <p class="card-title">
               {% for c in expense_category %}
-              <span class="ex-btn category-{{ c.id }} badge rounded-pill bg-info text-light m-1" data-value="{{ c }}" style="font-size: 18px;">{{ c }}<a href="#" onclick="delExpense('category','{{ c.id }}')"><i class="ex-i bi bi-x-circle text-light ml-1 "></i></a><a href="#" onclick="add('edit', '{{ c.id }}' )"><i class="ex-edit ri-pencil-line text-light ml-1 "></i></a></span>
+              <span class="ex-btn category-{{ c.id }} badge rounded-pill bg-info text-light m-1" data-value="{{ c }}" style="font-size: 18px;">{{ c }}<a href="#"  onclick="delExpense('category','{{ c.id }}')"><i class="ex-i bi bi-x-circle text-light ml-1 "></i></a><a href="#" onclick="add('edit', '{{ c.id }}' )"><i class="ex-edit ri-pencil-line text-light ml-1 "></i></a></span>
               {% endfor %}
   
               
@@ -334,7 +335,7 @@
                       window.location.href = "/expense";
                     }
                 })
-              }else{
+              }else if (command === 'no'){
                 $.ajax({
                         url:`expense/${Number(id)}`,
                         type:"GET",
@@ -350,6 +351,8 @@
                           window.location.href = "/expense";
                         }
                     })
+              }else{
+                confirm_card.style.display = 'none'
               }
             }
 
