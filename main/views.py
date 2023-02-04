@@ -127,49 +127,6 @@ class DetailView(View):
             client.update(name=name, phone=phone, coming_type=tarif, status=status)
         return redirect(f"/detail/{id}")
 
-def default_add_month(request):
-
-    clients = Client.objects.all()
-    for client in clients:
-        print('hhhhhhhhh')
-        now = datetime.datetime.now()
-        today = int(now.strftime("%d"))
-        month_days = calendar.monthrange(int(now.strftime("%Y")), int(now.strftime("%m")))[1]
-        res_days = month_days - today
-        if res_days >= client.coming_type.days:
-            coming_days = client.coming_type.days
-            price = client.coming_type.price
-        else:
-            daily_price = client.coming_type.price / client.coming_type.days
-            coming_days = res_days
-            price = daily_price * coming_days
-        sunday = coming_days // 7
-        coming_days -= sunday
-        month = Month.objects.create(
-            client=client,
-            coming_days=coming_days,
-            payment=int(price)
-        )
-    return JsonResponse({"status":"Oy hosil qilindi"})
-
-
-def default_add_day(request):
-    clients = Client.objects.all()
-    for client in clients:
-        try:
-            if client.status == "PAUSED":
-                pass
-            else:
-                month = client.months.last()
-                month.came += 1
-                month.save()
-                day = Day.objects.create(
-                    month=month
-                )
-        except:
-            month = "salom"
-    return JsonResponse({"status":"Kun hosil qilindi"})
-
 
 def edit_day(request, day_id):
     day = get_object_or_404(Day, id=day_id)
