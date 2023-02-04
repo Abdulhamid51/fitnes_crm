@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-o956%g!gag88e*l0!$+f1*d74s=o+o2)hq^fwz12$^f1_9zwfc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 if DEBUG:
@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
-    'django_crontab'
+    "django_cron",
 ]
 
 MIDDLEWARE = [
@@ -78,6 +78,12 @@ CRONJOBS = [
     ('* * * * *', 'main.views.default_add_day')
 ]
 
+CRON_CLASSES = [
+    "main.cron.MyCronJob",
+    
+]
+
+ALLOW_PARALLEL_RUNS = True
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
