@@ -157,77 +157,163 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">Daromad va xarajatlar statistikasi <span>| Yillik</span></h5>
-
+              <select class="year" onchange="changeYear()">
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+              </select>
               <!-- Column Chart -->
               <div id="columnChart"></div>
 
               <script>
                 document.addEventListener("DOMContentLoaded", () => {
-                  var $date =  new Date().getFullYear();
-                  $.ajax({
-                    url:'/year_mount/',
-                    type:'get',
-                    data:{
-                      'year':$date
-                    },
-                    success:function (response) {
-                      
-                    new ApexCharts(document.querySelector("#columnChart"), {
-                    series: [{
-                      name: 'Tushum',
-                      data: response['earnings']
-                    }, 
-                    {
-                      name: 'Sof daromad',
-                      data: response['income']
-                    }, 
-                    {
-                      name: 'Chiqim',
-                      data: response['expense']
-                    }
-                  ],
-                    chart: {
-                      type: 'bar',
-                      height: 350
-                    },
-                    plotOptions: {
-                      bar: {
-                        horizontal: false,
-                        columnWidth: '100%',
-                        endingShape: 'rounded'
+                  window.onload = function(){
+
+                    console.log('dds')
+                    let date =  new Date().getFullYear();
+                    $.ajax({
+                      url:'/year_mount/',
+                      type:'get',
+                      data:{
+                        'year':date
                       },
-                    },
-                    dataLabels: {
-                      enabled: false
-                    },
-                    stroke: {
-                      show: true,
-                      width: 2,
-                      colors: ['transparent']
-                    },
-                    xaxis: {
-                      categories: response['months'],
-                    },
-                    yaxis: {
-                      title: {
-                        // text: '$ (thousands)'
+                      success:function (response) {
+                        
+                      new ApexCharts(document.querySelector("#columnChart"), {
+                      series: [{
+                        name: 'Tushum',
+                        data: response['earnings']
+                      }, 
+                      {
+                        name: 'Sof daromad',
+                        data: response['income']
+                      }, 
+                      {
+                        name: 'Chiqim',
+                        data: response['expense']
                       }
-                    },
-                    fill: {
-                      opacity: 1
-                    },
-                    tooltip: {
-                      y: {
-                        formatter: function(val) {
-                          return val  + " so'm"
+                    ],
+                      chart: {
+                        type: 'bar',
+                        height: 350
+                      },
+                      plotOptions: {
+                        bar: {
+                          horizontal: false,
+                          columnWidth: '100%',
+                          endingShape: 'rounded'
+                        },
+                      },
+                      dataLabels: {
+                        enabled: false
+                      },
+                      stroke: {
+                        show: true,
+                        width: 2,
+                        colors: ['transparent']
+                      },
+                      xaxis: {
+                        categories: response['months'],
+                      },
+                      yaxis: {
+                        title: {
+                          // text: '$ (thousands)'
+                        }
+                      },
+                      fill: {
+                        opacity: 1
+                      },
+                      tooltip: {
+                        y: {
+                          formatter: function(val) {
+                            return val  + " so'm"
+                          }
                         }
                       }
-                    }
-                  }).render();
-                }
-              });
+                    }).render();
+                  }
+                });
+                  }
+
+
+                  
+                  
+              
+              
+              
+              
+              
                 });
 
+
+                function changeYear() {
+                  let year = document.querySelector('.year').value;
+                      //let year = $(this).val()
+                      console.log(year)
+                     // console.log(year)
+                      $.ajax({
+                        url:'/year_mount/',
+                        type:'get',
+                        data:{
+                          'year':year
+                        },
+                        success:function (response) {
+                          console.log(response)
+                        new ApexCharts(document.querySelector("#columnChart"), {
+                        series: [{
+                          name: 'Tushum',
+                          data: response['earnings']
+                        }, 
+                        {
+                          name: 'Sof daromad',
+                          data: response['income']
+                        }, 
+                        {
+                          name: 'Chiqim',
+                          data: response['expense']
+                        }
+                      ],
+                        chart: {
+                          type: 'bar',
+                          height: 350
+                        },
+                        plotOptions: {
+                          bar: {
+                            horizontal: false,
+                            columnWidth: '100%',
+                            endingShape: 'rounded'
+                          },
+                        },
+                        dataLabels: {
+                          enabled: false
+                        },
+                        stroke: {
+                          show: true,
+                          width: 2,
+                          colors: ['transparent']
+                        },
+                        xaxis: {
+                          categories: response['months'],
+                        },
+                        yaxis: {
+                          title: {
+                            // text: '$ (thousands)'
+                          }
+                        },
+                        fill: {
+                          opacity: 1
+                        },
+                        tooltip: {
+                          y: {
+                            formatter: function(val) {
+                              return val  + " so'm"
+                            }
+                          }
+                        }
+                      }).render();
+                    }
+                  });
+                  }
 
              
               </script>

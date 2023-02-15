@@ -30,4 +30,7 @@ urlpatterns = [
     path("client_barcode_came/<uid>", barcode_came, name="barcode_came"),
     path('login',LoginView.as_view(),name='login'),
     path('logout',logout_,name='logout'),
+
+    path("sd/", default_add_day, name="sd"),
+    path("sm/", add_month, name="sm")
 ]

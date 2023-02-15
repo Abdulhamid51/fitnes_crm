@@ -7,13 +7,17 @@ import calendar
 from django.contrib import messages
 from .filter import deco_login
 
+from .default_add import *
 
 
-def default_add_day():
+def default_add_day(request):
     clients = Client.objects.all()
     for client in clients:
+        cd = client.months.last().coming_days
+        cm = client.months.last().came
+        print(cd, cm)
         try:
-            if client.status == "PAUSED":
+            if client.status == "PAUSED" and client.months.last().payed == True:
                 pass
             else:
                 month = client.months.last()
@@ -24,33 +28,12 @@ def default_add_day():
                 )
         except:
             month = "salom"
-    return True
+    return JsonResponse({"salom":"salom"})
 
 
-def default_add_month():
-
-    clients = Client.objects.all()
-    for client in clients:
-        print('hhhhhhhhh')
-        now = datetime.datetime.now()
-        today = int(now.strftime("%d"))
-        month_days = calendar.monthrange(int(now.strftime("%Y")), int(now.strftime("%m")))[1]
-        res_days = month_days - today
-        if res_days >= client.coming_type.days:
-            coming_days = client.coming_type.days
-            price = client.coming_type.price
-        else:
-            daily_price = client.coming_type.price / client.coming_type.days
-            coming_days = res_days
-            price = daily_price * coming_days
-        sunday = coming_days // 7
-        coming_days -= sunday
-        month = Month.objects.create(
-            client=client,
-            coming_days=coming_days,
-            payment=int(price)
-        )
-    return True
+def add_month(request):
+    default_add_month()
+    return JsonResponse({"month":"add"})
 
 
 
@@ -193,9 +176,13 @@ def barcode_came(request, uid):
     try:
         client = get_object_or_404(Client, uid=uid)
         day = client.months.last().days.last()
-        day.came = True
-        day.save()
-        status = f"{client.name} bugun mashg'ulotga keldi keldi"
+        today = datetime.datetime.now().strftime('%Y-%m-%d')
+        if str(today) == str(day):
+            day.came = True
+            day.save()
+            status = f"{client.name} bugun mashg'ulotga keldi."
+        else:
+            status = f"{client.name} avval to'lovni amalga oshiring!"
     except:
         status = "UID noto`g`ri"
     return JsonResponse({"status":status})
@@ -274,11 +261,8 @@ class PaymentView(View):
             except:
                 last_day = 'no last day'
             today = datetime.datetime.now()
-            if last_day == today:
-                print("kun qoshilmadi")
-            else:
+            if last_day != today:
                 Day.objects.create(month=month)
-                print("kun qoshildi")
             messages.success(request, "To'lov amalga oshirildi ! ")
             return redirect('/payment')
 

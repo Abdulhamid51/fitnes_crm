@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-o956%g!gag88e*l0!$+f1*d74s=o+o2)hq^fwz12$^f1_9zwfc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 if DEBUG:
@@ -75,7 +75,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 CRONJOBS = [
-    ('0 1 * * *', 'main.views.default_add_day'),
+    ('5 20 * * *', 'main.views.default_add_day'),
     ('0 0 5 * *', 'main.views.default_add_month'),
 ]
 
