@@ -10,30 +10,14 @@ from .filter import deco_login
 from .default_add import *
 
 
-def default_add_day(request):
-    clients = Client.objects.all()
-    for client in clients:
-        cd = client.months.last().coming_days
-        cm = client.months.last().came
-        print(cd, cm)
-        try:
-            if client.status == "PAUSED" and client.months.last().payed == True:
-                pass
-            else:
-                month = client.months.last()
-                month.came += 1
-                month.save()
-                day = Day.objects.create(
-                    month=month
-                )
-        except:
-            month = "salom"
-    return JsonResponse({"salom":"salom"})
+def add_day(request):
+    default_add_day()
+    return request
 
 
 def add_month(request):
     default_add_month()
-    return JsonResponse({"month":"add"})
+    return request
 
 
 

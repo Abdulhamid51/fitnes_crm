@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
-    "django_crontab",
 ]
 
 MIDDLEWARE = [
@@ -67,6 +66,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'main.views.add_day',
+                'main.views.add_month',
             ],
         },
     },
@@ -74,15 +75,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-CRONJOBS = [
-    ('5 20 * * *', 'main.views.default_add_day'),
-    ('0 0 5 * *', 'main.views.default_add_month'),
-]
-
-# CRON_CLASSES = [
-#     "main.cron.MyCronJob",
-    
-# ]
 
 ALLOW_PARALLEL_RUNS = True
 

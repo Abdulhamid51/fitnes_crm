@@ -31,6 +31,6 @@ urlpatterns = [
     path('login',LoginView.as_view(),name='login'),
     path('logout',logout_,name='logout'),
 
-    path("sd/", default_add_day, name="sd"),
+    path("sd/", add_day, name="sd"),
     path("sm/", add_month, name="sm")
 ]

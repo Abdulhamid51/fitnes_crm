@@ -5,10 +5,9 @@ from .models import *
 def default_add_month():
     clients = Client.objects.all()
     for client in clients:
-        last_month = str(client.months.last().created)
-        this_month = datetime.datetime.now().strftime('%Y-%m-%d')
+        last_month = str(client.months.last().created).split('-')[1]
+        this_month = datetime.datetime.now().strftime('%m')
         if last_month != this_month:
-            print(last_month)
             now = datetime.datetime.now()
             today = int(now.strftime("%d"))
             month_days = calendar.monthrange(int(now.strftime("%Y")), int(now.strftime("%m")))[1]
@@ -25,5 +24,31 @@ def default_add_month():
                 coming_days=coming_days,
                 payment=int(price)
             )
+            print("add month")
         else:
-            print('bu oy qoshilgan')
+            print("not add month")
+
+def default_add_day():
+    clients = Client.objects.all()
+    for client in clients:
+        try:
+            last_day = str(client.months.last().days.last().date).split('-')[2]
+            this_day = datetime.datetime.now().strftime('%d')
+            cd = client.months.last().coming_days
+            cm = client.months.last().came
+            if cm >= cd or last_day == this_day:
+                print("not add day (1)")
+            else:
+                if client.status == "PAUSED" and client.months.last().payed == True:
+                    print("not add day (2)")
+                    pass
+                else:
+                    month = client.months.last()
+                    month.came += 1
+                    month.save()
+                    day = Day.objects.create(
+                        month=month
+                    )
+                    print("add day")
+        except:
+            print("no day")
