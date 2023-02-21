@@ -12,12 +12,12 @@ from .default_add import *
 
 def add_day(request):
     default_add_day()
-    return request
+    return {"day":'added'}
 
 
 def add_month(request):
     default_add_month()
-    return request
+    return {"month":'added'}
 
 
 
@@ -64,10 +64,9 @@ class RegisterView(View):
         user = request.user
         name = request.POST.get('name')
         phone = request.POST.get('phone')
-        ctype = request.POST.get('tarif')
-        if user and name and phone and ctype:
-
-            tarif = ComingType.objects.get(title=ctype)
+        ctypes = request.POST.get('tarif')
+        if user and name and phone and ctypes:
+            ctype = ComingType.objects.get(title=ctypes)
             status = request.POST.get('status')
             for c in Client.objects.all():
                 if phone == c.phone:
@@ -75,13 +74,13 @@ class RegisterView(View):
                     return redirect('/register')
                 else:
                     pass
-            client = Client.objects.create(user=user,
-                                    name=name,
-                                    phone=phone,
-                                    coming_type=tarif,
-                                    status=status,
-                                    )
-            tarifs =  ComingType.objects.all()
+            client = Client.objects.create(
+                        user=user,
+                        name=name,
+                        phone=phone,
+                        coming_type=ctype,
+                        status=status,
+                    )
 
             # month create
 
@@ -104,10 +103,10 @@ class RegisterView(View):
                 payment=int(price)
             )
             
-            context = {'tarif':tarifs, "uid":client.uid}
-            print(client.uid)
+            tarifs =  ComingType.objects.all()
+            context = {'tarif':tarifs,'client':client, "uid":client.uid,"name":client.name}
             messages.success(request, "Mijoz ro'yxatga olindi !")
-            return render(request,'register.html', context)
+            return render(request=request, template_name='register.html',context=context)
         else:
             messages.success(request, "Xatolik qaytadan harakat qiling ! ")
             tarifs = ComingType.objects.all()
