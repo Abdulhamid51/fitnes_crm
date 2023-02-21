@@ -24,9 +24,6 @@ def default_add_month():
                 coming_days=coming_days,
                 payment=int(price)
             )
-            print("add month")
-        else:
-            print("not add month")
 
 def default_add_day():
     clients = Client.objects.all()
@@ -37,10 +34,9 @@ def default_add_day():
             cd = client.months.last().coming_days
             cm = client.months.last().came
             if cm >= cd or last_day == this_day:
-                print("not add day (1)")
+                pass
             else:
                 if client.status == "PAUSED" and client.months.last().payed == True:
-                    print("not add day (2)")
                     pass
                 else:
                     month = client.months.last()
@@ -49,6 +45,5 @@ def default_add_day():
                     day = Day.objects.create(
                         month=month
                     )
-                    print("add day")
         except:
-            print("no day")
+            pass

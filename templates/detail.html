@@ -185,12 +185,16 @@
                </div>
   
                <div class="form-floating mb-3 mt-3 p-1">
-                 <select class="form-select" name="month" id="month" aria-label="State">
+                 <select class="form-select month_payment" name="month" id="month" aria-label="State">
+                   <option value="0" >Oyni tanlang</option>
                    {% for t in months %}
-                   <option value="{{t.id}}" >{{ t.created | date:"F (Y)" }}</option>
+                    {% if t.payed == True %}
+                      {% else %}
+                      <option value="{{t.id}}" >{{ t.created | date:"F (Y)" }}</option>
+                    {% endif %}
                    {% endfor %}
                  </select>
-                 <label for="month">Oyni tanlang</label>
+                 <label for="month">To'lash kerak bo'lgan oylar</label>
                </div>
  
               <div class="text-left">
@@ -256,6 +260,20 @@
     JsBarcode("#barcode", '{{ client.uid }}', {
       height: 40,
     });
+
+    $('.month_payment').on('change', function(){
+      let id = $(this).val()
+      $.ajax({
+        url:'/month_payment/',
+        type:'get',
+        data:{
+          'id':id
+        },
+        success:function(response){
+          $('#payment').val(response['payment'])
+        }
+      })
+    })
 
     function sendData(){
       var payment = $('#payment').val()

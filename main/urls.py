@@ -32,5 +32,7 @@ urlpatterns = [
     path('logout',logout_,name='logout'),
 
     path("sd/", add_day, name="sd"),
-    path("sm/", add_month, name="sm")
+    path("sm/", add_month, name="sm"),
+
+    path("month_payment/", detail_month_sum, name="month_payment"),
 ]

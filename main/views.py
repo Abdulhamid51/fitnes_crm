@@ -64,10 +64,10 @@ class RegisterView(View):
         user = request.user
         name = request.POST.get('name')
         phone = request.POST.get('phone')
-        tarif = request.POST.get('tarif')
-        if user and name and phone and tarif:
+        ctype = request.POST.get('tarif')
+        if user and name and phone and ctype:
 
-            tarif = ComingType.objects.get(title=tarif)
+            tarif = ComingType.objects.get(title=ctype)
             status = request.POST.get('status')
             for c in Client.objects.all():
                 if phone == c.phone:
@@ -81,35 +81,40 @@ class RegisterView(View):
                                     coming_type=tarif,
                                     status=status,
                                     )
-            tarif =  ComingType.objects.all()
-            context = {'tarif':tarif,'client':client, "uid":client.uid,"name":client.name}
+            tarifs =  ComingType.objects.all()
+
+            # month create
+
+            now = datetime.datetime.now()
+            today = int(now.strftime("%d"))
+            month_days = calendar.monthrange(int(now.strftime("%Y")), int(now.strftime("%m")))[1]
+            res_days = month_days - today
+            if res_days >= client.coming_type.days:
+                coming_days = client.coming_type.days
+                price = client.coming_type.price
+            else:
+                daily_price = client.coming_type.price / client.coming_type.days
+                coming_days = res_days
+                price = daily_price * coming_days
+            sunday = coming_days // 7
+            coming_days -= sunday
+            month = Month.objects.create(
+                client=client,
+                coming_days=coming_days,
+                payment=int(price)
+            )
+            
+            context = {'tarif':tarifs, "uid":client.uid}
+            print(client.uid)
             messages.success(request, "Mijoz ro'yxatga olindi !")
+            return render(request,'register.html', context)
         else:
             messages.success(request, "Xatolik qaytadan harakat qiling ! ")
-            # context = {'tarif':tarif, "status":"Nimadur noto`g`ri ketdi"} 
+            tarifs = ComingType.objects.all()
+            context = {'tarif':tarifs, "status":"Nimadur noto`g`ri ketdi"} 
+            return render(request,'register.html', context)
 
-        # month create
 
-        now = datetime.datetime.now()
-        today = int(now.strftime("%d"))
-        month_days = calendar.monthrange(int(now.strftime("%Y")), int(now.strftime("%m")))[1]
-        res_days = month_days - today
-        if res_days >= client.coming_type.days:
-            coming_days = client.coming_type.days
-            price = client.coming_type.price
-        else:
-            daily_price = client.coming_type.price / client.coming_type.days
-            coming_days = res_days
-            price = daily_price * coming_days
-        sunday = coming_days // 7
-        coming_days -= sunday
-        month = Month.objects.create(
-            client=client,
-            coming_days=coming_days,
-            payment=int(price)
-        )
-
-        return render(request,'register.html',context)
 
 
 class DetailView(View):
@@ -256,10 +261,16 @@ def detail_payment(request):
     payment = int(request.POST.get('payment'))
     month = Month.objects.get(id=month_id)
     obj = month.client
-    if month.payment <= payment:
+    if month.payment == payment:
         month.payment = 0
         month.payed = True
         obj.debt = False
+    elif month.payment < payment:
+        balance = payment - month.payment
+        month.payment = 0
+        month.payed = True
+        obj.debt = False
+        obj.balance = balance
     else:
         month.payment -= payment
         month.payed = False
@@ -272,7 +283,11 @@ def detail_payment(request):
     )
     return JsonResponse({"status":"ok"})
 
-
+def detail_month_sum(request):
+    month_id = request.GET.get('id')
+    month = Month.objects.get(id=month_id)
+    payment = month.payment
+    return JsonResponse({'payment':payment})
 
 def handler_404(request,exception):
     return render(request, "404.html")
