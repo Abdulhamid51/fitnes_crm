@@ -275,6 +275,13 @@ def detail_payment(request):
         month.payed = False
         obj.debt = True
     month.save()
+    try:
+        last_day = month.days.last().date
+    except:
+        last_day = 'no last day'
+    today = datetime.datetime.now()
+    if last_day != today:
+        Day.objects.create(month=month)
     obj.save()
     py = Payment.objects.create(
         month=month,
