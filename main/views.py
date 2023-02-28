@@ -11,14 +11,29 @@ from .filter import deco_login
 class HomeView(View):
     @deco_login
     def get(self,request):
-        print()
-        clients = Client.objects.all()
-        all_clients = clients.count()
-        payment = Payment.objects.all().order_by("-id")
-        
         inactive = 0
         active = 0
         paused = 0
+        daily_sum = 0
+        expense_sum = 0
+        now = datetime.datetime.now()
+
+        clients = Client.objects.all()
+        all_clients = clients.count()
+        payment = Payment.objects.all().order_by("-id")
+        day = Day.objects.filter(came=True,date=now).count()
+        pay = payment.filter(date=now)
+        expense= Expense.objects.filter(created=now)
+        
+        for e in expense:
+            expense_sum += e.summa
+    
+        for p in pay:
+            daily_sum += p.money
+            
+        total_sum = daily_sum - expense_sum
+        
+      
         for c in clients:
             if c.status == "ACTIVE":
                 active += 1
@@ -29,10 +44,15 @@ class HomeView(View):
         
         context = {
             "all_clients":all_clients,
+            "came_day":day,
             "active":active,
             "inactive":inactive,
             "paused":paused,
-            "payment":payment
+            "payment":payment,
+            'daily_sum':daily_sum,
+            'expense_sum':expense_sum,
+            'total_sum':total_sum,
+            'now':now
 
         }
         

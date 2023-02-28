@@ -20,17 +20,82 @@
 
         <!-- Left side columns -->
         <div class="col-lg-6">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="card info-card sales-card">
+               
+                    <div class="card-body">
+                      <h5 class="card-title">Mijozlar soni <span>| Umumiy</span></h5>
+    
+                      <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                          <i class="bi bi-people "></i>
+                        </div>
+                        <div class="ps-3">
+                          <h6 id="count_all" data-all="{{ all_clients }}">{{ all_clients }} ta</h6>
+                          <!-- tolovlar kunlik  -->
+    
+                        </div>
+                      </div>
+                    </div>
+    
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="card info-card sales-card">
+               
+                    <div class="card-body">
+                      <h5 class="card-title">Mijozlar soni <span>| Kunlik</span></h5>
+    
+                      <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                          <i class="bi bi-people text-warning"></i>
+                        </div>
+                        <div class="ps-3">
+                          <h6 id="count_all" data-all="{{ came_day }}">{{ came_day }} ta</h6>
+                          <!-- tolovlar kunlik  -->
+    
+                        </div>
+                      </div>
+                    </div>
+    
+                  </div>
+                </div>
+              </div>
               <div class="card info-card sales-card">
                
                 <div class="card-body">
-                  <h5 class="card-title">Mijozlar soni <span>| Umumiy</span></h5>
+                  <h5 class="card-title">Daromad <span>| Kunlik | {{ now | date:"d/m/Y"}}</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-people"></i>
+                      <i class="bi bi-arrow-down-circle-fill text-success"></i>
                     </div>
                     <div class="ps-3">
-                      <h6 id="count_all" data-all="{{ all_clients }}">{{ all_clients }} ta</h6>
+                      <h5 class="card-title"  id="count_all" data-all="">Tushum: {{ daily_sum }} so'm</h5>
+
+
+                      <!-- tolovlar kunlik  -->
+
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-arrow-up-circle-fill text-danger"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h5 class="card-title"  id="count_all" data-all="">Chiqim: {{ expense_sum }} so'm</h5>
+                      <!-- tolovlar kunlik  -->
+
+                    </div>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-cash text-success"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h5 class="card-title" id="count_all" data-all="">Sof daromad: {{ total_sum }} so'm</h5>
+
                       <!-- tolovlar kunlik  -->
 
                     </div>
@@ -38,7 +103,6 @@
                 </div>
 
               </div>
-              
         
 
               <div class="card">
@@ -342,6 +406,7 @@
         var dateVal = moment(val, "DD/MM/YYYY");
         var visible = (dateVal.isBetween(dateFrom, dateTo, null, [])) ? "" : "none"; // [] for inclusive
         $(tr).css('display', visible);
+
       });
     }
 

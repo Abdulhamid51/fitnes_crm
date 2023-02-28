@@ -32,6 +32,19 @@
 
   <main>
     <div class="container">
+      {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+          <div class="alert alert-danger alert-dismissible fade show msg" role="alert "   >
+            <i class="bi bi-x-circle me-1"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          
+          {% endfor %}
+      </ul>
+      {% else %}
+    {% endif %}
 
       <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
         <div class="container">
@@ -89,6 +102,25 @@
         </div>
 
       </section>
+
+      <style>
+        .msg{
+          position: fixed;
+          top: 10px;
+          right: 0;
+          width: 30%;
+          animation: run 1s linear ;
+          z-index: 100;
+        }
+        @keyframes run {
+        from{ 
+            transform: translateX(500px);   
+        }
+        to{
+            transform: translateX(-8px);   
+        }
+  }
+      </style>
 
     </div>
   </main><!-- End #main -->

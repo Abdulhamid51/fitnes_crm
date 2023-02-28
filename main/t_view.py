@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views import View
 from .models import *
-from django.contrib.auth import  login ,logout
+from django.contrib.auth import  login ,logout, authenticate
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect
@@ -21,11 +21,14 @@ class LoginView(View):
         username = request.POST.get('username')
         password = request.POST.get('password')
         if username and password:
-            user =  User.objects.filter(username=username)[0]
-
+            user = authenticate(request,username=username,password=password)
             if user is not None:
                 login(request,user)
                 return redirect('main:home')
+            else:
+                messages.error(request, "Login yoki parol xato !")
+                return redirect('main:login')
+                
         return render(request, 'pages-login.html')
 
 def logout_(request):
