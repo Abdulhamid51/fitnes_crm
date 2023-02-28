@@ -11,8 +11,6 @@ urlpatterns = [
     path('attandance/', DavomatView.as_view(), name='list_client'),
     path('register/', RegisterView.as_view(),name = 'register'),
     path('detail/<int:id>', DetailView.as_view(),name = 'detail'),
-    path('add_default_day/', default_add_day, name='add_day'),
-    path('add_default_month/', default_add_month, name='add_month'),
     path('add_day/<int:day_id>', edit_day, name='add_day'),
     path('payment/', PaymentView.as_view(), name='payment'),
     path('detail-payment/', detail_payment, name='detail-payment'),
@@ -32,4 +30,9 @@ urlpatterns = [
     path("client_barcode_came/<uid>", barcode_came, name="barcode_came"),
     path('login',LoginView.as_view(),name='login'),
     path('logout',logout_,name='logout'),
+
+    path("sd/", add_day, name="sd"),
+    path("sm/", add_month, name="sm"),
+
+    path("month_payment/", detail_month_sum, name="month_payment"),
 ]

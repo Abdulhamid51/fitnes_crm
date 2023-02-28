@@ -7,6 +7,19 @@ import calendar
 from django.contrib import messages
 from .filter import deco_login
 
+from .default_add import *
+
+
+def add_day(request):
+    default_add_day()
+    return {"day":'added'}
+
+
+def add_month(request):
+    default_add_month()
+    return {"month":'added'}
+
+
 
 class HomeView(View):
     @deco_login
@@ -71,10 +84,9 @@ class RegisterView(View):
         user = request.user
         name = request.POST.get('name')
         phone = request.POST.get('phone')
-        tarif = request.POST.get('tarif')
-        if user and name and phone and tarif:
-
-            tarif = ComingType.objects.get(title=tarif)
+        ctypes = request.POST.get('tarif')
+        if user and name and phone and ctypes:
+            ctype = ComingType.objects.get(title=ctypes)
             status = request.POST.get('status')
             for c in Client.objects.all():
                 if phone == c.phone:
@@ -82,41 +94,46 @@ class RegisterView(View):
                     return redirect('/register')
                 else:
                     pass
-            client = Client.objects.create(user=user,
-                                    name=name,
-                                    phone=phone,
-                                    coming_type=tarif,
-                                    status=status,
-                                    )
-            tarif =  ComingType.objects.all()
-            context = {'tarif':tarif,'client':client, "uid":client.uid,"name":client.name}
+            client = Client.objects.create(
+                        user=user,
+                        name=name,
+                        phone=phone,
+                        coming_type=ctype,
+                        status=status,
+                    )
+
+            # month create
+
+            now = datetime.datetime.now()
+            today = int(now.strftime("%d"))
+            month_days = calendar.monthrange(int(now.strftime("%Y")), int(now.strftime("%m")))[1]
+            res_days = month_days - today
+            if res_days >= client.coming_type.days:
+                coming_days = client.coming_type.days
+                price = client.coming_type.price
+            else:
+                daily_price = client.coming_type.price / client.coming_type.days
+                coming_days = res_days
+                price = daily_price * coming_days
+            sunday = coming_days // 7
+            coming_days -= sunday
+            month = Month.objects.create(
+                client=client,
+                coming_days=coming_days,
+                payment=int(price)
+            )
+            
+            tarifs =  ComingType.objects.all()
+            context = {'tarif':tarifs,'client':client, "uid":client.uid,"name":client.name}
             messages.success(request, "Mijoz ro'yxatga olindi !")
+            return render(request=request, template_name='register.html',context=context)
         else:
             messages.success(request, "Xatolik qaytadan harakat qiling ! ")
-            # context = {'tarif':tarif, "status":"Nimadur noto`g`ri ketdi"} 
+            tarifs = ComingType.objects.all()
+            context = {'tarif':tarifs, "status":"Nimadur noto`g`ri ketdi"} 
+            return render(request,'register.html', context)
 
-        # month create
 
-        now = datetime.datetime.now()
-        today = int(now.strftime("%d"))
-        month_days = calendar.monthrange(int(now.strftime("%Y")), int(now.strftime("%m")))[1]
-        res_days = month_days - today
-        if res_days >= client.coming_type.days:
-            coming_days = client.coming_type.days
-            price = client.coming_type.price
-        else:
-            daily_price = client.coming_type.price / client.coming_type.days
-            coming_days = res_days
-            price = daily_price * coming_days
-        sunday = coming_days // 7
-        coming_days -= sunday
-        month = Month.objects.create(
-            client=client,
-            coming_days=coming_days,
-            payment=int(price)
-        )
-
-        return render(request,'register.html',context)
 
 
 class DetailView(View):
@@ -147,49 +164,6 @@ class DetailView(View):
             client.update(name=name, phone=phone, coming_type=tarif, status=status)
         return redirect(f"/detail/{id}")
 
-def default_add_month(request):
-
-    clients = Client.objects.all()
-    for client in clients:
-        print('hhhhhhhhh')
-        now = datetime.datetime.now()
-        today = int(now.strftime("%d"))
-        month_days = calendar.monthrange(int(now.strftime("%Y")), int(now.strftime("%m")))[1]
-        res_days = month_days - today
-        if res_days >= client.coming_type.days:
-            coming_days = client.coming_type.days
-            price = client.coming_type.price
-        else:
-            daily_price = client.coming_type.price / client.coming_type.days
-            coming_days = res_days
-            price = daily_price * coming_days
-        sunday = coming_days // 7
-        coming_days -= sunday
-        month = Month.objects.create(
-            client=client,
-            coming_days=coming_days,
-            payment=int(price)
-        )
-    return JsonResponse({"status":"Oy hosil qilindi"})
-
-
-def default_add_day(request):
-    clients = Client.objects.all()
-    for client in clients:
-        try:
-            if client.status == "PAUSED":
-                pass
-            else:
-                month = client.months.last()
-                month.came += 1
-                month.save()
-                day = Day.objects.create(
-                    month=month
-                )
-        except:
-            month = "salom"
-    return JsonResponse({"status":"Kun hosil qilindi"})
-
 
 def edit_day(request, day_id):
     day = get_object_or_404(Day, id=day_id)
@@ -210,9 +184,13 @@ def barcode_came(request, uid):
     try:
         client = get_object_or_404(Client, uid=uid)
         day = client.months.last().days.last()
-        day.came = True
-        day.save()
-        status = f"{client.name} bugun mashg'ulotga keldi keldi"
+        today = datetime.datetime.now().strftime('%Y-%m-%d')
+        if str(today) == str(day):
+            day.came = True
+            day.save()
+            status = f"{client.name} bugun mashg'ulotga keldi."
+        else:
+            status = f"{client.name} avval to'lovni amalga oshiring!"
     except:
         status = "UID noto`g`ri"
     return JsonResponse({"status":status})
@@ -279,7 +257,7 @@ class PaymentView(View):
                 month.payed = False
                 obj.debt = True
             month.save()
-            obj.balance -= balance
+            # obj.balance -= balance
             obj.save()
             Payment.objects.create(
                 month=month,
@@ -291,11 +269,8 @@ class PaymentView(View):
             except:
                 last_day = 'no last day'
             today = datetime.datetime.now()
-            if last_day == today:
-                print("kun qoshilmadi")
-            else:
+            if last_day != today:
                 Day.objects.create(month=month)
-                print("kun qoshildi")
             messages.success(request, "To'lov amalga oshirildi ! ")
             return redirect('/payment')
 
@@ -305,15 +280,28 @@ def detail_payment(request):
     payment = int(request.POST.get('payment'))
     month = Month.objects.get(id=month_id)
     obj = month.client
-    if month.payment <= payment:
+    if month.payment == payment:
         month.payment = 0
         month.payed = True
         obj.debt = False
+    elif month.payment < payment:
+        balance = payment - month.payment
+        month.payment = 0
+        month.payed = True
+        obj.debt = False
+        obj.balance = balance
     else:
         month.payment -= payment
         month.payed = False
         obj.debt = True
     month.save()
+    try:
+        last_day = month.days.last().date
+    except:
+        last_day = 'no last day'
+    today = datetime.datetime.now()
+    if last_day != today:
+        Day.objects.create(month=month)
     obj.save()
     py = Payment.objects.create(
         month=month,
@@ -321,5 +309,15 @@ def detail_payment(request):
     )
     return JsonResponse({"status":"ok"})
 
+def detail_month_sum(request):
+    month_id = request.GET.get('id')
+    month = Month.objects.get(id=month_id)
+    payment = month.payment
+    return JsonResponse({'payment':payment})
 
+def handler_404(request,exception):
+    return render(request, "404.html")
+
+def handler_500(request):
+    return render(request, "500.html")
 
