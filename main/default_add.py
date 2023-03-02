@@ -36,7 +36,7 @@ def default_add_day():
             if cm >= cd or last_day == this_day:
                 pass
             else:
-                if client.status == "PAUSED" and client.months.last().payed == True:
+                if client.status == "PAUSED" and client.months.last().payed == False:
                     pass
                 else:
                     month = client.months.last()

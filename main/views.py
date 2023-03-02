@@ -265,12 +265,15 @@ class PaymentView(View):
                 discount=discount
             )
             try:
-                last_day = month.days.last().date
+                last_day = str(month.days.last().date)
             except:
                 last_day = 'no last day'
-            today = datetime.datetime.now()
+            today = datetime.datetime.now().strftime('%Y-%m-%d')
+            print(today, last_day)
             if last_day != today:
                 Day.objects.create(month=month)
+                month.came += 1
+                month.save()
             messages.success(request, "To'lov amalga oshirildi ! ")
             return redirect('/payment')
 
@@ -296,12 +299,14 @@ def detail_payment(request):
         obj.debt = True
     month.save()
     try:
-        last_day = month.days.last().date
+        last_day = str(month.days.last().date)
     except:
         last_day = 'no last day'
-    today = datetime.datetime.now()
+    today = datetime.datetime.now().strftime('%Y-%m-%d')
     if last_day != today:
         Day.objects.create(month=month)
+        month.came += 1
+        month.save()
     obj.save()
     py = Payment.objects.create(
         month=month,
